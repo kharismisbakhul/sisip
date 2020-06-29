@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon.png">
+    <title>AdminBite admin Template - The Ultimate Multipurpose admin template</title>
+    <!-- Custom CSS -->
+    <link href="../../assets/libs/chartist/dist/chartist.min.css" rel="stylesheet">
+    <link href="../../assets/extra-libs/c3/c3.min.css" rel="stylesheet">
+    <link href="../../assets/libs/morris.js/morris.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../../dist/css/style.min.css" rel="stylesheet">
+    <link href="../../assets/extra-libs/css-chart/css-chart.css" rel="stylesheet">
+
+    <!-- This page plugin CSS -->
+    <link href="../../assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+
+<body>
+    <!-- ============================================================== -->
+    <!-- Preloader - style you can find in spinners.css -->
+    <!-- ============================================================== -->
+    <div class="preloader">
+        <div class="lds-ripple">
+            <div class="lds-pos"></div>
+            <div class="lds-pos"></div>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- Main wrapper - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <div id="main-wrapper">
+        <!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        <header class="topbar">
+            <nav class="navbar top-navbar navbar-expand-md navbar-dark">
+                <div class="navbar-header">
+                    <!-- This is for the sidebar toggle which is visible on mobile only -->
+                    <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)">
+                        <i class="ti-menu ti-close"></i>
+                    </a>
+                    <!-- ============================================================== -->
+                    <!-- Logo -->
+                    <!-- ============================================================== -->
+                    <a class="navbar-brand" href="index.html">
+                        <!-- Logo icon -->
+                        <b class="logo-icon">
+                            <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
+                            <!-- Dark Logo icon -->
+                            <img src="../../assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
+                            <!-- Light Logo icon -->
+                            <img src="../../assets/images/logo-light-icon.png" alt="homepage" class="light-logo" />
+                        </b>
+                        <!--End Logo icon -->
+                        <!-- Logo text -->
+                        <span class="logo-text">
+                            <!-- dark Logo text -->
+                            <img src="../../assets/images/logo-text.png" alt="homepage" class="dark-logo" />
+                            <!-- Light Logo text -->
+                            <img src="../../assets/images/logo-light-text.png" class="light-logo" alt="homepage" />
+                        </span>
+                    </a>
+                    <!-- ============================================================== -->
+                    <!-- End Logo -->
+                    <!-- ============================================================== -->
+                    <!-- ============================================================== -->
+                    <!-- Toggle which is visible on mobile only -->
+                    <!-- ============================================================== -->
+                    <a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)"
+                        data-toggle="collapse" data-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="ti-more"></i>
+                    </a>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Logo -->
+                <!-- ============================================================== -->
+                <div class="navbar-collapse collapse" id="navbarSupportedContent">
+                    <!-- ============================================================== -->
+                    <!-- toggle and nav items -->
+                    <!-- ============================================================== -->
+                    <ul class="navbar-nav float-left mr-auto">
+                        <li class="nav-item d-none d-md-block">
+                            <a class="nav-link sidebartoggler waves-effect waves-light" href="javascript:void(0)"
+                                data-sidebartype="mini-sidebar">
+                                <i class="sl-icon-menu font-20"></i>
+                            </a>
+                        </li>
+
+                    </ul>
+                    <!-- ============================================================== -->
+                    <!-- Right side toggle and nav items -->
+                    <!-- ============================================================== -->
+                    <ul class="navbar-nav float-right">
+                        <!-- ============================================================== -->
+                        <!-- Search -->
+                        <!-- ============================================================== -->
+                        <li class="nav-item search-box">
+                            <a class="nav-link waves-effect waves-dark" href="javascript:void(0)">
+                                <i class="fas fa-fw fa-sign-out-alt font-16"></i> Logout
+                            </a>
+                        </li>
+
+
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- ============================================================== -->
+        <!-- End Topbar header -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <aside class="left-sidebar">
+            <!-- Sidebar scroll-->
+            <div class="scroll-sidebar">
+                <!-- Sidebar navigation-->
+                <nav class="sidebar-nav">
+                    <ul id="sidebarnav">
+                        <!-- User Profile-->
+                        <li>
+                            <!-- User Profile-->
+                            <div class="user-profile dropdown m-t-20">
+                                <div class="user-pic">
+                                    <img src="../../assets/images/users/1.jpg" alt="users"
+                                        class="rounded-circle img-fluid" />
+                                </div>
+                                <div class="user-content hide-menu m-t-10">
+                                    <h5 class="m-b-10 user-name font-medium">Ayu Salsabila</h5>
+                                    <a class="btn btn-circle btn-sm m-r-5" role="button">
+                                        <i class="ti-calendar"></i>
+                                    </a>
+                                    <span>22-05-2020</span>
+
+                                </div>
+                            </div>
+                            <!-- End User Profile-->
+                        </li>
+                        <!-- User Profile-->
+                        <li class="nav-small-cap">
+                            <i class="mdi mdi-dots-horizontal"></i>
+                            <span class="hide-menu">Home</span>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="v_dashboard_pegawai.html" aria-expanded="false">
+                                <i class="icon-Car-Wheel"></i>
+                                <span class="hide-menu">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="v_profil.html" aria-expanded="false">
+                                <i class="icon-User"></i>
+                                <span class="hide-menu">Profil</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-small-cap">
+                            <i class="mdi mdi-dots-horizontal"></i>
+                            <span class="hide-menu">Layanan</span>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="v_presensi.html
+                                   " aria-expanded="false">
+                                <i class="icon-Bookmark"></i>
+                                <span class="hide-menu">Presensi</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="v_logbook.html
+                                   " aria-expanded="false">
+                                <i class="icon-Book"></i>
+                                <span class="hide-menu">Logbook</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="v_capaian_kerja.html
+                                   " aria-expanded="false">
+                                <i class="icon-Starfish"></i>
+                                <span class="hide-menu">Capaian Kerja</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="V_saran.html
+                                   " aria-expanded="false">
+                                <i class="icon-Mail-Send"></i>
+                                <span class="hide-menu">Saran</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="v_klarifikasi.html
+                                   " aria-expanded="false">
+                                <i class="icon-Settings-Window"></i>
+                                <span class="hide-menu">Klarifikasi</span>
+                            </a>
+                        </li>
+
+
+                        <li class="nav-small-cap">
+                            <i class="mdi mdi-dots-horizontal"></i>
+                            <span class="hide-menu">Laporan</span>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="v_indeks_kepuasan_pegawai.html" aria-expanded="false">
+                                <i class="icon-Pie-Chart2"></i>
+                                <span class="hide-menu"> Indeks Kepuasan</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="chart-morris.html
+                                   " aria-expanded="false">
+                                <i class="icon-Bar-Chart2"></i>
+                                <span class="hide-menu"> Kinerja</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="chart-chart-js.html
+                                   " aria-expanded="false">
+                                <i class="icon-Bar-Chart5"></i>
+                                <span class="hide-menu">Evaluasi</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="chart-sparkline.html
+                                   " aria-expanded="false">
+                                <i class="icon-Line-Chart3"></i>
+                                <span class="hide-menu">Keaktifan</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- End Sidebar navigation -->
+            </div>
+            <!-- End Sidebar scroll-->
+        </aside>
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Page wrapper  -->
+        <!-- ============================================================== -->
+        <div class="page-wrapper">
+            <!-- ============================================================== -->
+            <!-- Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <div class="page-breadcrumb">
+                <div class="row">
+                    <div class="col-5 align-self-center">
+                        <h4 class="page-title">Daftar Saran</h4>
+                        <div class="d-flex align-items-center">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
+            <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Start Page Content -->
+                <!-- ============================================================== -->
+                <!-- Row -->
+                <div class="row">
+
+                    <!-- Column -->
+                    <div class="col-lg-12 col-xlg-12 col-md-12">
+
+                        <div class="card">
+                            <div class="card-header bg-info text-white">
+                                <h4>Daftar Saran</h4>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="table-responsive">
+                                    <div class="d-flex justify-content-end mb-2">
+
+                                        <form action="" method="">
+                                            <div class="input-group">
+                                                <select class="custom-select form-control" id="inlineFormCustomSelect">
+                                                    <option selected="">Jenis...</option>
+                                                    <option value="1">One</option>
+                                                    <option value="2">Two</option>
+                                                    <option value="3">Three</option>
+                                                </select>
+                                                <input type="date" name="date_start" id="date_start"
+                                                    class="form-control" value="2018-05-13">
+                                                <input type="date" name="date_start" id="date_start"
+                                                    class="form-control" value="2018-05-13">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-info" type="button"><i
+                                                            class="fas fa-search"></i></button>
+                                                </div>
+
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <table class="table table-hover" id="zero">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Tanngal</th>
+                                                <th>User</th>
+                                                <th>Jenis</th>
+                                                <th>Feedback</th>
+                                                <th>File</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <tr>
+                                                <td>1</td>
+                                                <td>22-05-2020</td>
+                                                <td>Aditya Yusril Fikri</td>
+                                                <td>Saran</td>
+                                                <td>Listrik sering mati dikamar mandi</td>
+                                                <td><a href=""><i class="fas fa-file-alt mr-2"></i>File</a></td>
+                                            </tr>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>22-05-2020</td>
+                                                <td>Aditya Yusril Fikri</td>
+                                                <td>Saran</td>
+                                                <td>Listrik sering mati dikamar mandi</td>
+                                                <td><a href=""><i class="fas fa-file-alt mr-2"></i>File</a></td>
+                                            </tr>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>22-05-2020</td>
+                                                <td>Aditya Yusril Fikri</td>
+                                                <td>Saran</td>
+                                                <td>Listrik sering mati dikamar mandi</td>
+                                                <td><a href=""><i class="fas fa-file-alt mr-2"></i>File</a></td>
+                                            </tr>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>22-05-2020</td>
+                                                <td>Aditya Yusril Fikri</td>
+                                                <td>Saran</td>
+                                                <td>Listrik sering mati dikamar mandi</td>
+                                                <td><a href=""><i class="fas fa-file-alt mr-2"></i>File</a></td>
+                                            </tr>
+
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- Column -->
+                    </div>
+                    <!-- Row -->
+                    <!-- ============================================================== -->
+                    <!-- End PAge Content -->
+                    <!-- ============================================================== -->
+                    <!-- ============================================================== -->
+                    <!-- Right sidebar -->
+                    <!-- ============================================================== -->
+                    <!-- .right-sidebar -->
+                    <!-- ============================================================== -->
+                    <!-- End Right sidebar -->
+                    <!-- ============================================================== -->
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Container fluid  -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- footer -->
+                <!-- ============================================================== -->
+                <footer class="footer text-center">
+                    Copyright &copy; UB Guest House 2020
+                </footer>
+                <!-- ============================================================== -->
+                <!-- End footer -->
+                <!-- ============================================================== -->
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Page wrapper  -->
+            <!-- ============================================================== -->
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- Start Modeal -->
+        <!-- ============================================================== -->
+        <div class="modal fade" id="editPengumuman" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="exampleModalLabel1">Edit Pengumuman</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="message-text" class="control-label">Pengumuman:</label>
+                                <textarea class="form-control" id="message-text1"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">User:</label>
+                                <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                                    <option selected="">Pilih User...</option>
+                                    <option value="1">Aditya</option>
+                                    <option value="2">Kharis</option>
+                                    <option value="3">Iksan</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">Tujuan:</label>
+                                <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                                    <option selected="">Pilih Tujuan...</option>
+                                    <option value="1">Semua</option>
+                                    <option value="2">Unit</option>
+                                    <option value="3">SPV</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">Status:</label>
+                                <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                                    <option value="1">Aktif</option>
+                                    <option value="2">Tidak Aktif</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+                        <button type="button" class="btn btn-primary">Kirim</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Modal -->
+        <!-- ============================================================== -->
+
+        <!-- Start Modeal -->
+        <!-- ============================================================== -->
+        <div class="modal fade" id="tambahPengumuman" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="exampleModalLabel1">Tambah Pengumuman</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="message-text" class="control-label">Pengumuman:</label>
+                                <textarea class="form-control" id="message-text1"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">User:</label>
+                                <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                                    <option selected="">Pilih User...</option>
+                                    <option value="1">Aditya</option>
+                                    <option value="2">Kharis</option>
+                                    <option value="3">Iksan</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">Tujuan:</label>
+                                <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                                    <option selected="">Pilih Tujuan...</option>
+                                    <option value="1">Semua</option>
+                                    <option value="2">Unit</option>
+                                    <option value="3">SPV</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">Status:</label>
+                                <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                                    <option value="1">Aktif</option>
+                                    <option value="2">Tidak Aktif</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+                        <button type="button" class="btn btn-primary">Kirim</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Modal -->
+        <!-- ============================================================== -->
+
+
+        <!-- ============================================================== -->
+        <!-- End Wrapper -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- customizer Panel -->
+        <!-- ============================================================== -->
+        <aside class="customizer">
+            <a href="javascript:void(0)" class="service-panel-toggle">
+                <i class="icon-Coffee-2"></i>
+            </a>
+            <div class="customizer-body">
+                <ul class="nav customizer-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab
+                                   " aria-controls="pills-home" aria-selected="true">
+                            <i class="mdi mdi-wrench font-20"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="pills-tupoksi-tab" data-toggle="pill" href="#chat" role="tab
+                                   " aria-controls="chat" aria-selected="false">
+                            <i class="mdi mdi-message-reply font-20"></i>
+                        </a>
+                    </li>
+
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <!-- Tab 1 -->
+                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
+                        aria-labelledby="pills-home-tab">
+                        <div class="p-15 border-bottom">
+                            <!-- Sidebar -->
+                            <h5 class="font-medium m-b-10 m-t-10">Layout Settings</h5>
+                            <div class="custom-control custom-checkbox m-t-10">
+                                <input type="checkbox" class="custom-control-input" name="theme-view" id="theme-view">
+                                <label class="custom-control-label" for="theme-view">Dark Theme</label>
+                            </div>
+                            <div class="custom-control custom-checkbox m-t-10">
+                                <input type="checkbox" class="custom-control-input sidebartoggler" name="collapssidebar
+                                   " id="collapssidebar">
+                                <label class="custom-control-label" for="collapssidebar">Collapse Sidebar</label>
+                            </div>
+                            <div class="custom-control custom-checkbox m-t-10">
+                                <input type="checkbox" class="custom-control-input" name="sidebar-position"
+                                    id="sidebar-position">
+                                <label class="custom-control-label" for="sidebar-position">Fixed Sidebar</label>
+                            </div>
+                            <div class="custom-control custom-checkbox m-t-10">
+                                <input type="checkbox" class="custom-control-input" name="header-position"
+                                    id="header-position">
+                                <label class="custom-control-label" for="header-position">Fixed Header</label>
+                            </div>
+                            <div class="custom-control custom-checkbox m-t-10">
+                                <input type="checkbox" class="custom-control-input" name="boxed-layout"
+                                    id="boxed-layout">
+                                <label class="custom-control-label" for="boxed-layout">Boxed Layout</label>
+                            </div>
+                        </div>
+                        <div class="p-15 border-bottom">
+                            <!-- Logo BG -->
+                            <h5 class="font-medium m-b-10 m-t-10">Logo Backgrounds</h5>
+                            <ul class="theme-color">
+                                <li class="theme-item">
+                                    <a href="javascript:void(0)" class="theme-link" data-logobg="skin1"></a>
+                                </li>
+                                <li class="theme-item">
+                                    <a href="javascript:void(0)" class="theme-link" data-logobg="skin2"></a>
+                                </li>
+                                <li class="theme-item">
+                                    <a href="javascript:void(0)" class="theme-link" data-logobg="skin3"></a>
+                                </li>
+                                <li class="theme-item">
+                                    <a href="javascript:void(0)" class="theme-link" data-logobg="skin4"></a>
+                                </li>
+                                <li class="theme-item">
+                                    <a href="javascript:void(0)" class="theme-link" data-logobg="skin5"></a>
+                                </li>
+                                <li class="theme-item">
+                                    <a href="javascript:void(0)" class="theme-link" data-logobg="skin6"></a>
+                                </li>
+                            </ul>
+                            <!-- Logo BG -->
+                        </div>
+                        <div class="p-15 border-bottom">
+                            <!-- Navbar BG -->
+                            <h5 class="font-medium m-b-10 m-t-10">Navbar Backgrounds</h5>
+                            <ul class="theme-color">
+                                <li class="theme-item">
+                                    <a href="javascript:void(0)" class="theme-link" data-navbarbg="skin1"></a>
+                                </li>
+                                <li class="theme-item">
+                                    <a href="javascript:void(0)" class="theme-link" data-navbarbg="skin2"></a>
+                                </li>
+                                <li class="theme-item">
+                                    <a href="javascript:void(0)" class="theme-link" data-navbarbg="skin3"></a>
+                                </li>
+                                <li class="theme-item">
+                                    <a href="javascript:void(0)" class="theme-link" data-navbarbg="skin4"></a>
+                                </li>
+                                <li class="theme-item">
+                                    <a href="javascript:void(0)" class="theme-link" data-navbarbg="skin5"></a>
+                                </li>
+                                <li class="theme-item">
+                                    <a href="javascript:void(0)" class="theme-link" data-navbarbg="skin6"></a>
+                                </li>
+                            </ul>
+                            <!-- Navbar BG -->
+                        </div>
+                        <div class="p-15 border-bottom">
+                            <!-- Logo BG -->
+                            <h5 class="font-medium m-b-10 m-t-10">Sidebar Backgrounds</h5>
+                            <ul class="theme-color">
+                                <li class="theme-item">
+                                    <a href="javascript:void(0)" class="theme-link" data-sidebarbg="skin1"></a>
+                                </li>
+                                <li class="theme-item">
+                                    <a href="javascript:void(0)" class="theme-link" data-sidebarbg="skin2"></a>
+                                </li>
+                                <li class="theme-item">
+                                    <a href="javascript:void(0)" class="theme-link" data-sidebarbg="skin3"></a>
+                                </li>
+                                <li class="theme-item">
+                                    <a href="javascript:void(0)" class="theme-link" data-sidebarbg="skin4"></a>
+                                </li>
+                                <li class="theme-item">
+                                    <a href="javascript:void(0)" class="theme-link" data-sidebarbg="skin5"></a>
+                                </li>
+                                <li class="theme-item">
+                                    <a href="javascript:void(0)" class="theme-link" data-sidebarbg="skin6"></a>
+                                </li>
+                            </ul>
+                            <!-- Logo BG -->
+                        </div>
+                    </div>
+                    <!-- End Tab 1 -->
+                    <!-- Tab 2 -->
+                    <div class="tab-pane fade" id="chat" role="tabpanel" aria-labelledby="pills-tupoksi-tab">
+                        <ul class="mailbox list-style-none m-t-20">
+                            <li>
+                                <div class="message-center chat-scroll">
+                                    <a href="javascript:void(0)" class="message-item" id='chat_user_1' data-user-id='1'>
+                                        <span class="user-img">
+                                            <img src="../../assets/images/users/1.jpg" alt="user"
+                                                class="rounded-circle">
+                                            <span class="profile-status online pull-right"></span>
+                                        </span>
+                                        <div class="mail-contnet">
+                                            <h5 class="message-title">Pavan kumar</h5>
+                                            <span class="mail-desc">Just see the my admin!</span>
+                                            <span class="time">9:30 AM</span>
+                                        </div>
+                                    </a>
+                                    <!-- Message -->
+                                    <a href="javascript:void(0)" class="message-item" id='chat_user_2' data-user-id='2'>
+                                        <span class="user-img">
+                                            <img src="../../assets/images/users/2.jpg" alt="user"
+                                                class="rounded-circle">
+                                            <span class="profile-status busy pull-right"></span>
+                                        </span>
+                                        <div class="mail-contnet">
+                                            <h5 class="message-title">Sonu Nigam</h5>
+                                            <span class="mail-desc">I've sung a song! See you at</span>
+                                            <span class="time">9:10 AM</span>
+                                        </div>
+                                    </a>
+                                    <!-- Message -->
+                                    <a href="javascript:void(0)" class="message-item" id='chat_user_3' data-user-id='3'>
+                                        <span class="user-img">
+                                            <img src="../../assets/images/users/3.jpg" alt="user"
+                                                class="rounded-circle">
+                                            <span class="profile-status away pull-right"></span>
+                                        </span>
+                                        <div class="mail-contnet">
+                                            <h5 class="message-title">Arijit Sinh</h5>
+                                            <span class="mail-desc">I am a singer!</span>
+                                            <span class="time">9:08 AM</span>
+                                        </div>
+                                    </a>
+                                    <!-- Message -->
+                                    <a href="javascript:void(0)" class="message-item" id='chat_user_4' data-user-id='4'>
+                                        <span class="user-img">
+                                            <img src="../../assets/images/users/4.jpg" alt="user"
+                                                class="rounded-circle">
+                                            <span class="profile-status offline pull-right"></span>
+                                        </span>
+                                        <div class="mail-contnet">
+                                            <h5 class="message-title">Nirav Joshi</h5>
+                                            <span class="mail-desc">Just see the my admin!</span>
+                                            <span class="time">9:02 AM</span>
+                                        </div>
+                                    </a>
+                                    <!-- Message -->
+                                    <!-- Message -->
+                                    <a href="javascript:void(0)" class="message-item" id='chat_user_5' data-user-id='5'>
+                                        <span class="user-img">
+                                            <img src="../../assets/images/users/5.jpg" alt="user"
+                                                class="rounded-circle">
+                                            <span class="profile-status offline pull-right"></span>
+                                        </span>
+                                        <div class="mail-contnet">
+                                            <h5 class="message-title">Sunil Joshi</h5>
+                                            <span class="mail-desc">Just see the my admin!</span>
+                                            <span class="time">9:02 AM</span>
+                                        </div>
+                                    </a>
+                                    <!-- Message -->
+                                    <!-- Message -->
+                                    <a href="javascript:void(0)" class="message-item" id='chat_user_6' data-user-id='6'>
+                                        <span class="user-img">
+                                            <img src="../../assets/images/users/6.jpg" alt="user"
+                                                class="rounded-circle">
+                                            <span class="profile-status offline pull-right"></span>
+                                        </span>
+                                        <div class="mail-contnet">
+                                            <h5 class="message-title">Akshay Kumar</h5>
+                                            <span class="mail-desc">Just see the my admin!</span>
+                                            <span class="time">9:02 AM</span>
+                                        </div>
+                                    </a>
+                                    <!-- Message -->
+                                    <!-- Message -->
+                                    <a href="javascript:void(0)" class="message-item" id='chat_user_7' data-user-id='7'>
+                                        <span class="user-img">
+                                            <img src="../../assets/images/users/7.jpg" alt="user"
+                                                class="rounded-circle">
+                                            <span class="profile-status offline pull-right"></span>
+                                        </span>
+                                        <div class="mail-contnet">
+                                            <h5 class="message-title">Pavan kumar</h5>
+                                            <span class="mail-desc">Just see the my admin!</span>
+                                            <span class="time">9:02 AM</span>
+                                        </div>
+                                    </a>
+                                    <!-- Message -->
+                                    <!-- Message -->
+                                    <a href="javascript:void(0)" class="message-item" id='chat_user_8' data-user-id='8'>
+                                        <span class="user-img">
+                                            <img src="../../assets/images/users/8.jpg" alt="user"
+                                                class="rounded-circle">
+                                            <span class="profile-status offline pull-right"></span>
+                                        </span>
+                                        <div class="mail-contnet">
+                                            <h5 class="message-title">Varun Dhavan</h5>
+                                            <span class="mail-desc">Just see the my admin!</span>
+                                            <span class="time">9:02 AM</span>
+                                        </div>
+                                    </a>
+                                    <!-- Message -->
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- End Tab 2 -->
+                </div>
+            </div>
+        </aside>
+
+        <div class="chat-windows"></div>
+        <!-- ============================================================== -->
+        <!-- All Jquery -->
+        <!-- ============================================================== -->
+        <script src="../../assets/libs/jquery/dist/jquery.min.js"></script>
+        <!-- Bootstrap tether Core JavaScript -->
+        <script src="../../assets/libs/popper.js/dist/umd/popper.min.js"></script>
+        <script src="../../assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+        <!-- apps -->
+        <script src="../../dist/js/app.min.js"></script>
+        <script src="../../dist/js/app.init.js"></script>
+        <script src="../../dist/js/app-style-switcher.js"></script>
+        <!-- slimscrollbar scrollbar JavaScript -->
+        <script src="../../assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
+        <script src="../../assets/extra-libs/sparkline/sparkline.js"></script>
+        <!--Wave Effects -->
+        <script src="../../dist/js/waves.js"></script>
+        <!--Menu sidebar -->
+        <script src="../../dist/js/sidebarmenu.js"></script>
+        <!--Custom JavaScript -->
+        <script src="../../dist/js/custom.min.js"></script>
+
+        <!--chartis chart-->
+        <script src="../../assets/libs/chartist/dist/chartist.min.js"></script>
+        <script src="../../assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script>
+        <!--c3 charts -->
+        <script src="../../assets/extra-libs/c3/d3.min.js"></script>
+        <script src="../../assets/extra-libs/c3/c3.min.js"></script>
+        <!--chartjs -->
+        <script src="../../assets/libs/raphael/raphael.min.js"></script>
+        <script src="../../assets/libs/morris.js/morris.min.js"></script>
+        <script src="../../dist/js/pages/dashboards/dashboard1.js"></script>
+
+        <script src="../../dist/js/pages/dashboards/dashboard2.js"></script>
+
+        <!--This page plugins -->
+        <script src="../../assets/extra-libs/DataTables/datatables.min.js"></script>
+        <script src="../../dist/js/pages/datatable/datatable-basic.init.js"></script>
+</body>
+
+</html>

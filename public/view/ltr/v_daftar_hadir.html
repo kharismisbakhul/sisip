@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon.png">
+    <title>AdminBite admin Template - The Ultimate Multipurpose admin template</title>
+    <!-- Custom CSS -->
+    <link href="../../assets/libs/chartist/dist/chartist.min.css" rel="stylesheet">
+    <link href="../../assets/extra-libs/c3/c3.min.css" rel="stylesheet">
+    <link href="../../assets/libs/morris.js/morris.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../../dist/css/style.min.css" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+
+<body>
+    <!-- ============================================================== -->
+    <!-- Preloader - style you can find in spinners.css -->
+    <!-- ============================================================== -->
+    <div class="preloader">
+        <div class="lds-ripple">
+            <div class="lds-pos"></div>
+            <div class="lds-pos"></div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- Main wrapper - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <div id="main-wrapper">
+        <!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        <header class="topbar">
+            <nav class="navbar top-navbar navbar-expand-md navbar-dark">
+                <div class="navbar-header">
+                    <!-- This is for the sidebar toggle which is visible on mobile only -->
+                    <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)">
+                        <i class="ti-menu ti-close"></i>
+                    </a>
+                    <!-- ============================================================== -->
+                    <!-- Logo -->
+                    <!-- ============================================================== -->
+                    <a class="navbar-brand" href="index.html">
+                        <!-- Logo icon -->
+                        <b class="logo-icon">
+                            <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
+                            <!-- Dark Logo icon -->
+                            <img src="../../assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
+                            <!-- Light Logo icon -->
+                            <img src="../../assets/images/logo-light-icon.png" alt="homepage" class="light-logo" />
+                        </b>
+                        <!--End Logo icon -->
+                        <!-- Logo text -->
+                        <span class="logo-text">
+                            <!-- dark Logo text -->
+                            <img src="../../assets/images/logo-text.png" alt="homepage" class="dark-logo" />
+                            <!-- Light Logo text -->
+                            <img src="../../assets/images/logo-light-text.png" class="light-logo" alt="homepage" />
+                        </span>
+                    </a>
+                    <!-- ============================================================== -->
+                    <!-- End Logo -->
+                    <!-- ============================================================== -->
+                    <!-- ============================================================== -->
+                    <!-- Toggle which is visible on mobile only -->
+                    <!-- ============================================================== -->
+                    <a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)"
+                        data-toggle="collapse" data-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="ti-more"></i>
+                    </a>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Logo -->
+                <!-- ============================================================== -->
+                <div class="navbar-collapse collapse" id="navbarSupportedContent">
+                    <!-- ============================================================== -->
+                    <!-- toggle and nav items -->
+                    <!-- ============================================================== -->
+                    <ul class="navbar-nav float-left mr-auto">
+
+
+
+                    </ul>
+                    <!-- ============================================================== -->
+                    <!-- Right side toggle and nav items -->
+                    <!-- ============================================================== -->
+                    <ul class="navbar-nav float-right">
+
+                        <li class="nav-item search-box">
+                            <a class="nav-link waves-effect waves-dark" href="javascript:void(0)">
+                                <i class="fas fa-fw fa-sign-out-alt font-16"></i> Logout
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- ============================================================== -->
+        <!-- End Topbar header -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Page wrapper  -->
+        <!-- ============================================================== -->
+        <div class="page-wrapper">
+            <!-- ============================================================== -->
+            <!-- Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <div class="page-breadcrumb">
+                <div class="row">
+                    <div class="col-5 align-self-center">
+                        <h4 class="page-title">Daftar Hadir Pegawai </h4>
+                        <div class="d-flex align-items-center">
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
+            <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Info box -->
+                <!-- ============================================================== -->
+
+                <div class="d-flex justify-content-end mb-2">
+
+                    <form action="" method="">
+                        <div class="input-group">
+                            <input type="date" class="form-control" value="2018-05-13">
+                            <input type="text" class="form-control" placeholder="nama...">
+                            <div class="input-group-append">
+                                <button class="btn btn-info" type="button"><i class="fas fa-search"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <img src="../../assets/images/users/4.jpg" alt="user" width="100"
+                                                        class="rounded-circle">
+                                                </td>
+                                                <td>
+                                                    <h4>Salsabila Ayu</h4>
+                                                    <p>Accoubts Manager Amix corp</p>
+                                                </td>
+                                                <td>
+                                                    <div class="comment-text w-100">
+                                                        <span class="m-b-15 d-block">Jl. Simpang Candi Panggung gang 3
+                                                            no 2 Malang, Jawa Timur</span>
+                                                        <div class="comment-footer">
+                                                            <span class="label label-rounded label-primary">In :
+                                                                07.30</span>
+                                                            <span class="label label-rounded label-success">Out :
+                                                                15.30</span>
+                                                            <span class="label label-rounded label-warning">WFH</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="btn btn-success">Hadir</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <img src="../../assets/images/users/1.jpg" alt="user" width="100"
+                                                        class="rounded-circle">
+                                                </td>
+                                                <td>
+                                                    <h4>Salsabila Ayu</h4>
+                                                    <p>Accoubts Manager Amix corp</p>
+                                                </td>
+                                                <td>
+                                                    <div class="comment-text w-100">
+                                                        <span class="m-b-15 d-block">Jl. Simpang Candi Panggung gang 3
+                                                            no 2 Malang, Jawa Timur</span>
+                                                        <div class="comment-footer">
+                                                            <span class="label label-rounded label-primary">In :
+                                                                07.30</span>
+                                                            <span class="label label-rounded label-success">Out :
+                                                                15.30</span>
+                                                            <span class="label label-rounded label-warning">WFH</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="btn btn-success">Hadir</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <img src="../../assets/images/users/2.jpg" alt="user" width="100"
+                                                        class="rounded-circle">
+                                                </td>
+                                                <td>
+                                                    <h4>Salsabila Ayu</h4>
+                                                    <p>Accoubts Manager Amix corp</p>
+                                                </td>
+                                                <td>
+                                                    <div class="comment-text w-100">
+                                                        <span class="m-b-15 d-block">Jl. Simpang Candi Panggung gang 3
+                                                            no 2 Malang, Jawa Timur</span>
+                                                        <div class="comment-footer">
+                                                            <span class="label label-rounded label-primary">In :
+                                                                07.30</span>
+                                                            <span class="label label-rounded label-success">Out :
+                                                                15.30</span>
+                                                            <span class="label label-rounded label-warning">WFH</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="btn btn-success">Hadir</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <img src="../../assets/images/users/1.jpg" alt="user" width="100"
+                                                        class="rounded-circle">
+                                                </td>
+                                                <td>
+                                                    <h4>Salsabila Ayu</h4>
+                                                    <p>Accoubts Manager Amix corp</p>
+                                                </td>
+                                                <td>
+                                                    <div class="comment-text w-100">
+                                                        <span class="m-b-15 d-block">Jl. Simpang Candi Panggung gang 3
+                                                            no 2 Malang, Jawa Timur</span>
+                                                        <div class="comment-footer">
+                                                            <span class="label label-rounded label-primary">In :
+                                                                07.30</span>
+                                                            <span class="label label-rounded label-success">Out :
+                                                                15.30</span>
+                                                            <span class="label label-rounded label-warning">WFH</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="btn btn-success">Hadir</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <img src="../../assets/images/users/3.jpg" alt="user" width="100"
+                                                        class="rounded-circle">
+                                                </td>
+                                                <td>
+                                                    <h4>Salsabila Ayu</h4>
+                                                    <p>Accoubts Manager Amix corp</p>
+                                                </td>
+                                                <td>
+                                                    <div class="comment-text w-100">
+                                                        <span class="m-b-15 d-block">Jl. Simpang Candi Panggung gang 3
+                                                            no 2 Malang, Jawa Timur</span>
+                                                        <div class="comment-footer">
+                                                            <span class="label label-rounded label-primary">In :
+                                                                07.30</span>
+                                                            <span class="label label-rounded label-success">Out :
+                                                                15.30</span>
+
+                                                            <span class="label label-rounded label-warning">WFH</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="btn btn-danger">Tidak Hadir</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <div class="d-flex justify-content-end mb-2">
+
+                                        <nav aria-label="Page navigation example">
+                                            <ul class="pagination">
+                                                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- footer -->
+            <!-- ============================================================== -->
+            <footer class="footer text-center">
+                All Rights Reserved by AdminBite admin. Designed and Developed by
+                <a href="https://wrappixel.com">WrapPixel</a>.
+            </footer>
+            <!-- ============================================================== -->
+            <!-- End footer -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page wrapper  -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- customizer Panel -->
+    <!-- ============================================================== -->
+
+    <!-- ============================================================== -->
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+    <script src="../../assets/libs/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="../../assets/libs/popper.js/dist/umd/popper.min.js"></script>
+    <script src="../../assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- apps -->
+    <script src="../../dist/js/app.min.js"></script>
+    <script src="../../dist/js/app.init.horizontal.js"></script>
+    <script src="../../dist/js/app-style-switcher.horizontal.js"></script>
+    <!-- slimscrollbar scrollbar JavaScript -->
+    <script src="../../assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
+    <script src="../../assets/extra-libs/sparkline/sparkline.js"></script>
+    <!--Wave Effects -->
+    <script src="../../dist/js/waves.js"></script>
+    <!--Menu sidebar -->
+    <script src="../../dist/js/sidebarmenu.js"></script>
+    <!--Custom JavaScript -->
+    <script src="../../dist/js/custom.min.js"></script>
+    <!--This page JavaScript -->
+    <!--chartis chart-->
+    <script src="../../assets/libs/chartist/dist/chartist.min.js"></script>
+    <script src="../../assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script>
+    <!--c3 charts -->
+    <script src="../../assets/extra-libs/c3/d3.min.js"></script>
+    <script src="../../assets/extra-libs/c3/c3.min.js"></script>
+    <!--chartjs -->
+    <script src="../../assets/libs/raphael/raphael.min.js"></script>
+    <script src="../../assets/libs/morris.js/morris.min.js"></script>
+
+    <script src="../../dist/js/pages/dashboards/dashboard1.js"></script>
+</body>
+
+</html>
