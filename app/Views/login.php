@@ -38,34 +38,30 @@
         <!-- ============================================================== -->
         <!-- Login box.scss -->
         <!-- ============================================================== -->
-        <div class="auth-wrapper d-flex no-block justify-content-center align-items-center"
-            style="background:url(assets/images/background/city.jpg) no-repeat center center;background-size: cover;">
+        <div class="auth-wrapper d-flex no-block justify-content-center align-items-center" style="background:url(assets/images/background/city.jpg) no-repeat center center;background-size: cover;">
             <div class="auth-box on-sidebar">
                 <div id="loginform">
                     <div class="logo mt-5">
-                        <span class="db"><img src="assets/images/icon_ub.png" alt="logo" /></span>
+                        <span class="db"><img src="assets/images/ub_icon.png" width="100" alt="logo" /></span>
                         <!-- <h5 class="font-medium m-b-20">Masuk ke SISIP</h5> -->
                     </div>
                     <!-- Form -->
                     <div class="row">
                         <div class="col-12">
                             <h1 class="mt-5 text-center"> Login Sisip</h1>
-                            <form class="form-horizontal mt-5" id="loginform" action="<?= base_url('/login')?>" method="post">
+                            <form class="form-horizontal mt-5" id="loginform" action="<?= base_url('/login') ?>" method="post">
                                 <?= csrf_field() ?>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="basic-addon1"><i class="ti-user"></i></span>
                                     </div>
-                                    <input type="text" class="form-control form-control-lg" placeholder="Username"
-                                        aria-label="Username" name="username" aria-describedby="basic-addon1">
+                                    <input type="text" class="form-control form-control-lg" placeholder="Username" aria-label="Username" name="username" aria-describedby="basic-addon1">
                                 </div>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon2"><i
-                                                class="ti-pencil"></i></span>
+                                        <span class="input-group-text" id="basic-addon2"><i class="ti-pencil"></i></span>
                                     </div>
-                                    <input type="password" class="form-control form-control-lg" placeholder="Password"
-                                        aria-label="Password" name="password" aria-describedby="basic-addon1">
+                                    <input type="password" class="form-control form-control-lg" placeholder="Password" aria-label="Password" name="password" aria-describedby="basic-addon1">
                                 </div>
 
                                 <div class="form-group text-center">
@@ -83,7 +79,7 @@
 
                                 <div class="form-group mt-5">
                                     <div class="col-sm-12 text-center">
-                                        <a href="<?= base_url('/daftarHadir')?>" class="btn btn-primary text-white">Lihat daftar
+                                        <a href="<?= base_url('/daftarHadir') ?>" class="btn btn-primary text-white">Lihat daftar
                                             hadir
                                             pegawai</a>
                                     </div>
@@ -105,15 +101,13 @@
                             <!-- email -->
                             <div class="form-group row">
                                 <div class="col-12">
-                                    <input class="form-control form-control-lg" type="email" required=""
-                                        placeholder="Username">
+                                    <input class="form-control form-control-lg" type="email" required="" placeholder="Username">
                                 </div>
                             </div>
                             <!-- pwd -->
                             <div class="row m-t-20">
                                 <div class="col-12">
-                                    <button class="btn btn-block btn-lg btn-danger" type="submit"
-                                        name="action">Reset</button>
+                                    <button class="btn btn-block btn-lg btn-danger" type="submit" name="action">Reset</button>
                                 </div>
                             </div>
                         </form>
@@ -153,7 +147,7 @@
         // ============================================================== 
         // Login and Recover Password 
         // ============================================================== 
-        $('#to-recover').on("click", function () {
+        $('#to-recover').on("click", function() {
             $("#loginform").slideUp();
             $("#recoverform").fadeIn();
         });

@@ -8,7 +8,7 @@
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-5 align-self-center">
-            <h4 class="page-title">Profil Pegawai</h4>
+            <h4 class="page-title">Profil</h4>
             <div class="d-flex align-items-center">
 
             </div>
@@ -32,24 +32,22 @@
         <div class="col-lg-4 col-xlg-3 col-md-5">
             <div class="card">
                 <div class="card-body">
-                    <center class="m-t-30"> <img src="<?= base_url($user['foto_profil']) ?>" class="rounded-circle" width="150" />
+                    <center class="m-t-30">
+                        <div class="gambar rounded-circle">
+                            <img src="<?= ($user['foto_profil']) ?  base_url($user['foto_profil']) : '/assets/images/users/default.jpg'  ?>" class="portrait" />
+                        </div>
                         <h4 class="card-title m-t-10"><?= $user['nama'] ?></h4>
-                        <h6 class="card-subtitle"><?= $user['nama_jabatan'] . ' ' . $user['jabatan']['nama'] ?></h6>
+                        <h6 class="card-subtitle"><?= $user['nama_status_user']  ?></h6>
                         <div class="row text-center justify-content-md-center">
                             <div class="col-lg-12 mb-2">
-                                <button type="button" class="btn waves-effect waves-light btn-block btn-info">Ubah Gambar
+                                <button type="button" class="btn waves-effect waves-light btn-block btn-info btn-gambar" data-id="<?= $user['no_induk'] ?>" data-toggle="modal" data-target="#ubahGambar" data-whatever="@mdo">Ubah Gambar
                                     Profil</button>
                             </div>
                             <div class="col-lg-12 mb-2">
-                                <button type="button" class="btn waves-effect waves-light btn-block btn-warning">Ajukan
-                                    Izin</button>
-                            </div>
-                            <div class="col-lg-12 mb-2">
-                                <button type="button" class="btn waves-effect waves-light btn-block btn-success">Ubah
+                                <button type="button" class="btn btn-success waves-effect waves-light btn-block btn-password" data-id="<?= $user['no_induk'] ?>" data-toggle="modal" data-target="#ubahPassword" data-whatever="@mdo">Ubah
                                     Password</button>
+
                             </div>
-
-
                         </div>
                     </center>
                 </div>
@@ -71,73 +69,16 @@
                 <ul class="nav nav-pills custom-pills" id="pills-tab" role="tablist">
 
                     <li class="nav-item">
-                        <a class="nav-link active" id="pills-tupoksi-tab" data-toggle="pill" href="#last-month" role="tab" aria-controls="pills-tupoksi" aria-selected="false">Tupoksi</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" id="pills-setting-tab" data-toggle="pill" href="#previous-month" role="tab" aria-controls="pills-setting" aria-selected="false">Setting</a>
                     </li>
                 </ul>
                 <!-- Tabs -->
                 <div class="tab-content" id="pills-tabContent">
 
-                    <div class="tab-pane fade show active" id="last-month" role="tabpanel" aria-labelledby="pills-tupoksi-tab">
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <form class="m-b-25" action="" method="POST">
-                                    <div class="input-group">
-                                        <select class="custom-select" id="inputGroupSelect04">
-                                            <option selected="">Periode Kerja...</option>
-                                            <option value="1">2018</option>
-                                            <option value="2">2019</option>
-                                            <option value="3">2020</option>
-                                        </select>
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary" type="button"><i class="fas fa-search"></i></button>
-                                        </div>
-                                    </div>
-                                </form>
-                                <h4>Pekerjaan <b><?= $user['nama_jabatan'] . ' ' . $user['jabatan']['nama'] ?></b> Periode <?= date('Y') ?></h4>
-                                <table class="table table-hover table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">No</th>
-                                            <th scope="col">Nama Tugas</th>
-                                            <th scope="col">Jenis Tugas</th>
-                                            <th scope="col">Count</th>
 
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php $i = 1;
-                                        foreach ($rancangan_tugas as $rt) : ?>
-                                            <tr>
-                                                <th scope="row"><?= $i++; ?></th>
-                                                <td><?= $rt['nama_tugas'] ?></td>
-                                                <?php if ($rt['status_tugas'] == 1) {
-                                                    echo '<td>Utama</td>';
-                                                } else {
-                                                    echo '<td>Tambahan</td>';
-                                                } ?>
-                                                <td><?= $rt['jumlah_tugas'] ?> </td>
-                                            </tr>
-                                        <?php endforeach ?>
-                                    </tbody>
-                                </table>
-                                <h4>Penilaian Kinerja</h4>
-                                <hr>
-                                <h5 class="m-t-30">Capaian Kinerja Anda <span class="pull-right"><?= $jumlah_tugas_berlangsung; ?> dari
-                                        <?= $jumlah_total_tugas; ?></span>
-                                </h5>
-                                <div class="progress">
-                                    <div class="progress-bar bg-info" role="progressbar" aria-valuenow="<?= $jumlah_tugas_berlangsung; ?>" aria-valuemin="0" aria-valuemax="<?= $jumlah_total_tugas; ?>" style="width:<?= $jumlah_tugas_berlangsung; ?>%; height:6px;">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="previous-month" role="tabpanel" aria-labelledby="pills-setting-tab">
+                    <div class="tab-pane fade show active" id="previous-month" role="tabpanel" aria-labelledby="pills-setting-tab">
                         <div class="card-body">
-                            <form class="form-horizontal form-material" action="<?= base_url('/staff/profil') ?>" method="post">
+                            <form class="form-horizontal form-material" action="<?= base_url('/admin/profil') ?>" method="post">
                                 <?= csrf_field() ?>
                                 <div class="form-group">
                                     <label class="col-md-12">Nama</label>
@@ -184,17 +125,69 @@
         </div>
         <!-- Column -->
     </div>
-    <!-- Row -->
+
+    <!-- Start Modeal -->
     <!-- ============================================================== -->
-    <!-- End PAge Content -->
+    <div class="modal fade" id="ubahPassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="exampleModalLabel1">Ubah Password</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <form method="post" class="form-pwd">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="message-text" class="control-label">Password Lama:</label>
+                            <input type="text" class="form-control v-pwd" id="message-text1" readonly value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="control-label">Password Baru:</label>
+                            <input type="password" name="password1" class="form-control" id="password1">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="control-label">Konfirmasi Password Baru:</label>
+                            <input type="password" name="password2" class="form-control" id="password2">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">Kirim</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <!-- ============================================================== -->
+
+    <!-- Start Modeal -->
     <!-- ============================================================== -->
-    <!-- Right sidebar -->
+    <div class="modal fade" id="ubahGambar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="exampleModalLabel1">Upload Foto Profil</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <form method="post" class="form-gmbr" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="message-text" class="control-label">Upload:</label>
+                            <input type="file" class="form-control v-pwd" id="message-text1" name="foto_profil" readonly value="">
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">Kirim</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <!-- ============================================================== -->
-    <!-- .right-sidebar -->
-    <!-- ============================================================== -->
-    <!-- End Right sidebar -->
-    <!-- ============================================================== -->
+
+
 </div>
 <!-- ============================================================== -->
 <!-- End Container fluid  -->

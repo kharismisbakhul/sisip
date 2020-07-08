@@ -1,0 +1,46 @@
+.gambar {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+}
+
+.gambar img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    height: 100%;
+    width: auto;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.gambar img.portrait {
+    width: 100%;
+    height: auto;
+}
+
+.gambar2 {
+    position: relative;
+    margin: auto;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+}
+
+.gambar2 img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    height: 100%;
+    width: auto;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.gambar2 img.portrait2 {
+    width: 100%;
+    height: auto;
+}

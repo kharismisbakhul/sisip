@@ -18,8 +18,6 @@
     <!-- Custom CSS -->
     <link href="<?= base_url('dist/css/style.min.css') ?>" rel="stylesheet">
     <link href="<?= base_url('assets/extra-libs/css-chart/css-chart.css') ?>" rel="stylesheet">
-    <link href="<?= base_url('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') ?>" rel="stylesheet">
-    <link rel="stylesheet" href="<?= base_url('assets/css/style.css') ?>">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -121,13 +119,15 @@
         <!-- ============================================================== -->
         <!-- End Topbar header -->
         <!-- ============================================================== -->
-        <?= $this->include('sidebar') ?>
+        <?= $this->include('sidebar')
+        ?>
         <!-- ============================================================== -->
         <!-- Page wrapper  -->
         <!-- ============================================================== -->
         <div class="page-wrapper">
             <!-- Main Content -->
-            <?= $this->renderSection('content') ?>
+            <?= $this->renderSection('content')
+            ?>
             <!-- End Main Content -->
             <!-- ============================================================== -->
             <!-- footer -->
@@ -147,7 +147,7 @@
     <!-- End Wrapper -->
     <!-- ============================================================== -->
     <!-- ============================================================== -->
-    <?= '' //$this->include('customizer') 
+    <?= '' // $this->include('customizer') 
     ?>
 
     <div class="chat-windows"></div>
@@ -184,15 +184,6 @@
     <script src="<?= base_url('dist/js/pages/dashboards/dashboard1.js') ?>"></script>
 
     <script src="<?= base_url('dist/js/pages/dashboards/dashboard2.js') ?>"></script>
-
-    <!-- DataTabels -->
-    <!--This page plugins -->
-    <script src="<?= base_url('assets/extra-libs/DataTables/datatables.min.js') ?>"></script>
-    <script src="<?= base_url('dist/js/pages/datatable/datatable-basic.init.js') ?>"></script>
-
-
-    <!-- my Script -->
-    <script src="<?= base_url('assets/js/script.js') ?>"></script>
 </body>
 
 </html>
