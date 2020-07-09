@@ -2,9 +2,24 @@
 namespace App\Controllers;
 use App\Models\menu;
 use App\Models\kategori_menu;
+use App\Models\indeksKepuasan;
+use App\Models\indeksPertanyaan;
+use App\Models\indeksNilai;
+
 
 class StaffController extends BaseController
 {
+    protected $indeksKepuasanModel;
+    protected $indeksPertanyaanModel;
+    protected $indeksNilaiModel;
+    public function __construct()
+    {
+        $this->indeksKepuasanModel = new indeksKepuasan();
+        $this->indeksPertanyaanModel = new indeksPertanyaan();
+        $this->indeksNilaiModel = new indeksNilai();
+
+    }
+
     function getTanggal($tanggal)
     {
         $bulan = array(
@@ -27,6 +42,7 @@ class StaffController extends BaseController
     }
     
     public function index(){
+        date_default_timezone_set('Asia/Jakarta'); 
         $data['title'] = "Dashboard Pegawai";
         $menu = model('menu');
         $kategori = model('kategori_menu');
@@ -37,14 +53,49 @@ class StaffController extends BaseController
         $data['jumlah_validasi'] = count($tugas->where('status_tugas', 1)->findAll());
         $data['jumlah_belum_validasi'] = count($tugas->where('status_tugas', 0)->findAll());
         $data['jumlah_revisi'] = count($tugas->where('status_tugas', 2)->findAll());
-        $data['user'] = $user->where('no_induk', session('no_induk'))->first();
+        $data['user'] = $user->join('riwayat_jabatan', 'riwayat_jabatan.no_induk = user.no_induk')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan')->where('user.no_induk', session('no_induk'))->first();
+        $data['presensi'] = $presensi->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'presensi.tanggal_presensi' => date("Y-m-d")])->first();
         $data['menu'] = $menu->where('status_user', session('id_status_user'))->findAll();
         $data['kategori_menu'] = $kategori->findAll();
-        $data['pengumuman'] = $pengumuman->join('user', 'pengumuman.publisher = user.no_induk')->findAll();
-        
+        $data['pengumuman'] = $pengumuman->join('user', 'pengumuman.publisher = user.no_induk')->findAll(); 
+        $pesan = model('pesan');
+        $data['chat']  = $pesan->asArray()->join('user', 'user.no_induk = pesan.user')->orderBy('waktu', 'asc')->orderBy('tanggal', 'asc')->findAll();
+
         return view('dashboard_pegawai', $data);
     }
 
+    public function tambahChat(){
+        $pesan = model('pesan');
+        $data = [
+            'pesan' => $this->request->getVar('pesan'),
+            'waktu' => date("h:i:sa"),
+            'tanggal' => date("Y-m-d"),
+            'user' => session('no_induk'),
+        ];
+        $pesan->save($data);
+        return redirect()->to(base_url(''));
+    }
+
+    public function ajukanIzin(){
+        $perizinan = model('perizinan');
+        $data = [
+            'tanggal_mulai' => $this->request->getVar('tanggal_mulai'),
+            'tanggal_selesai' => $this->request->getVar('tanggal_selesai'),
+            'alasan' => $this->request->getVar('keterangan'),
+            'no_induk' => session('no_induk'),
+        ];
+        $upload_image = $this->request->getFile('bukti');
+        if ($upload_image->getClientName() != "") {
+            $tujuan_upload = 'assets/images/izin/';
+            $upload_image->move($tujuan_upload, $upload_image->getClientName());
+            $nama_file = $upload_image->getClientName();
+            $data['bukti'] = $nama_file;
+        }
+
+        $perizinan->save($data);
+        return redirect()->to(base_url().'/staff/profil');
+
+    }
     public function profil(){
         $data['title'] = "Profil Pegawai";
         if (! $this->validate([
@@ -57,13 +108,18 @@ class StaffController extends BaseController
             $menu = model('menu');
             $kategori = model('kategori_menu');
             $user = model('user');
+            $tugas = model('tugas');
             $rancangan_tugas = model('rancangan_tugas');
             $data['user'] = $user->join('riwayat_jabatan', 'riwayat_jabatan.no_induk = user.no_induk')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan')->where('user.no_induk', session('no_induk'))->first();
             $data['rancangan_tugas'] = $rancangan_tugas->where('id_jabatan', $data['user']['id_jabatan'])->findAll();
+            $data['tugas'] =  $tugas->asArray()->select('id_tugas, id_riwayat_jabatan, tugas.nama_tugas, tanggal_tugas, tugas.periode, tugas.jumlah_tugas, tugas.nomor_pekerjaan, tugas.status_tugas, tugas.id_rancangan_tugas, rancangan_tugas.jumlah_total_tugas')->selectSum('tugas.jumlah_tugas')->join('rancangan_tugas', 'rancangan_tugas.id_rancangan_tugas = tugas.id_rancangan_tugas')->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.tanggal_tugas >=' => date(date("Y").'-01-01'), 'tugas.tanggal_tugas <=' => date(date("Y").'-12-31'), 'tugas.id_rancangan_tugas !=' => 0])->groupBy("tugas.id_rancangan_tugas")->orderBy('tugas.id_rancangan_tugas', 'DESC')->findAll();
             $jumlah_tugas_berlangsung = 0;
             $jumlah_total_tugas = 0;
             for ($i=0; $i < count($data['rancangan_tugas']); $i++) { 
-                $jumlah_total_tugas += intval($data['rancangan_tugas'][$i]['jumlah_tugas']);
+                $jumlah_total_tugas += intval($data['rancangan_tugas'][$i]['jumlah_total_tugas']);
+            }
+            for ($i=0; $i < count($data['tugas']); $i++) { 
+                $jumlah_tugas_berlangsung += intval($data['tugas'][$i]['jumlah_tugas']);
             }
             $data['jumlah_total_tugas'] =  $jumlah_total_tugas;
             $data['jumlah_tugas_berlangsung'] = $jumlah_tugas_berlangsung;
@@ -75,6 +131,10 @@ class StaffController extends BaseController
             // dd($data['user']);
             $data['menu'] = $menu->where('status_user', session('id_status_user'))->findAll();
             $data['kategori_menu'] = $kategori->findAll();
+
+            $pesan = model('pesan');
+            $data['chat']  = $pesan->asArray()->join('user', 'user.no_induk = pesan.user')->orderBy('waktu', 'asc')->orderBy('tanggal', 'asc')->findAll();
+
             return view('profil', $data);
         }
         else{
@@ -89,15 +149,57 @@ class StaffController extends BaseController
             $user->update($no_induk, $profil);
             return redirect()->to(base_url().'/staff/profil');
         }
-        
+    }
+
+    public function ubahPassword(){
+        $password_lama = $this->request->getVar('pass1');
+        $password_baru = $this->request->getVar('pass2');
+        $password_baru2 = $this->request->getVar('pass3');
+        $login = [
+            'no_induk' => session('no_induk'),
+            'password' => $password_lama
+        ];
+        $user = model('user');
+        $data = $user->asArray()->where($login)->first();
+        if($data){
+            if($password_baru == $password_baru2){
+                $user->update(session('no_induk'), ['password' => $password_baru]);
+                return redirect()->to(base_url().'/staff/profil');
+            }else{
+
+            }
+        }else{
+
+        }
+    }
+    public function ubahFoto(){
+        $user = model('user');
+        $data['user'] = $user->where('user.no_induk', session('no_induk'))->first();
+        $upload_image = $this->request->getFile('foto');
+        // dd($upload_image);
+        // $upload_image = $_FILES['image']['name'];
+        if ($upload_image) {
+            $tujuan_upload = 'assets/images/users/';
+            // dd($tujuan_upload);
+            $upload_image->move($tujuan_upload, $upload_image->getClientName());
+            $nama_file = 'assets/images/users/'.$upload_image->getClientName();
+
+            $old_images = $data['user']['foto_profil'];
+            if ($old_images != 'assets/images/users/1.jpg') {
+                unlink(FCPATH . $old_images);
+            }
+            $user->update(session('no_induk'), ['foto_profil' => $nama_file]);
+            return redirect()->to(base_url().'/staff/profil');
+        }
     }
 
     public function presensi(){
+        date_default_timezone_set('Asia/Jakarta'); 
         $user = model('user');
         $presensi = model('presensi');
         $data['user'] = $user->join('riwayat_jabatan', 'riwayat_jabatan.no_induk = user.no_induk')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan')->where('user.no_induk', session('no_induk'))->first();
         $data['presensi'] = $presensi->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'presensi.tanggal_presensi' => date("Y-m-d")])->first();
-        // dd($dta['presensi']);a
+
         if (! $this->validate([
             'status_kerja' => 'required',
             'lokasi' => 'required',
@@ -114,13 +216,13 @@ class StaffController extends BaseController
             for ($i=0; $i < count($data['semua_presensi']); $i++) { 
                 $data['semua_presensi'][$i]['tanggal_bahasa'] = $this->getTanggal($data['semua_presensi'][$i]['tanggal_presensi']);
             };
-            // dd($data['semua_presensi']);
             $data['menu'] = $menu->where('status_user', session('id_status_user'))->findAll();
             $data['kategori_menu'] = $kategori->findAll();
+            $pesan = model('pesan');
+            $data['chat']  = $pesan->asArray()->join('user', 'user.no_induk = pesan.user')->orderBy('waktu', 'asc')->orderBy('tanggal', 'asc')->findAll();
+
             return view('presensi', $data);
         }else{
-            // $presensi = model('presensi');
-            // $data_presensi = $presensi->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'presensi.tanggal_presensi' => "2020-06-29"])->findAll();
             if($data['presensi'] == null){
                 // Absen Masuk
                 $data = [
@@ -141,24 +243,23 @@ class StaffController extends BaseController
             }
             $presensi->save($data);
 
-            // $user = model('user');
-            // $no_induk = $this->request->getPost('no_induk');
-            // $data = [
-            //     'isPresensi' => 1,
-            // ];
-            // $user->update($no_induk, $data);
             return redirect()->to(base_url().'/staff/presensi');
         }
     }
 
     public function logbook(){
+        date_default_timezone_set('Asia/Jakarta'); 
         $data['title'] = "Logbook Pegawai";
         $menu = model('menu');
         $kategori = model('kategori_menu');
         $user = model('user');
         $presensi = model('presensi');
+        $tugas = model('tugas');
         $data['user'] = $user->join('riwayat_jabatan', 'riwayat_jabatan.no_induk = user.no_induk')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan')->where('user.no_induk', session('no_induk'))->first();
         $data['semua_presensi'] = $presensi->asArray()->where('id_riwayat_jabatan', $data['user']['id_riwayat_jabatan'])->findAll();
+        $data['presensi_hari_ini'] = $presensi->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'presensi.tanggal_presensi' => date("Y-m-d")])->first();
+        $data['tugas_hari_ini'] =  $tugas->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.tanggal_tugas' => date("Y-m-d")])->where('tugas.id_rancangan_tugas !=', "0")->findAll();
+        $data['tugas_tambahan_hari_ini'] =  $tugas->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.tanggal_tugas' => date("Y-m-d")])->where('tugas.id_rancangan_tugas', 0)->findAll();
         for ($i=0; $i < count($data['semua_presensi']); $i++) { 
             $data['semua_presensi'][$i]['tanggal_bahasa'] = $this->getTanggal($data['semua_presensi'][$i]['tanggal_presensi']);
         };
@@ -166,17 +267,97 @@ class StaffController extends BaseController
         $data['rancangan_tugas'] = $rancangan_tugas->where('id_jabatan', $data['user']['id_jabatan'])->findAll();
         $data['menu'] = $menu->where('status_user', session('id_status_user'))->findAll();
         $data['kategori_menu'] = $kategori->findAll();
+        $pesan = model('pesan');
+        $data['chat']  = $pesan->asArray()->join('user', 'user.no_induk = pesan.user')->orderBy('waktu', 'asc')->orderBy('tanggal', 'asc')->findAll();
+
+        // dd($data['tugas_hari_ini']);
         return view('logbook', $data);
     }
 
+    public function inputLogbook(){
+        date_default_timezone_set('Asia/Jakarta'); 
+        $user = model('user');
+        $data['user'] = $user->join('riwayat_jabatan', 'riwayat_jabatan.no_induk = user.no_induk')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan')->where('user.no_induk', session('no_induk'))->first();
+        if (! $this->validate([
+            'id_rancangan_tugas' => 'required',
+            'jumlah' => 'required',
+        ])){
+            return redirect()->to(base_url().'/staff/logbook');
+        }
+        else{
+            $tugas = model('tugas');
+            // Tugas Utama
+            if($this->request->getPost('id_rancangan_tugas') != 0){
+                $rancangan_tugas = model('rancangan_tugas');
+                $data_rt = $rancangan_tugas->asArray()->where('id_rancangan_tugas', $this->request->getPost('id_rancangan_tugas'))->first();
+                $data_tugas = $tugas->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.tanggal_tugas' => date("Y-m-d"), 'tugas.id_rancangan_tugas' => $this->request->getPost('id_rancangan_tugas')])->first();
+                $data = [
+                    'id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'],
+                    'nama_tugas' => $data_rt['nama_tugas'], 
+                    'tanggal_tugas' => date("Y-m-d"),
+                    'periode' => $data_rt['periode'],
+                    'jumlah_tugas' => $this->request->getPost('jumlah'),
+                    'nomor_pekerjaan' => $data_rt['nomor_pekerjaan'],
+                    'status_tugas' => 3,
+                    'id_rancangan_tugas' => $data_rt['id_rancangan_tugas'],
+                ];
+                if($data_tugas != null){
+                    $data['id_tugas'] = $data_tugas['id_tugas'];
+                }
+            }
+            // Tugas Tambahan
+            else{
+                $data = [
+                    'id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'],
+                    'nama_tugas' => $this->request->getPost('nama_tugas_tambahan'), 
+                    'tanggal_tugas' => date("Y-m-d"),
+                    'periode' => $this->request->getPost('periode'),
+                    'jumlah_tugas' => $this->request->getPost('jumlah'),
+                    'nomor_pekerjaan' => 00,
+                    'status_tugas' => 3,
+                    'id_rancangan_tugas' => $this->request->getPost('id_rancangan_tugas'),
+                ];
+            }
+            
+            /* Status Tugas
+                1 = Valid
+                2 = Revisi
+                3 = Baru Masuk
+                4 = Klarifikasi
+            */
+           
+            $tugas->save($data);
+            return redirect()->to(base_url().'/staff/logbook');
+        }
+    }
+
+    public function selesaiInput($id_presensi){
+        $presensi = model('presensi');
+        $presensi->update($id_presensi, ['isi_logbook' => 1]);
+        return redirect()->to(base_url().'/staff/logbook');
+    }
+    public function hapusTugas($id_tugas){
+        $tugas = model('tugas');
+        $tugas->delete(['id_tugas' => $id_tugas]);
+        return redirect()->to(base_url().'/staff/logbook');
+    }
+
     public function capaianKerja(){
+        date_default_timezone_set('Asia/Jakarta'); 
         $data['title'] = "Capaian Kerja Pegawai";
         $menu = model('menu');
         $kategori = model('kategori_menu');
         $user = model('user');
+        $tugas = model('tugas');
         $data['user'] = $user->join('riwayat_jabatan', 'riwayat_jabatan.no_induk = user.no_induk')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan')->where('user.no_induk', session('no_induk'))->first();
+        // $data['tugas'] =  $tugas->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.tanggal_tugas >=' => date(date("Y").'-01-01'), 'tugas.tanggal_tugas <=' => date(date("Y").'-12-31')])->findAll();
+        $data['tugas'] =  $tugas->asArray()->select('id_tugas, id_riwayat_jabatan, tugas.nama_tugas, tanggal_tugas, tugas.periode, tugas.jumlah_tugas, tugas.nomor_pekerjaan, tugas.status_tugas, tugas.id_rancangan_tugas, rancangan_tugas.jumlah_total_tugas')->selectSum('tugas.jumlah_tugas')->join('rancangan_tugas', 'rancangan_tugas.id_rancangan_tugas = tugas.id_rancangan_tugas')->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.tanggal_tugas >=' => date(date("Y").'-01-01'), 'tugas.tanggal_tugas <=' => date(date("Y").'-12-31')])->groupBy("tugas.id_rancangan_tugas")->orderBy('tugas.id_rancangan_tugas', 'DESC')->findAll();
         $data['menu'] = $menu->where('status_user', session('id_status_user'))->findAll();
         $data['kategori_menu'] = $kategori->findAll();
+        $pesan = model('pesan');
+        $data['chat']  = $pesan->asArray()->join('user', 'user.no_induk = pesan.user')->orderBy('waktu', 'asc')->orderBy('tanggal', 'asc')->findAll();
+
+        // dd($data['tugas']);
         return view('capaian_kerja', $data);
     }
 
@@ -194,6 +375,9 @@ class StaffController extends BaseController
             $data['kategori_saran'] = $kategori_saran->findAll();
             $data['menu'] = $menu->where('status_user', session('id_status_user'))->findAll();
             $data['kategori_menu'] = $kategori->findAll();
+            $pesan = model('pesan');
+            $data['chat']  = $pesan->asArray()->join('user', 'user.no_induk = pesan.user')->orderBy('waktu', 'asc')->orderBy('tanggal', 'asc')->findAll();
+
             return view('saran', $data);
         }else{
             $saran = model('feedback');
@@ -202,7 +386,14 @@ class StaffController extends BaseController
                 'no_induk' => $this->request->getPost('user'),
                 'kategori_feedback' => $this->request->getPost('kategori_saran'),
             ];
-            // dd($data);
+            $upload_image = $this->request->getFile('file_pendukung');
+            if ($upload_image->getClientName() != "") {
+                $tujuan_upload = 'assets/images/file_pendukung/';
+                $upload_image->move($tujuan_upload, $upload_image->getClientName());
+                $nama_file = $upload_image->getClientName();
+    
+                $data['file_pendukung'] = $nama_file;
+            }
             $saran->save($data);
             return redirect()->to(base_url().'/staff/saran');
         }
@@ -214,10 +405,35 @@ class StaffController extends BaseController
         $menu = model('menu');
         $kategori = model('kategori_menu');
         $user = model('user');
+        $tugas = model('tugas');
         $data['user'] = $user->join('riwayat_jabatan', 'riwayat_jabatan.no_induk = user.no_induk')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan')->where('user.no_induk', session('no_induk'))->first();
+        $data['tugas_revisi'] =  $tugas->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.status_tugas' => 2])->findAll();
+        // dd($data['tugas_revisi']);
         $data['menu'] = $menu->where('status_user', session('id_status_user'))->findAll();
         $data['kategori_menu'] = $kategori->findAll();
+        $pesan = model('pesan');
+        $data['chat']  = $pesan->asArray()->join('user', 'user.no_induk = pesan.user')->orderBy('waktu', 'asc')->orderBy('tanggal', 'asc')->findAll();
+
         return view('klarifikasi', $data);
+    }
+
+    public function klarifikasiTugas(){
+        $tugas = model('tugas');
+        $id_tugas = $this->request->getVar('id_tugas');
+        $data = [
+            'status_tugas' => 4, 
+            'catatan' => $this->request->getVar('alasan-klarifikasi')
+        ];
+        $upload_image = $this->request->getFile('bukti-klarifikasi');
+        if ($upload_image->getClientName() != "") {
+            $tujuan_upload = 'assets/images/bukti_klarifikasi/';
+            $upload_image->move($tujuan_upload, $upload_image->getClientName());
+            $nama_file = $upload_image->getClientName();
+            $data['bukti'] = $nama_file;
+        }
+
+        $tugas->update($id_tugas, $data);
+        return redirect()->to(base_url().'/staff/klarifikasi');
     }
 
     public function indeksKepuasan(){
@@ -228,20 +444,59 @@ class StaffController extends BaseController
         $data['user'] = $user->join('riwayat_jabatan', 'riwayat_jabatan.no_induk = user.no_induk')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan')->where('user.no_induk', session('no_induk'))->first();
         $data['menu'] = $menu->where('status_user', session('id_status_user'))->findAll();
         $data['kategori_menu'] = $kategori->findAll();
+        $pesan = model('pesan');
+        $data['chat']  = $pesan->asArray()->join('user', 'user.no_induk = pesan.user')->orderBy('waktu', 'asc')->orderBy('tanggal', 'asc')->findAll();
+
+        $cek = $this->indeksKepuasanModel->cekIndeksKepuasan(session('no_induk'));
+        if ($cek) {
+            $data['pesan'] = 'Terimakasih, Anda sudah melakukan pengisian indeks kepuasan pegawai';
+            $data['pertanyaan'] = null;
+        } else {
+            $id = $this->indeksKepuasanModel->where('status', 1)->first();
+            $data['pesan'] = 'Anda belum melakukan pengisian indeks kepuasan pegawai. Silahkan melakukan pengisian indeks kepuasan pegawai';
+            $data['pertanyaan'] = $this->indeksPertanyaanModel->getPertanyaan($id['id']);
+        }
         return view('indeks_kepuasan', $data);
     }
 
+    public function saveIndeksKepuasan()
+    {
+        $pertanyaan = $this->indeksPertanyaanModel->getPertanyaan($this->request->getVar('id_indeks'));
+        $dataPertanyaan  = [];
+        for ($i = 0; $i < count($pertanyaan); $i++) {
+            if ($this->request->getVar('q' . $pertanyaan[$i]['id_pertanyaan']) == 0) {
+                session()->setFlashdata('pesan', '<span class="text-danger">Semua pertanyaan harus diisi !</span>');
+                return redirect()->to('/staff/indeksKepuasan');
+            }
+            $dataPertanyaan[$i] = [
+                'id_pertanyaan' => $pertanyaan[$i]['id_pertanyaan'],
+                'nilai' => $this->request->getVar('q' . $pertanyaan[$i]['id_pertanyaan']),
+                'no_induk' => $this->request->getVar('no_induk'),
+            ];
+        }
+        $this->indeksNilaiModel->insertBatch($dataPertanyaan);
+        session()->setFlashdata('pesan', 'Data indeks kepuasan pegawai berhasil ditambah');
+        return redirect()->to(base_url().'/staff/indeksKepuasan');
+    }
+
     public function detailTugas($id_presensi){
+        date_default_timezone_set('Asia/Jakarta'); 
         $data['title'] = "Detail Tugas Pegawai";
         $menu = model('menu');
         $kategori = model('kategori_menu');
         $user = model('user');
         $presensi = model('presensi');
+        $tugas = model('tugas');
         $data['user'] = $user->join('riwayat_jabatan', 'riwayat_jabatan.no_induk = user.no_induk')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan')->where('user.no_induk', session('no_induk'))->first();
         $data['presensi'] = $presensi->where('id_presensi',$id_presensi)->first();
+        $data['tugas'] =  $tugas->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.tanggal_tugas' => $data['presensi']['tanggal_presensi']])->orderBy('id_rancangan_tugas', 'DESC')->findAll();
         $data['presensi']['tanggal_bahasa'] = $this->getTanggal($data['presensi']['tanggal_presensi']);
         $data['menu'] = $menu->where('status_user', session('id_status_user'))->findAll();
         $data['kategori_menu'] = $kategori->findAll();
+        $pesan = model('pesan');
+        $data['chat']  = $pesan->asArray()->join('user', 'user.no_induk = pesan.user')->orderBy('waktu', 'asc')->orderBy('tanggal', 'asc')->findAll();
+
+        // dd($data['tugas']);
         return view('detail_tugas', $data);
     }
 }

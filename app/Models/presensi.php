@@ -9,6 +9,6 @@ class presensi extends Model
 
     protected $useTimestamps = false;
     protected $allowedFields = [
-        'id_presensi', 'waktu_presensi_masuk', 'waktu_presensi_keluar', 'status_presensi', 'lokasi', 'status_tempat_kerja', 'id_riwayat_jabatan', 'tanggal_presensi'
+        'id_presensi', 'waktu_presensi_masuk', 'waktu_presensi_keluar', 'status_presensi', 'lokasi', 'status_tempat_kerja', 'id_riwayat_jabatan', 'tanggal_presensi', 'isi_logbook'
     ];
 }

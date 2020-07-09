@@ -36,7 +36,7 @@
                                 <h4>Form Saran Pegawai</h4>
                             </div>
                             <div class="card-body">
-                                <form class="form-horizontal form-material" action="<?= base_url('/staff/saran')?>" method="post">
+                                <form class="form-horizontal form-material" action="<?= base_url('/staff/saran')?>" method="post" enctype="multipart/form-data">
                                     <?= csrf_field() ?>
                                     <div class="form-group">
                                         <input type="hidden" name="user" value="<?= $user['no_induk']?>">

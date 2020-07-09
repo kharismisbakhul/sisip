@@ -37,91 +37,58 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-
-                                    <table class="table table-hover ">
+                                <?php if($tugas_revisi != null) { ?>
+                                    <table class="table table-hover" id="tabel-klarifikasi">
                                         <thead>
                                             <tr>
                                                 <th style="width: 5%;">No</th>
                                                 <th style="width: 10%;">Tanggal</th>
                                                 <th style="width: 30%;">Tugas</th>
                                                 <th style="width: 10%;">Jenis Tugas</th>
-                                                <th style="width: 5%;">Count</th>
+                                                <th style="width: 5%;">Jumlah</th>
                                                 <th style="width: 20%;">Status</th>
                                                 <th style="width: 10%;">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>12-05-2020</td>
-                                                <td>Memimpin UB Guest House dan International Dormitory serta menjadi
-                                                    motivator bagi karyawan</td>
+                                        <?php $i = 1; foreach($tugas_revisi as $t) : ?>
+                                        <tr>
+                                            <td><?= $i++; ?></td>
+                                            <td><?= $t['tanggal_tugas'] ?></td>
+                                            <td><?= $t['nama_tugas'] ?></td>
+                                            <?php if($t['id_rancangan_tugas'] != 0) { ?>
                                                 <td>Utama</td>
-                                                <td>1</td>
-                                                <td><i class="fas fa-dot-circle mr-2 text-warning"></i>
-                                                    revisi
-                                                    <p>Jumlahnya tidak sesuai</p>
-                                                </td>
-                                                <td>
-                                                    <button type="button" class="btn btn-warning" data-toggle="modal"
-                                                        data-target="#exampleModal"
-                                                        data-whatever="@mdo">Klarifikasi</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>12-05-2020</td>
-                                                <td>Memimpin UB Guest House dan International Dormitory serta menjadi
-                                                    motivator bagi karyawan</td>
-                                                <td>Utama</td>
-                                                <td>1</td>
-                                                <td><i class="fas fa-dot-circle mr-2 text-warning"></i>
-                                                    revisi
-                                                    <p>Jumlahnya tidak sesuai</p>
-                                                </td>
-                                                <td>
-                                                    <button type="button" class="btn btn-warning" data-toggle="modal"
-                                                        data-target="#exampleModal"
-                                                        data-whatever="@mdo">Klarifikasi</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>12-05-2020</td>
-                                                <td>Memimpin UB Guest House dan International Dormitory serta menjadi
-                                                    motivator bagi karyawan</td>
-                                                <td>Utama</td>
-                                                <td>1</td>
-                                                <td><i class="fas fa-dot-circle mr-2 text-warning"></i>
-                                                    revisi
-                                                    <p>Jumlahnya tidak sesuai</p>
-                                                </td>
-                                                <td>
-                                                    <button type="button" class="btn btn-warning" data-toggle="modal"
-                                                        data-target="#exampleModal"
-                                                        data-whatever="@mdo">Klarifikasi</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>12-05-2020</td>
-                                                <td>Memimpin UB Guest House dan International Dormitory serta menjadi
-                                                    motivator bagi karyawan</td>
+                                            <?php } else {?>
                                                 <td>Tambahan</td>
-                                                <td>1</td>
-                                                <td><i class="fas fa-dot-circle mr-2 text-purple"></i>
+                                            <?php }?>
+                                            <td><?= $t['jumlah_tugas']?></td>
+                                            <?php if($t['status_tugas'] == 2) {?>
+                                                <td>
+                                                    <i class="fas fa-dot-circle mr-2 text-warning"></i>
+                                                    <button class="btn btn-sm btn-warning">Revisi</button>
+                                                    <p><?= $t['catatan']?></p>
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-warning klarifikasi_tugas" data-toggle="modal"
+                                                        data-target="#exampleModal"
+                                                        data-whatever="@mdo" data-id="<?= $t['id_tugas']?>">Klarifikasi</button>
+                                                </td>
+                                            <?php } else {?>
+                                                <td>
+                                                    <i class="fas fa-dot-circle mr-2 text-purple"></i>
                                                     Klarifikasi
                                                     <a href=""><i class="fas fa-file-alt"></i></a>
-                                                    <p>Sudah benar melakukan kerjaan seperti itu</p>
+                                                    <p><?= $t['catatan']?></p>
                                                 </td>
-                                                <td>
-
-
-                                                </td>
-                                            </tr>
-
+                                                <td></td>
+                                            <?php }?>
+                                        <?php endforeach?>
+                                        </tr>
                                         </tbody>
                                     </table>
+                                <?php }else{ ?>
+                                    <div class="alert alert-warning text-center">Tidak ada tugas Revisi</div>
+                                <?php } ?>
                                 </div>
                             </div>
                         </div>
@@ -155,22 +122,24 @@
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                     aria-hidden="true">&times;</span></button>
                         </div>
+                        <form action="<?= base_url('/staff/klarifikasiTugas')?>" method="post" enctype="multipart/form-data">
+                        <?= csrf_field() ?>
                         <div class="modal-body">
-                            <form>
+                                <input type="hidden" name="id_tugas" id="id_tugas_modal" value="">
                                 <div class="form-group">
                                     <label for="message-text" class="control-label">Alasan:</label>
-                                    <textarea class="form-control" id="message-text1"></textarea>
+                                    <textarea class="form-control" id="message-text1" name="alasan-klarifikasi"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="recipient-name" class="control-label">Bukti:</label>
-                                    <input type="file" class="form-control" id="recipient-name1">
+                                    <input type="file" class="form-control" id="recipient-name1" name="bukti-klarifikasi">
                                 </div>
-                            </form>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-                            <button type="button" class="btn btn-primary">Kirim</button>
+                            <button type="submit" class="btn btn-primary">Kirim</button>
                         </div>
+                        </form>
                     </div>
                 </div>
             </div>

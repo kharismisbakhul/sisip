@@ -184,6 +184,10 @@
     <script src="<?= base_url('dist/js/pages/dashboards/dashboard1.js')?>"></script>
 
     <script src="<?= base_url('dist/js/pages/dashboards/dashboard2.js')?>"></script>
+
+    <!-- Custom Js -->
+    <script src="<?= base_url('assets/js/user.js')?>"></script>
+    <script src="<?= base_url('assets/js/script.js') ?>"></script>
 </body>
 
 </html>

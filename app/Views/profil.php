@@ -39,17 +39,17 @@
                                     <div class="row text-center justify-content-md-center">
                                         <div class="col-lg-12 mb-2">
                                             <button type="button"
-                                                class="btn waves-effect waves-light btn-block btn-info">Ubah Gambar
+                                                class="btn waves-effect waves-light btn-block btn-info" data-toggle="modal" data-target="#ubahFoto">Ubah Gambar
                                                 Profil</button>
                                         </div>
                                         <div class="col-lg-12 mb-2">
                                             <button type="button"
-                                                class="btn waves-effect waves-light btn-block btn-warning">Ajukan
+                                                class="btn waves-effect waves-light btn-block btn-warning" data-toggle="modal" data-target="#izin">Ajukan
                                                 Izin</button>
                                         </div>
                                         <div class="col-lg-12 mb-2">
                                             <button type="button"
-                                                class="btn waves-effect waves-light btn-block btn-success">Ubah
+                                                class="btn waves-effect waves-light btn-block btn-success" data-toggle="modal" data-target="#ubahPassword">Ubah
                                                 Password</button>
                                         </div>
 
@@ -112,7 +112,7 @@
                                                         <th scope="col">No</th>
                                                         <th scope="col">Nama Tugas</th>
                                                         <th scope="col">Jenis Tugas</th>
-                                                        <th scope="col">Count</th>
+                                                        <th scope="col">Jumlah Total</th>
 
                                                     </tr>
                                                 </thead>
@@ -126,7 +126,7 @@
                                                             }else{
                                                                 echo '<td>Tambahan</td>';   
                                                             }?>
-                                                        <td><?= $rt['jumlah_tugas']?> </td>
+                                                        <td><?= $rt['jumlah_total_tugas']?> </td>
                                                     </tr>
                                                     <?php endforeach?>
                                                 </tbody>
@@ -216,4 +216,115 @@
             <!-- ============================================================== -->
             <!-- End Container fluid  -->
             <!-- ============================================================== -->
+
+
+        <!-- Start Modal Ubah Foto -->
+        <!-- ============================================================== -->
+        <div class="modal fade" id="ubahFoto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="exampleModalLabel1">Ubah Foto Profil</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    </div>
+                    <form action="<?= base_url('/staff/ubahFoto')?>" method="post" enctype="multipart/form-data">
+                    <?= csrf_field() ?>
+                    <div class="modal-body">
+                            <div class="form-group">
+                                <label for="message-text" class="control-label">Foto Profil</label>
+                                <input type="file" class="form-control" id="message-text1" name="foto">
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">Ubah Foto Profil</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Modal -->
+        <!-- ============================================================== -->
+
+        <!-- Start Modal Ajukan Izin -->
+        <!-- ============================================================== -->
+        <div class="modal fade" id="izin" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="exampleModalLabel1">Ajukan Izin</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    </div>
+                    <form <form action="<?= base_url('/staff/ajukanIzin')?>" method="post" enctype="multipart/form-data">
+                    <?= csrf_field() ?>>
+                    <div class="modal-body">
+                            <div class="form-group">
+                                <label for="message-text" class="control-label">Tanggal Mulai</label>
+                                <input type="date" class="form-control" id="message-text1" name="tanggal_mulai">
+                            </div>
+                            <div class="form-group">
+                                <label for="message-text" class="control-label">Tanggal Selesai</label>
+                                <input type="date" class="form-control" id="message-text1" name="tanggal_selesai">
+                            </div>
+                            <div class="form-group">
+                                <label for="message-text" class="control-label">Keterangan</label>
+                                <input type="text" class="form-control" id="message-text1" name="keterangan">
+                            </div>
+                            <div class="form-group">
+                                <label for="message-text" class="control-label">Bukti</label>
+                                <input type="file" class="form-control" id="message-text1" name="bukti">
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-warning">Ajukan Izin</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Modal -->
+        <!-- ============================================================== -->
+
+        <!-- Start Modal Ubah Password -->
+        <!-- ============================================================== -->
+        <div class="modal fade" id="ubahPassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="exampleModalLabel1">Ubah Password</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    </div>
+                    <form action="<?= base_url('/staff/ubahPassword')?>" method="post">
+                    <div class="modal-body">
+                            <div class="form-group">
+                                <label for="message-text" class="control-label">Password Lama:</label>
+                                <input type="password" class="form-control" id="message-text1" name="pass1">
+                            </div>
+                            <div class="form-group">
+                                <label for="message-text" class="control-label">Password Baru:</label>
+                                <input type="password" class="form-control" id="message-text1" name="pass2">
+                            </div>
+                            <div class="form-group">
+                                <label for="message-text" class="control-label">Konfirmasi Password Baru:</label>
+                                <input type="password" class="form-control" id="message-text1" name="pass3">
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-success">Ubah Password</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Modal -->
+        <!-- ============================================================== -->
+
 <?= $this->endSection() ?>

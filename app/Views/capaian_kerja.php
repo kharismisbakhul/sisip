@@ -65,134 +65,19 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                        <?php $i = 1; foreach($tugas as $t) : ?>
                                             <tr>
-                                                <td>
-                                                    1
-                                                </td>
-                                                <td>
-                                                    Memimpin UB Guest House dan International Dormitory serta menjadi
-                                                    motivator bagi karyawan
-                                                </td>
-                                                <td>
-                                                    Utama
-                                                </td>
-                                                <td>
-                                                    10
-                                                </td>
-                                                <td>
-                                                    100
-                                                </td>
+                                                <td><?= $i++; ?></td>
+                                                <td><?= $t['nama_tugas']?></td>
+                                                <?php if($t['id_rancangan_tugas'] != 0) { ?>
+                                                    <td>Utama</td>
+                                                <?php } else {?>
+                                                    <td>Tambahan</td>
+                                                <?php }?>
+                                                <td><?= $t['jumlah_tugas']?></td>
+                                                <td><?= $t['jumlah_total_tugas']?></td>
                                             </tr>
-                                            <tr>
-                                                <td>
-                                                    2
-                                                </td>
-                                                <td>
-                                                    Memimpin UB Guest House dan International Dormitory serta menjadi
-                                                    motivator bagi karyawan
-                                                </td>
-                                                <td>
-                                                    Utama
-                                                </td>
-                                                <td>
-                                                    10
-                                                </td>
-                                                <td>
-                                                    100
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    3
-                                                </td>
-                                                <td>
-                                                    Memimpin UB Guest House dan International Dormitory serta menjadi
-                                                    motivator bagi karyawan
-                                                </td>
-                                                <td>
-                                                    Utama
-                                                </td>
-                                                <td>
-                                                    10
-                                                </td>
-                                                <td>
-                                                    100
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    4
-                                                </td>
-                                                <td>
-                                                    Memimpin UB Guest House dan International Dormitory serta menjadi
-                                                    motivator bagi karyawan
-                                                </td>
-                                                <td>
-                                                    Utama
-                                                </td>
-                                                <td>
-                                                    10
-                                                </td>
-                                                <td>
-                                                    100
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    5
-                                                </td>
-                                                <td>
-                                                    Memimpin UB Guest House dan International Dormitory serta menjadi
-                                                    motivator bagi karyawan
-                                                </td>
-                                                <td>
-                                                    Utama
-                                                </td>
-                                                <td>
-                                                    10
-                                                </td>
-                                                <td>
-                                                    100
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    6
-                                                </td>
-                                                <td>
-                                                    Memimpin UB Guest House dan International Dormitory serta menjadi
-                                                    motivator bagi karyawan
-                                                </td>
-                                                <td>
-                                                    Utama
-                                                </td>
-                                                <td>
-                                                    10
-                                                </td>
-                                                <td>
-                                                    100
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    7
-                                                </td>
-                                                <td>
-                                                    Membuat prosedur standar UB Guest
-                                                    House
-                                                </td>
-                                                <td>
-                                                    Tambahan
-                                                </td>
-                                                <td>
-                                                    10
-                                                </td>
-                                                <td>
-                                                    100
-                                                </td>
-                                            </tr>
-
-
+                                        <?php endforeach?>
                                         </tbody>
                                     </table>
                                 </div>

@@ -8,4 +8,14 @@ class status_user extends Model
     protected $primaryKey = 'id_status_user';
 
     protected $useTimestamps = false;
+
+    public function getStatusUser($id_status_user = false)
+    {
+
+        if ($id_status_user == false) {
+            return $this->findAll();
+        }
+
+        return $this->where(['id_status_user' => $id_status_user])->first();
+    }
 }

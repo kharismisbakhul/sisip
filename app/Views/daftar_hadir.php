@@ -79,7 +79,7 @@
 
                     <form action="" method="">
                         <div class="input-group">
-                            <input type="date" class="form-control" value="2018-05-13">
+                            <input type="date" class="form-control">
                             <input type="text" class="form-control" placeholder="nama...">
                             <div class="input-group-append">
                                 <button class="btn btn-info" type="button"><i class="fas fa-search"></i></button>
@@ -124,7 +124,7 @@
                                                                 <?= $p['presensi']['waktu_presensi_keluar']?></span>
                                                             <?php if($p['presensi']['status_tempat_kerja'] == 1) {?>
                                                                 <span class="label label-rounded label-warning">WFH</span>
-                                                            <?php } else if($p['status_tempat_kerja'] == 2) {?>
+                                                            <?php } else if($p['presensi']['status_tempat_kerja'] == 2) {?>
                                                                 <span class="label label-rounded label-warning">WFO</span>
                                                             <?php } else {?>
                                                                 <span class="label label-rounded label-warning">WO</span>
@@ -141,7 +141,7 @@
                                         </tbody>
                                     </table>
 
-                                    <div class="d-flex justify-content-end mb-2">
+                                    <!-- <div class="d-flex justify-content-end mb-2">
 
                                         <nav aria-label="Page navigation example">
                                             <ul class="pagination">
@@ -152,7 +152,7 @@
                                                 <li class="page-item"><a class="page-link" href="#">Next</a></li>
                                             </ul>
                                         </nav>
-                                    </div>
+                                    </div> -->
 
                                 </div>
                             </div>

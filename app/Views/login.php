@@ -49,7 +49,11 @@
                     <!-- Form -->
                     <div class="row">
                         <div class="col-12">
-                            <h1 class="mt-5 text-center"> Login Sisip</h1>
+                            <h2 class="mt-5 text-center">Login</h2>
+                            <h3 class="mt-1 text-center">Sistem Presensi Pegawai</h3>
+                            <?php if(session()->getFlashdata('eror')) {?>
+                                <h5 class="mt-2 mb-0 text-center alert alert-danger"><?= session()->getFlashdata('eror') ?></h5>
+                            <?php }?>
                             <form class="form-horizontal mt-5" id="loginform" action="<?= base_url('/login')?>" method="post">
                                 <?= csrf_field() ?>
                                 <div class="input-group mb-3">

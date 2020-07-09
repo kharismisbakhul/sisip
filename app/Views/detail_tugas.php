@@ -71,64 +71,53 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-
-                                    <table class="table table-hover ">
+                                <?php if($tugas == null) {?>
+                                    <div class="col-lg-12 alert alert-warning text-center">Belum ada Tugas yang diselesaikan, Silahkan Mengisi Logbook!!</div>
+                                <?php }else{?>
+                                    <table class="table table-hover " id="klarifikasi-tugas-detail">
                                         <thead>
                                             <tr>
                                                 <th>No</th>
                                                 <th>Tugas</th>
                                                 <th>Jenis Tugas</th>
-                                                <th>Count</th>
+                                                <th>Jumlah</th>
                                                 <th>Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-
+                                        <?php $i = 1; foreach($tugas as $t) : ?>
                                             <tr>
-                                                <td>1</td>
-                                                <td>Memimpin UB Guest House dan International Dormitory serta menjadi
-                                                    motivator bagi karyawan</td>
-                                                <td>Utama</td>
-                                                <td>1</td>
-                                                <td> <i class="fas fa-dot-circle mr-2 text-warning"></i>
-                                                    <button class="btn btn-sm btn-warning">Revisi</button>
-                                                    <p>Anda tidak mengerjakan ini!</p>
-
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>Memimpin UB Guest House dan International Dormitory serta menjadi
-                                                    motivator bagi karyawan</td>
-                                                <td>Utama</td>
-                                                <td>1</td>
-                                                <td><i class="fas fa-dot-circle mr-2 text-purple"></i>
+                                                <td><?= $i++; ?></td>
+                                                <td><?= $t['nama_tugas']?></td>
+                                                <?php if($t['id_rancangan_tugas'] != 0) { ?>
+                                                    <td>Utama</td>
+                                                <?php } else {?>
+                                                    <td>Tambahan</td>
+                                                <?php }?>
+                                                <td><?= $t['jumlah_tugas']?></td>
+                                                <?php if($t['status_tugas'] == 1) { ?>
+                                                    <td><i class="fas fa-dot-circle mr-2 text-success"></i>
+                                                    valid</td>
+                                                <?php }else if($t['status_tugas'] == 2) {?>
+                                                    <td>
+                                                        <i class="fas fa-dot-circle mr-2 text-warning"></i>
+                                                        <button class="btn btn-sm btn-warning">Revisi</button>
+                                                        <p><?= $t['catatan']?></p>
+                                                    </td>
+                                                <?php }else if($t['status_tugas'] == 3) {?>
+                                                    <td><i class="fas fa-dot-circle mr-2"></i> Belum valid</td>
+                                                <?php } else {?>
+                                                    <td><i class="fas fa-dot-circle mr-2 text-purple"></i>
                                                     Klarifikasi
-                                                    <a href=""><i class="fas fa-file-alt"></i></a>
-                                                    <p>Sudah benar melakukan kerjaan seperti itu</p>
-                                                </td>
+                                                    <a href="#" class="bukti-klarifikasi-detail" data-id="<?= $t['bukti']?>"><i class="fas fa-file-alt"></i></a>
+                                                    <p><?= $t['catatan']?></p>
+                                                    </td>
+                                                <?php }?>
                                             </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>Memimpin UB Guest House dan International Dormitory serta menjadi
-                                                    motivator bagi karyawan</td>
-                                                <td>Utama</td>
-                                                <td>1</td>
-                                                <td><i class="fas fa-dot-circle mr-2 text-success"></i>
-                                                    valid</td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>Memimpin UB Guest House dan International Dormitory serta menjadi
-                                                    motivator bagi karyawan</td>
-                                                <td>Tambahan</td>
-                                                <td>1</td>
-                                                <td><i class="fas fa-dot-circle mr-2 text-success"></i>
-                                                    valid</td>
-                                            </tr>
-
+                                            <?php endforeach?>
                                         </tbody>
                                     </table>
+                                <?php }?>
                                 </div>
                             </div>
                         </div>

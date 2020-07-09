@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 29, 2020 at 03:35 AM
+-- Generation Time: Jul 09, 2020 at 07:30 AM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.1
 
@@ -101,9 +101,9 @@ CREATE TABLE `feedback` (
 --
 
 INSERT INTO `feedback` (`id_feedback`, `feedback`, `no_induk`, `kategori_feedback`, `file_pendukung`) VALUES
-(1, '0', '700', 1, ''),
-(2, '0', '700', 3, ''),
-(3, 'Haga', '700', 2, '');
+(5, 'AAA', '700', 3, ''),
+(6, 'AAAA', '700', 4, '395871.jpg'),
+(7, 'AVCC', '700', 4, 'Abstrak Jurnal - Misbakhul Kharis 165150201111021.pdf');
 
 -- --------------------------------------------------------
 
@@ -151,6 +151,60 @@ INSERT INTO `hari` (`id_hari`, `nama_hari`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `indeks_kepuasan`
+--
+
+CREATE TABLE `indeks_kepuasan` (
+  `id` int(11) NOT NULL,
+  `tanggal` date NOT NULL,
+  `status` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `indeks_kepuasan`
+--
+
+INSERT INTO `indeks_kepuasan` (`id`, `tanggal`, `status`) VALUES
+(2, '2020-07-11', 0),
+(4, '2020-07-06', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `indeks_nilai`
+--
+
+CREATE TABLE `indeks_nilai` (
+  `id_nilai` int(11) NOT NULL,
+  `id_pertanyaan` int(11) NOT NULL,
+  `nilai` int(11) NOT NULL,
+  `no_induk` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `indeks_pertanyaan`
+--
+
+CREATE TABLE `indeks_pertanyaan` (
+  `id_pertanyaan` int(11) NOT NULL,
+  `pertanyaan` varchar(500) NOT NULL,
+  `id_indeks` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `indeks_pertanyaan`
+--
+
+INSERT INTO `indeks_pertanyaan` (`id_pertanyaan`, `pertanyaan`, `id_indeks`) VALUES
+(7, 'Test ', 2),
+(8, 'contoh soal 2 ?', 2),
+(9, 'contoh soal 3 ?', 2);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `jabatan`
 --
 
@@ -171,7 +225,21 @@ INSERT INTO `jabatan` (`id_jabatan`, `kode_jabatan`, `detail_jabatan`) VALUES
 (4, 4, 1),
 (5, 5, 1),
 (6, 6, 1),
-(7, 7, 3);
+(7, 7, 3),
+(8, 7, 1),
+(9, 7, 2),
+(10, 7, 4),
+(11, 7, 5),
+(12, 7, 6),
+(13, 7, 7),
+(14, 7, 8),
+(15, 7, 9),
+(16, 7, 10),
+(17, 7, 11),
+(18, 7, 12),
+(19, 7, 13),
+(20, 7, 14),
+(21, 7, 15);
 
 -- --------------------------------------------------------
 
@@ -300,7 +368,12 @@ INSERT INTO `menu` (`id_menu`, `nama_menu`, `link`, `icon`, `status_user`, `id_k
 (27, 'Kinerja', '/supervisor/laporanKinerja', 'icon-Bar-Chart2', 6, 3),
 (28, 'Evaluasi', '/supervisor/LaporanEvaluasi', 'icon-Bar-Chart5', 6, 3),
 (29, 'Keaktifan', '/supervisor/laporanKeaktifan', 'icon-Line-Chart3', 6, 3),
-(30, 'Indeks Kepuasan', '/supervisor/indeksKepuasan', 'icon-Pie-Chart2', 6, 3);
+(30, 'Indeks Kepuasan', '/supervisor/indeksKepuasan', 'icon-Pie-Chart2', 6, 3),
+(31, 'Dashboard', '/admin', 'icon-Car-Wheel', 1, 1),
+(32, 'Profil', '/admin/profil', 'icon-User', 1, 1),
+(33, 'Management Users', '/admin/managementUsers', 'icon-People-onCloud', 1, 2),
+(34, 'Daftar Saran', '/admin/daftarSaran', 'icon-Mail-Send', 1, 2),
+(35, 'Indeks Kepuasan Pegawai', '/admin/indeksKepuasan', 'icon-Pie-Chart2', 1, 2);
 
 -- --------------------------------------------------------
 
@@ -354,6 +427,28 @@ CREATE TABLE `penilaian_kinerja` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `perizinan`
+--
+
+CREATE TABLE `perizinan` (
+  `id_perizinan` int(11) NOT NULL,
+  `tanggal_mulai` date NOT NULL,
+  `tanggal_selesai` date NOT NULL,
+  `alasan` varchar(500) NOT NULL,
+  `bukti` varchar(500) NOT NULL,
+  `no_induk` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `perizinan`
+--
+
+INSERT INTO `perizinan` (`id_perizinan`, `tanggal_mulai`, `tanggal_selesai`, `alasan`, `bukti`, `no_induk`) VALUES
+(2, '2020-07-10', '2020-07-14', 'ADDD', '', '700');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `pesan`
 --
 
@@ -379,16 +474,20 @@ CREATE TABLE `presensi` (
   `lokasi` varchar(255) NOT NULL,
   `status_tempat_kerja` int(1) NOT NULL,
   `id_riwayat_jabatan` int(11) NOT NULL,
-  `tanggal_presensi` date NOT NULL
+  `tanggal_presensi` date NOT NULL,
+  `isi_logbook` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `presensi`
 --
 
-INSERT INTO `presensi` (`id_presensi`, `waktu_presensi_masuk`, `waktu_presensi_keluar`, `status_presensi`, `lokasi`, `status_tempat_kerja`, `id_riwayat_jabatan`, `tanggal_presensi`) VALUES
-(1, '07:00:00', '16:00:00', 0, 'Jl. Bunga No. 21', 1, 2, '2020-06-29'),
-(5, '07:20:22', '07:41:55', 0, 'Jl. Bunga No. 22', 1, 1, '2020-06-28');
+INSERT INTO `presensi` (`id_presensi`, `waktu_presensi_masuk`, `waktu_presensi_keluar`, `status_presensi`, `lokasi`, `status_tempat_kerja`, `id_riwayat_jabatan`, `tanggal_presensi`, `isi_logbook`) VALUES
+(1, '07:00:00', '16:00:00', 0, 'Jl. Bunga No. 21', 1, 2, '2020-06-29', 0),
+(5, '07:20:22', '07:41:55', 0, 'Jl. Bunga No. 22', 1, 1, '2020-06-28', 0),
+(6, '07:54:08', '07:54:17', 0, 'Jl. Kucing No. 21', 1, 1, '2020-07-06', 0),
+(7, '08:09:57', '08:10:04', 0, 'Perumahan Griya', 3, 1, '2020-07-07', 0),
+(9, '10:15:21', '11:43:00', 0, 'Jl. Koala No. 33', 1, 1, '2020-07-08', 0);
 
 -- --------------------------------------------------------
 
@@ -398,21 +497,23 @@ INSERT INTO `presensi` (`id_presensi`, `waktu_presensi_masuk`, `waktu_presensi_k
 
 CREATE TABLE `rancangan_tugas` (
   `id_rancangan_tugas` int(11) NOT NULL,
-  `id_jabatan` int(11) NOT NULL,
-  `nama_tugas` varchar(255) NOT NULL,
-  `periode` int(1) NOT NULL,
-  `jumlah_tugas` int(11) NOT NULL,
-  `nomor_pekerjaan` int(11) NOT NULL,
-  `status_tugas` int(11) NOT NULL
+  `id_jabatan` int(11) DEFAULT NULL,
+  `nama_tugas` varchar(255) DEFAULT NULL,
+  `periode` int(1) DEFAULT NULL,
+  `jumlah_total_tugas` int(11) DEFAULT NULL,
+  `nomor_pekerjaan` int(11) DEFAULT NULL,
+  `status_tugas` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `rancangan_tugas`
 --
 
-INSERT INTO `rancangan_tugas` (`id_rancangan_tugas`, `id_jabatan`, `nama_tugas`, `periode`, `jumlah_tugas`, `nomor_pekerjaan`, `status_tugas`) VALUES
+INSERT INTO `rancangan_tugas` (`id_rancangan_tugas`, `id_jabatan`, `nama_tugas`, `periode`, `jumlah_total_tugas`, `nomor_pekerjaan`, `status_tugas`) VALUES
+(0, NULL, NULL, NULL, 0, NULL, NULL),
 (1, 7, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', 1, 10, 1, 1),
-(2, 7, 'Menyiapkan kelengkapan permintaan uang persediaan', 1, 20, 2, 1);
+(2, 7, 'Menyiapkan kelengkapan permintaan uang persediaan', 1, 20, 2, 1),
+(3, 6, 'Monitoring', 1, 20, 12, 1);
 
 -- --------------------------------------------------------
 
@@ -435,7 +536,8 @@ CREATE TABLE `riwayat_jabatan` (
 
 INSERT INTO `riwayat_jabatan` (`id_riwayat_jabatan`, `no_induk`, `id_jabatan`, `status_aktif`, `periode_mulai_jabatan`, `periode_akhir_jabatan`) VALUES
 (1, '700', 7, 1, '2020-06-01', NULL),
-(2, '600', 6, 1, '2020-06-01', NULL);
+(2, '600', 6, 1, '2020-06-01', NULL),
+(4, '701', 7, 1, '2020-06-01', NULL);
 
 -- --------------------------------------------------------
 
@@ -533,8 +635,23 @@ CREATE TABLE `tugas` (
   `jumlah_tugas` int(11) NOT NULL,
   `nomor_pekerjaan` int(11) NOT NULL,
   `status_tugas` int(1) NOT NULL,
-  `id_rancangan_tugas` int(11) NOT NULL
+  `id_rancangan_tugas` int(11) NOT NULL,
+  `catatan` varchar(500) DEFAULT NULL,
+  `bukti` varchar(500) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tugas`
+--
+
+INSERT INTO `tugas` (`id_tugas`, `id_riwayat_jabatan`, `nama_tugas`, `tanggal_tugas`, `periode`, `jumlah_tugas`, `nomor_pekerjaan`, `status_tugas`, `id_rancangan_tugas`, `catatan`, `bukti`) VALUES
+(2, 1, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', '2020-07-07', 1, 1, 1, 1, 1, '', NULL),
+(3, 1, 'Menyiapkan kelengkapan permintaan uang persediaan', '2020-07-07', 1, 3, 2, 1, 2, '', NULL),
+(4, 1, 'Siram Bunga', '2020-07-07', 1, 2, 0, 1, 0, '', NULL),
+(6, 1, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', '2020-07-08', 1, 1, 1, 2, 1, 'Harus Revisi', NULL),
+(7, 1, 'Ganti Baju', '2020-07-07', 1, 1, 0, 1, 0, '', NULL),
+(8, 1, 'Cuci Cuci', '2020-07-08', 1, 1, 0, 1, 0, 'Saya sudah melakukan ini loh mas', 'ERD.png'),
+(10, 1, 'Menyiapkan kelengkapan permintaan uang persediaan', '2020-07-08', 1, 4, 2, 1, 2, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -561,13 +678,14 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`no_induk`, `password`, `nama`, `no_telepon`, `alamat`, `email`, `tahun_masuk`, `foto_profil`, `isPenilaian`, `isPresensi`, `id_status_user`) VALUES
-('100', '123', 'Admin', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1),
+('100', '123', 'Admin', NULL, NULL, NULL, NULL, 'assets/images/users/Kharis.jpg', NULL, NULL, 1),
 ('200', '123', 'Operator', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2),
 ('300', '123', 'Donny Alair', '086666666', 'Jl. Kembang No. 44', 'donny@gmail.com', 2013, NULL, 0, 0, 3),
 ('400', '123', 'Rita Wahyuningsih, S.S', '085555555555', 'Jl. Bunga Bunga No. 22', 'ritawahyu@gmail.com', 2013, NULL, 0, 0, 4),
 ('500', '123', 'Adika Setia Hadi', '0899999999', 'Jl. Kucing No. 22', 'adika@gmail.com', 2014, NULL, 0, 0, 5),
-('600', '123', 'Cuikitalia, SE', '081111111', 'Jl. Mawar No. 33', 'cuikitalia@gmail.com', 2014, 'assets/images/users/1.jpg', 0, 0, 6),
-('700', '123', 'Juniar Sofyan Syah', '082222222233', 'Jl. Melati No. 333', 'juniar@gmail.com', 2013, 'assets/images/users/1.jpg', 0, 0, 7);
+('600', '123', 'Cuikitalia, SE', '081111111', 'Jl. Mawar No. 33', 'cuikitalia@gmail.com', 2014, 'assets/images/users/kharis_ub.png', 0, 0, 6),
+('700', '321', 'Juniar Sofyan Syah', '082222222233', 'Jl. Melati No. 333', 'juniarS@gmail.com', 2013, 'assets/images/users/Kharis.jpg', 0, 0, 7),
+('701', '321', 'Joni AB', '082222222233', 'Jl. Melati No. 333', 'juniarS@gmail.com', 2013, 'assets/images/users/Kharis.jpg', 0, 0, 7);
 
 -- --------------------------------------------------------
 
@@ -627,6 +745,27 @@ ALTER TABLE `general_manager`
 --
 ALTER TABLE `hari`
   ADD PRIMARY KEY (`id_hari`);
+
+--
+-- Indexes for table `indeks_kepuasan`
+--
+ALTER TABLE `indeks_kepuasan`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `indeks_nilai`
+--
+ALTER TABLE `indeks_nilai`
+  ADD PRIMARY KEY (`id_nilai`),
+  ADD KEY `no_induk` (`no_induk`),
+  ADD KEY `id_pertanyaan` (`id_pertanyaan`);
+
+--
+-- Indexes for table `indeks_pertanyaan`
+--
+ALTER TABLE `indeks_pertanyaan`
+  ADD PRIMARY KEY (`id_pertanyaan`),
+  ADD KEY `id_indeks` (`id_indeks`);
 
 --
 -- Indexes for table `jabatan`
@@ -690,6 +829,13 @@ ALTER TABLE `pengumuman`
 ALTER TABLE `penilaian_kinerja`
   ADD PRIMARY KEY (`id_penilaian_kinerja`),
   ADD KEY `id_riwayat_jabatan` (`id_riwayat_jabatan`);
+
+--
+-- Indexes for table `perizinan`
+--
+ALTER TABLE `perizinan`
+  ADD PRIMARY KEY (`id_perizinan`),
+  ADD KEY `no_induk` (`no_induk`);
 
 --
 -- Indexes for table `pesan`
@@ -789,7 +935,7 @@ ALTER TABLE `direktur`
 -- AUTO_INCREMENT for table `feedback`
 --
 ALTER TABLE `feedback`
-  MODIFY `id_feedback` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_feedback` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `general_manager`
@@ -804,10 +950,28 @@ ALTER TABLE `hari`
   MODIFY `id_hari` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
+-- AUTO_INCREMENT for table `indeks_kepuasan`
+--
+ALTER TABLE `indeks_kepuasan`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `indeks_nilai`
+--
+ALTER TABLE `indeks_nilai`
+  MODIFY `id_nilai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `indeks_pertanyaan`
+--
+ALTER TABLE `indeks_pertanyaan`
+  MODIFY `id_pertanyaan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
 -- AUTO_INCREMENT for table `jabatan`
 --
 ALTER TABLE `jabatan`
-  MODIFY `id_jabatan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_jabatan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `jam_kerja`
@@ -837,7 +1001,7 @@ ALTER TABLE `manager`
 -- AUTO_INCREMENT for table `menu`
 --
 ALTER TABLE `menu`
-  MODIFY `id_menu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id_menu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `penanggalan`
@@ -858,28 +1022,34 @@ ALTER TABLE `penilaian_kinerja`
   MODIFY `id_penilaian_kinerja` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `perizinan`
+--
+ALTER TABLE `perizinan`
+  MODIFY `id_perizinan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `pesan`
 --
 ALTER TABLE `pesan`
-  MODIFY `id_pesan` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_pesan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `presensi`
 --
 ALTER TABLE `presensi`
-  MODIFY `id_presensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_presensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `rancangan_tugas`
 --
 ALTER TABLE `rancangan_tugas`
-  MODIFY `id_rancangan_tugas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_rancangan_tugas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `riwayat_jabatan`
 --
 ALTER TABLE `riwayat_jabatan`
-  MODIFY `id_riwayat_jabatan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_riwayat_jabatan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `staff`
@@ -903,7 +1073,7 @@ ALTER TABLE `supervisor`
 -- AUTO_INCREMENT for table `tugas`
 --
 ALTER TABLE `tugas`
-  MODIFY `id_tugas` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_tugas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `validasi`
@@ -932,6 +1102,19 @@ ALTER TABLE `feedback`
 --
 ALTER TABLE `general_manager`
   ADD CONSTRAINT `general_manager_ibfk_1` FOREIGN KEY (`id_direktur`) REFERENCES `direktur` (`id_direktur`);
+
+--
+-- Constraints for table `indeks_nilai`
+--
+ALTER TABLE `indeks_nilai`
+  ADD CONSTRAINT `indeks_nilai_ibfk_1` FOREIGN KEY (`no_induk`) REFERENCES `user` (`no_induk`),
+  ADD CONSTRAINT `indeks_nilai_ibfk_2` FOREIGN KEY (`id_pertanyaan`) REFERENCES `indeks_pertanyaan` (`id_pertanyaan`);
+
+--
+-- Constraints for table `indeks_pertanyaan`
+--
+ALTER TABLE `indeks_pertanyaan`
+  ADD CONSTRAINT `indeks_pertanyaan_ibfk_1` FOREIGN KEY (`id_indeks`) REFERENCES `indeks_kepuasan` (`id`);
 
 --
 -- Constraints for table `jabatan`
@@ -976,6 +1159,12 @@ ALTER TABLE `pengumuman`
 --
 ALTER TABLE `penilaian_kinerja`
   ADD CONSTRAINT `penilaian_kinerja_ibfk_1` FOREIGN KEY (`id_riwayat_jabatan`) REFERENCES `riwayat_jabatan` (`id_riwayat_jabatan`);
+
+--
+-- Constraints for table `perizinan`
+--
+ALTER TABLE `perizinan`
+  ADD CONSTRAINT `perizinan_ibfk_1` FOREIGN KEY (`no_induk`) REFERENCES `user` (`no_induk`);
 
 --
 -- Constraints for table `pesan`

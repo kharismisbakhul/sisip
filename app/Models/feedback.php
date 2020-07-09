@@ -11,4 +11,9 @@ class feedback extends Model
     protected $allowedFields = [
         'id_feedback', 'feedback', 'no_induk', 'kategori_feedback', 'file_pendukung'
     ];
+
+    public function getFeedback()
+    {
+        return $this->join('user', 'user.no_induk=feedback.no_induk', 'left')->join('kategori_feedback as kf', 'kf.id_kategori=feedback.kategori_feedback', 'left')->findAll();
+    }
 }

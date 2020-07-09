@@ -8,4 +8,7 @@ class pesan extends Model
     protected $primaryKey = 'id_pesan';
 
     protected $useTimestamps = false;
+    protected $allowedFields = [
+        'id_pesan', 'pesan', 'waktu', 'tanggal', 'user'
+    ];
 }

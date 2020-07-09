@@ -87,7 +87,7 @@
                 <div class="col-md-12 col-lg-8">
                     <div class="row">
 
-                        <?php if($user['isPresensi'] == 0){?>
+                        <?php if($presensi == null){?>
                         <div class="col-lg-12">
                             <div class="card bg-light-info no-card-border">
                                 <div class="card-body">
@@ -95,7 +95,7 @@
                                         <div class="m-r-10">
                                             <h4>Reminder</h4>
                                             <span>Anda belum melakukan presensi hari ini tanggal <b><?= date('d-m-Y')?></b>.
-                                                Segera lakukan presensi sebelum pukul <b>07.30 </b>!</span>
+                                                Segera lakukan presensi<b></b>!</span>
                                         </div>
                                         <div class="ml-auto">
                                             <i class="icon-Information" style="font-size: 50px;"></i>

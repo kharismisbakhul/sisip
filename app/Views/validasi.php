@@ -51,77 +51,28 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                        <?php $i = 1; foreach($presensi_bawahan as $p) : ?>
                                             <tr>
-                                                <td>1</td>
-                                                <td>12-05-2020</td>
-                                                <td>Aditya Yusril Fikri</td>
+                                                <td><?= $i++; ?></td>
+                                                <td><?= $p['tanggal_presensi']?></td>
+                                                <td><?= $p['nama']?></td>
+                                                <?php if($p['status_tempat_kerja'] == 1) { ?>
                                                 <td>WFH</td>
-                                                <td>Jln. Simpang Candi Panggung gang 3 no 2, Malang</td>
+                                                <?php }else if($p['status_tempat_kerja'] == 2) { ?>
+                                                <td>WFO</td>
+                                                <?php }else{?>
+                                                <td>WO</td>
+                                                <?php }?>
+                                                <td><?= $p['lokasi']?></td>
                                                 <td><i class="fas fa-dot-circle mr-2 text-info"></i>
-                                                    <span>4</span>
+                                                    <span><?= $p['jumlah_tugas_validasi']?></span>
                                                 </td>
                                                 <td>
-                                                    <a href="v_detail_validasi.html" type="button"
+                                                    <a href="<?= base_url('/supervisor/detailValidasi/'.$p['id_presensi']) ?>" type="button"
                                                         class="btn btn-info">Detail</a>
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>12-05-2020</td>
-                                                <td>Aditya Yusril Fikri</td>
-                                                <td>WFH</td>
-                                                <td>Jln. Simpang Candi Panggung gang 3 no 2, Malang</td>
-                                                <td><i class="fas fa-dot-circle mr-2 text-info"></i>
-                                                    <span>4</span>
-                                                </td>
-                                                <td>
-                                                    <a href="v_detail_validasi.html" type="button"
-                                                        class="btn btn-info">Detail</a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>12-05-2020</td>
-                                                <td>Aditya Yusril Fikri</td>
-                                                <td>WFH</td>
-                                                <td>Jln. Simpang Candi Panggung gang 3 no 2, Malang</td>
-                                                <td><i class="fas fa-dot-circle mr-2 text-info"></i>
-                                                    <span>4</span>
-                                                </td>
-                                                <td>
-                                                    <a href="v_detail_validasi.html" type="button"
-                                                        class="btn btn-info">Detail</a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>12-05-2020</td>
-                                                <td>Aditya Yusril Fikri</td>
-                                                <td>WFH</td>
-                                                <td>Jln. Simpang Candi Panggung gang 3 no 2, Malang</td>
-                                                <td><i class="fas fa-dot-circle mr-2 text-info"></i>
-                                                    <span>3</span>
-                                                </td>
-                                                <td>
-                                                    <a href="v_detail_validasi.html" type="button"
-                                                        class="btn btn-info">Detail</a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>5</td>
-                                                <td>12-05-2020</td>
-                                                <td>Aditya Yusril Fikri</td>
-                                                <td>WFH</td>
-                                                <td>Jln. Simpang Candi Panggung gang 3 no 2, Malang</td>
-                                                <td><i class="fas fa-dot-circle mr-2 text-info"></i>
-                                                    <span>1</span>
-                                                </td>
-                                                <td>
-                                                    <a href="v_detail_validasi.html" type="button"
-                                                        class="btn btn-info">Detail</a>
-                                                </td>
-                                            </tr>
-
+                                        <?php endforeach?>
                                         </tbody>
                                     </table>
                                 </div>

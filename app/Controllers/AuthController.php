@@ -31,11 +31,15 @@ class AuthController extends BaseController
         }
         else{
             $login = [
-                'username' => $this->request->getPost('username') ,
+                'no_induk' => $this->request->getPost('username') ,
                 'password' => $this->request->getPost('password')
             ];
             $user = model('user');
-            $data = $user->asArray()->where('no_induk', $login['username'])->first();
+            $data = $user->asArray()->where($login)->first();
+            if($data == null){
+                session()->setFlashdata('eror', 'Login gagal, Username / Password tidak sesuai');
+                return redirect()->to(base_url());
+            }
             session()->set($data);
             return redirect()->to(base_url());
         }
@@ -80,6 +84,14 @@ class AuthController extends BaseController
         }
         // dd($data['pegawai']);
         return view('daftar_hadir', $data);
+    }
+    
+    public function geolokasi(){
+        $myfile = fopen(base_url('/assets/images/bukti_klarifikasi/ERD.png'), "r") or die("Unable to open file!");
+        echo fgets($myfile);
+        fclose($myfile);
+        // echo readfile(base_url('/assets/images/bukti_klarifikasi/ERD.png'));
+        // return view('geolokasi');
     }
 
 }
