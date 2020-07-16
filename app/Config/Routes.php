@@ -37,6 +37,9 @@ $routes->post('/login', 'AuthController::login');
 $routes->get('/logout', 'AuthController::logout');
 $routes->get('/daftarHadir', 'AuthController::daftarHadir');
 $routes->get('/geolokasi', 'AuthController::geolokasi');
+$routes->get('/logbookApi/(:any)', 'StaffController::logbookApi/$1');
+$routes->get('/kinerjaApi', 'StaffController::kinerjaApi');
+$routes->post('/staff/inputLogbookApi', 'StaffController::inputLogbookApi');
 
 // Admin
 $routes->get('/admin', 'AdminController::index');
@@ -100,6 +103,7 @@ $routes->get('/staff/logbook', 'StaffController::logbook');
 $routes->post('/staff/inputLogbook', 'StaffController::inputLogbook');
 $routes->get('/staff/selesaiInput/(:num)', 'StaffController::selesaiInput/$1');
 $routes->get('/staff/hapusTugas/(:num)', 'StaffController::hapusTugas/$1');
+$routes->get('/hapusTugasApi/(:any)', 'StaffController::hapusTugasApi/$1');
 $routes->get('/staff/detailTugas/(:num)', 'StaffController::detailTugas/$1');
 $routes->get('/staff/capaianKerja', 'StaffController::capaianKerja');
 $routes->get('/staff/saran', 'StaffController::saran');

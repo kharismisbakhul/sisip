@@ -9,7 +9,7 @@ class feedback extends Model
 
     protected $useTimestamps = false;
     protected $allowedFields = [
-        'id_feedback', 'feedback', 'no_induk', 'kategori_feedback', 'file_pendukung'
+        'id_feedback', 'feedback', 'no_induk', 'kategori_feedback', 'file_pendukung', 'tanggal', 'waktu'
     ];
 
     public function getFeedback()

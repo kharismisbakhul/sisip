@@ -26,6 +26,54 @@
                 <!-- ============================================================== -->
                 <!-- Start Page Content -->
                 <!-- ============================================================== -->
+                <div class="col-lg-12 col-xlg-12 col-md-12">
+                        <div class="card">
+                            <div class="card-header bg-info text-white">
+                                <h4>Riwayat Saran</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="zero_config" class="table table-hover table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Tanggal</th>
+                                                <th>Waktu</th>
+                                                <th>Saran</th>
+                                                <th>Jenis Saran</th>
+                                                <th>Bukti</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php $a = 1;
+                                        foreach($feedback as $f) :?>
+                                            <tr>
+                                                <td>
+                                                    <?= $a++;?>
+                                                </td>
+                                                <td>
+                                                    <?= $f['tanggal_bahasa']?>
+                                                </td>
+                                                <td>
+                                                    <?= $f['waktu']?>
+                                                </td>
+                                                <td>
+                                                    <?= $f['feedback']?>
+                                                </td>
+                                                <td>
+                                                    <?= $f['nama_kategori']?>
+                                                </td>
+                                                <td>
+                                                    <a target="_blank" href="<?= base_url('/assets/images/file_pendukung/'.$f['file_pendukung'])?>"><?= $f['file_pendukung']?></a>
+                                                </td>
+                                            </tr>
+                                            <?php endforeach ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 <!-- Row -->
                 <div class="row">
 

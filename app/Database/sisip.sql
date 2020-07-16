@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 09, 2020 at 07:30 AM
+-- Generation Time: Jul 16, 2020 at 10:06 AM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.1
 
@@ -91,6 +91,8 @@ INSERT INTO `direktur` (`id_direktur`, `nama_direktur`) VALUES
 CREATE TABLE `feedback` (
   `id_feedback` int(11) NOT NULL,
   `feedback` varchar(255) NOT NULL,
+  `tanggal` date NOT NULL,
+  `waktu` time NOT NULL,
   `no_induk` varchar(30) NOT NULL,
   `kategori_feedback` int(11) NOT NULL,
   `file_pendukung` varchar(255) NOT NULL
@@ -100,10 +102,12 @@ CREATE TABLE `feedback` (
 -- Dumping data for table `feedback`
 --
 
-INSERT INTO `feedback` (`id_feedback`, `feedback`, `no_induk`, `kategori_feedback`, `file_pendukung`) VALUES
-(5, 'AAA', '700', 3, ''),
-(6, 'AAAA', '700', 4, '395871.jpg'),
-(7, 'AVCC', '700', 4, 'Abstrak Jurnal - Misbakhul Kharis 165150201111021.pdf');
+INSERT INTO `feedback` (`id_feedback`, `feedback`, `tanggal`, `waktu`, `no_induk`, `kategori_feedback`, `file_pendukung`) VALUES
+(5, 'AAA', '2020-07-16', '08:00:00', '700', 3, ''),
+(6, 'AAAA', '2020-07-01', '11:00:00', '700', 4, '395871.jpg'),
+(7, 'AVCC', '2020-07-16', '18:00:00', '700', 4, 'Abstrak Jurnal - Misbakhul Kharis 165150201111021.pdf'),
+(8, 'Saran 1', '2020-07-14', '10:00:00', '700', 4, '23_Kartu_Peserta_Seminar_Hasil.pdf'),
+(9, 'Feedback Baru dong', '2020-07-15', '08:00:00', '700', 1, '21.jpg');
 
 -- --------------------------------------------------------
 
@@ -166,7 +170,8 @@ CREATE TABLE `indeks_kepuasan` (
 
 INSERT INTO `indeks_kepuasan` (`id`, `tanggal`, `status`) VALUES
 (2, '2020-07-11', 0),
-(4, '2020-07-06', 0);
+(4, '2020-07-06', 0),
+(11, '2020-07-09', 1);
 
 -- --------------------------------------------------------
 
@@ -180,6 +185,15 @@ CREATE TABLE `indeks_nilai` (
   `nilai` int(11) NOT NULL,
   `no_induk` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `indeks_nilai`
+--
+
+INSERT INTO `indeks_nilai` (`id_nilai`, `id_pertanyaan`, `nilai`, `no_induk`) VALUES
+(9, 12, 3, '700'),
+(10, 13, 3, '700'),
+(11, 14, 3, '700');
 
 -- --------------------------------------------------------
 
@@ -200,7 +214,10 @@ CREATE TABLE `indeks_pertanyaan` (
 INSERT INTO `indeks_pertanyaan` (`id_pertanyaan`, `pertanyaan`, `id_indeks`) VALUES
 (7, 'Test ', 2),
 (8, 'contoh soal 2 ?', 2),
-(9, 'contoh soal 3 ?', 2);
+(9, 'contoh soal 3 ?', 2),
+(12, 'Pertanyaan 1', 11),
+(13, 'Pertanyaan 2', 11),
+(14, 'Pertanyaan 3', 11);
 
 -- --------------------------------------------------------
 
@@ -436,6 +453,7 @@ CREATE TABLE `perizinan` (
   `tanggal_selesai` date NOT NULL,
   `alasan` varchar(500) NOT NULL,
   `bukti` varchar(500) NOT NULL,
+  `kategori_izin` int(1) NOT NULL,
   `no_induk` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -443,8 +461,9 @@ CREATE TABLE `perizinan` (
 -- Dumping data for table `perizinan`
 --
 
-INSERT INTO `perizinan` (`id_perizinan`, `tanggal_mulai`, `tanggal_selesai`, `alasan`, `bukti`, `no_induk`) VALUES
-(2, '2020-07-10', '2020-07-14', 'ADDD', '', '700');
+INSERT INTO `perizinan` (`id_perizinan`, `tanggal_mulai`, `tanggal_selesai`, `alasan`, `bukti`, `kategori_izin`, `no_induk`) VALUES
+(2, '2020-07-10', '2020-07-14', 'ADDD', '', 1, '700'),
+(3, '2020-07-16', '2020-07-17', 'Cuti ya', '21.jpg', 0, '700');
 
 -- --------------------------------------------------------
 
@@ -460,6 +479,16 @@ CREATE TABLE `pesan` (
   `user` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `pesan`
+--
+
+INSERT INTO `pesan` (`id_pesan`, `pesan`, `waktu`, `tanggal`, `user`) VALUES
+(6, 'Hai Gaes', '02:54:51', '2020-07-09', '100'),
+(7, 'Saya Supervisor', '02:55:28', '2020-07-09', '600'),
+(8, 'Aku Januar', '02:56:14', '2020-07-09', '700'),
+(9, 'Wahahaha', '10:10:06', '2020-07-16', '700');
+
 -- --------------------------------------------------------
 
 --
@@ -472,6 +501,7 @@ CREATE TABLE `presensi` (
   `waktu_presensi_keluar` time DEFAULT NULL,
   `status_presensi` int(1) NOT NULL,
   `lokasi` varchar(255) NOT NULL,
+  `lokasi_keluar` varchar(255) DEFAULT NULL,
   `status_tempat_kerja` int(1) NOT NULL,
   `id_riwayat_jabatan` int(11) NOT NULL,
   `tanggal_presensi` date NOT NULL,
@@ -482,12 +512,14 @@ CREATE TABLE `presensi` (
 -- Dumping data for table `presensi`
 --
 
-INSERT INTO `presensi` (`id_presensi`, `waktu_presensi_masuk`, `waktu_presensi_keluar`, `status_presensi`, `lokasi`, `status_tempat_kerja`, `id_riwayat_jabatan`, `tanggal_presensi`, `isi_logbook`) VALUES
-(1, '07:00:00', '16:00:00', 0, 'Jl. Bunga No. 21', 1, 2, '2020-06-29', 0),
-(5, '07:20:22', '07:41:55', 0, 'Jl. Bunga No. 22', 1, 1, '2020-06-28', 0),
-(6, '07:54:08', '07:54:17', 0, 'Jl. Kucing No. 21', 1, 1, '2020-07-06', 0),
-(7, '08:09:57', '08:10:04', 0, 'Perumahan Griya', 3, 1, '2020-07-07', 0),
-(9, '10:15:21', '11:43:00', 0, 'Jl. Koala No. 33', 1, 1, '2020-07-08', 0);
+INSERT INTO `presensi` (`id_presensi`, `waktu_presensi_masuk`, `waktu_presensi_keluar`, `status_presensi`, `lokasi`, `lokasi_keluar`, `status_tempat_kerja`, `id_riwayat_jabatan`, `tanggal_presensi`, `isi_logbook`) VALUES
+(1, '07:00:00', '16:00:00', 0, 'Jl. Bunga No. 21', NULL, 1, 2, '2020-06-29', 0),
+(5, '07:20:22', '07:41:55', 0, 'Jl. Bunga No. 22', NULL, 1, 1, '2020-06-28', 0),
+(6, '07:54:08', '07:54:17', 0, 'Jl. Kucing No. 21', NULL, 1, 1, '2020-07-06', 0),
+(7, '08:09:57', '08:10:04', 0, 'Perumahan Griya', NULL, 3, 1, '2020-07-07', 0),
+(9, '10:15:21', '11:43:00', 0, 'Jl. Koala No. 33', NULL, 1, 1, '2020-07-08', 0),
+(10, '01:53:11', '01:56:33', 0, 'Jl. Veteran No. 21', NULL, 2, 1, '2020-07-09', 0),
+(12, '09:43:48', '09:46:50', 0, 'Jalan Sultan Agung, RW 10, Pasar Manggis, Setiabudi, South Jakarta, Jakarta Special Capital Region, 12850, Indonesia', 'Malang, East Java, 65113, Indonesia', 2, 1, '2020-07-16', 0);
 
 -- --------------------------------------------------------
 
@@ -502,18 +534,19 @@ CREATE TABLE `rancangan_tugas` (
   `periode` int(1) DEFAULT NULL,
   `jumlah_total_tugas` int(11) DEFAULT NULL,
   `nomor_pekerjaan` int(11) DEFAULT NULL,
-  `status_tugas` int(11) DEFAULT NULL
+  `status_tugas` int(11) DEFAULT NULL,
+  `kode_tugas` varchar(6) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `rancangan_tugas`
 --
 
-INSERT INTO `rancangan_tugas` (`id_rancangan_tugas`, `id_jabatan`, `nama_tugas`, `periode`, `jumlah_total_tugas`, `nomor_pekerjaan`, `status_tugas`) VALUES
-(0, NULL, NULL, NULL, 0, NULL, NULL),
-(1, 7, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', 1, 10, 1, 1),
-(2, 7, 'Menyiapkan kelengkapan permintaan uang persediaan', 1, 20, 2, 1),
-(3, 6, 'Monitoring', 1, 20, 12, 1);
+INSERT INTO `rancangan_tugas` (`id_rancangan_tugas`, `id_jabatan`, `nama_tugas`, `periode`, `jumlah_total_tugas`, `nomor_pekerjaan`, `status_tugas`, `kode_tugas`) VALUES
+(0, NULL, NULL, NULL, 0, NULL, NULL, ''),
+(1, 7, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', 1, 10, 1, 1, 's512dd'),
+(2, 7, 'Menyiapkan kelengkapan permintaan uang persediaan', 1, 20, 2, 1, 'we23rr'),
+(3, 6, 'Monitoring', 1, 20, 12, 1, 'afdr11');
 
 -- --------------------------------------------------------
 
@@ -636,6 +669,7 @@ CREATE TABLE `tugas` (
   `nomor_pekerjaan` int(11) NOT NULL,
   `status_tugas` int(1) NOT NULL,
   `id_rancangan_tugas` int(11) NOT NULL,
+  `kode_tugas` varchar(6) DEFAULT NULL,
   `catatan` varchar(500) DEFAULT NULL,
   `bukti` varchar(500) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -644,14 +678,18 @@ CREATE TABLE `tugas` (
 -- Dumping data for table `tugas`
 --
 
-INSERT INTO `tugas` (`id_tugas`, `id_riwayat_jabatan`, `nama_tugas`, `tanggal_tugas`, `periode`, `jumlah_tugas`, `nomor_pekerjaan`, `status_tugas`, `id_rancangan_tugas`, `catatan`, `bukti`) VALUES
-(2, 1, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', '2020-07-07', 1, 1, 1, 1, 1, '', NULL),
-(3, 1, 'Menyiapkan kelengkapan permintaan uang persediaan', '2020-07-07', 1, 3, 2, 1, 2, '', NULL),
-(4, 1, 'Siram Bunga', '2020-07-07', 1, 2, 0, 1, 0, '', NULL),
-(6, 1, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', '2020-07-08', 1, 1, 1, 2, 1, 'Harus Revisi', NULL),
-(7, 1, 'Ganti Baju', '2020-07-07', 1, 1, 0, 1, 0, '', NULL),
-(8, 1, 'Cuci Cuci', '2020-07-08', 1, 1, 0, 1, 0, 'Saya sudah melakukan ini loh mas', 'ERD.png'),
-(10, 1, 'Menyiapkan kelengkapan permintaan uang persediaan', '2020-07-08', 1, 4, 2, 1, 2, NULL, NULL);
+INSERT INTO `tugas` (`id_tugas`, `id_riwayat_jabatan`, `nama_tugas`, `tanggal_tugas`, `periode`, `jumlah_tugas`, `nomor_pekerjaan`, `status_tugas`, `id_rancangan_tugas`, `kode_tugas`, `catatan`, `bukti`) VALUES
+(2, 1, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', '2020-07-07', 1, 1, 1, 1, 1, 's512dd', '', NULL),
+(3, 1, 'Menyiapkan kelengkapan permintaan uang persediaan', '2020-07-07', 1, 3, 2, 1, 2, 'we23rr', '', NULL),
+(4, 1, 'Siram Bunga', '2020-07-07', 1, 2, 0, 1, 0, 'ww2211', '', NULL),
+(6, 1, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', '2020-07-08', 1, 1, 1, 2, 1, 's512dd', 'Harus Revisi', NULL),
+(7, 1, 'Ganti Baju', '2020-07-07', 1, 1, 0, 1, 0, '33wwee', '', NULL),
+(8, 1, 'Cuci Cuci', '2020-07-08', 1, 1, 0, 4, 0, 'rewq11', 'Saya sudah melakukan ini loh mas', 'ERD.png'),
+(10, 1, 'Menyiapkan kelengkapan permintaan uang persediaan', '2020-07-08', 1, 4, 2, 1, 2, 'we23rr', NULL, NULL),
+(12, 1, 'Bersih Bersih', '2020-07-09', 1, 2, 0, 1, 0, 'bds455', NULL, NULL),
+(13, 1, 'Menyiapkan kelengkapan permintaan uang persediaan', '2020-07-09', 1, 4, 2, 4, 2, 'we23rr', 'Saya melakukan ini', 'Abstrak Jurnal - Misbakhul Kharis 165150201111021.pdf'),
+(31, 1, 'Menyiapkan kelengkapan permintaan uang persediaan', '2020-07-16', 1, 6, 2, 3, 2, 'we23rr', NULL, NULL),
+(32, 1, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', '2020-07-16', 1, 5, 1, 3, 1, 's512dd', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -935,7 +973,7 @@ ALTER TABLE `direktur`
 -- AUTO_INCREMENT for table `feedback`
 --
 ALTER TABLE `feedback`
-  MODIFY `id_feedback` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_feedback` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `general_manager`
@@ -953,19 +991,19 @@ ALTER TABLE `hari`
 -- AUTO_INCREMENT for table `indeks_kepuasan`
 --
 ALTER TABLE `indeks_kepuasan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `indeks_nilai`
 --
 ALTER TABLE `indeks_nilai`
-  MODIFY `id_nilai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_nilai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `indeks_pertanyaan`
 --
 ALTER TABLE `indeks_pertanyaan`
-  MODIFY `id_pertanyaan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_pertanyaan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `jabatan`
@@ -1025,19 +1063,19 @@ ALTER TABLE `penilaian_kinerja`
 -- AUTO_INCREMENT for table `perizinan`
 --
 ALTER TABLE `perizinan`
-  MODIFY `id_perizinan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_perizinan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `pesan`
 --
 ALTER TABLE `pesan`
-  MODIFY `id_pesan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_pesan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `presensi`
 --
 ALTER TABLE `presensi`
-  MODIFY `id_presensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_presensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `rancangan_tugas`
@@ -1073,7 +1111,7 @@ ALTER TABLE `supervisor`
 -- AUTO_INCREMENT for table `tugas`
 --
 ALTER TABLE `tugas`
-  MODIFY `id_tugas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_tugas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `validasi`

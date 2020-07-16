@@ -40,6 +40,7 @@
                                     <span class="text-white display-6"><i class="ti-check-box"></i></span>
                                 </div>
                             </div>
+                            <a href="<?= base_url('/staff/logbook')?>" class="float-right text-white btn btn-secondary">Detail</a>
                         </div>
                     </div>
                 </div>
@@ -56,6 +57,7 @@
                                     <span class="text-white display-6"><i class="ti-clipboard"></i></span>
                                 </div>
                             </div>
+                            <a href="<?= base_url('/staff/logbook')?>" class="float-right text-white btn btn-secondary">Detail</a>
                         </div>
                     </div>
                 </div>
@@ -71,6 +73,7 @@
                                     <span class="text-white display-6"><i class="ti-alert"></i></span>
                                 </div>
                             </div>
+                            <a href="<?= base_url('/staff/klarifikasi')?>" class="float-right text-white btn btn-secondary">Detail</a>
                         </div>
                     </div>
                 </div>
@@ -94,16 +97,35 @@
                                     <div class="d-flex align-items-center">
                                         <div class="m-r-10">
                                             <h4>Reminder</h4>
-                                            <span>Anda belum melakukan presensi hari ini tanggal <b><?= date('d-m-Y')?></b>.
+                                            <span>Anda belum melakukan presensi <u>masuk</u> hari ini tanggal <b><?= date('d-m-Y')?></b>.
                                                 Segera lakukan presensi<b></b>!</span>
                                         </div>
                                         <div class="ml-auto">
                                             <i class="icon-Information" style="font-size: 50px;"></i>
                                         </div>
                                     </div>
+                                    <a href="<?= base_url('/staff/presensi')?>" class="text-white btn btn-secondary mt-2">Klik disini untuk presensi !!</a>
                                 </div>
                             </div>
                         </div>
+                        <?php }elseif(($presensi['waktu_presensi_keluar'] == null)){?>
+                            <div class="col-lg-12">
+                                <div class="card bg-light-info no-card-border">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="m-r-10">
+                                                <h4>Reminder</h4>
+                                                <span>Anda belum melakukan presensi <u>keluar</u> hari ini tanggal <b><?= date('d-m-Y')?></b>.
+                                                    Segera lakukan presensi<b></b>!</span>
+                                            </div>
+                                            <div class="ml-auto">
+                                                <i class="icon-Information" style="font-size: 50px;"></i>
+                                            </div>
+                                        </div>
+                                        <a href="<?= base_url('/staff/presensi')?>" class="text-white btn btn-secondary mt-2">Klik disini untuk presensi !!</a>
+                                    </div>
+                                </div>
+                            </div>
                         <?php }?>
                         <div class="col-lg-12">
                             <div class="card">
@@ -160,32 +182,32 @@
                     <div class="card ">
                         <div class="card-body">
                             <h4 class="card-title">Diagram Progres Kinerja</h4>
-                            <div id="visitor" style="height:253px; width:100%;" class="m-t-20"></div>
+                            <div id="dashboard_diagram" style="height:253px; width:100%;" class="m-t-20"></div>
                             <!-- row -->
                             <div class="row m-t-30 m-b-15">
                                 <!-- column -->
                                 <div class="col-4 birder-right text-left">
-                                    <h4 class="m-b-0">60
+                                    <h4 class="m-b-0"><?= $jumlah_validasi ?>
                                         <small>
-                                            <i class="fas fa-stop text-info"></i>
+                                            <i class="fas fa-stop text-success"></i>
                                         </small>
-                                    </h4>Desktop
+                                    </h4>Pekerjaan divalidasi
                                 </div>
                                 <!-- column -->
                                 <div class="col-4 birder-right text-center">
-                                    <h4 class="m-b-0">28
+                                    <h4 class="m-b-0"><?= $jumlah_belum_validasi ?>
                                         <small>
-                                            <i class="fas fa-stop text-danger"></i>
+                                            <i class="fas fa-stop text-info"></i>
                                         </small>
-                                    </h4>Mobile
+                                    </h4>Pekerjaan belum divalidasi
                                 </div>
                                 <!-- column -->
                                 <div class="col-4 text-right">
-                                    <h4 class="m-b-0">12
+                                    <h4 class="m-b-0"><?= $jumlah_revisi ?>
                                         <small>
-                                            <i class="fas fa-stop text-secondary"></i>
+                                            <i class="fas fa-stop text-warning"></i>
                                         </small>
-                                    </h4>Tablet
+                                    </h4>Pekerjaan revisi
                                 </div>
                             </div>
                         </div>

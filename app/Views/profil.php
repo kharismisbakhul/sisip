@@ -112,6 +112,7 @@
                                                         <th scope="col">No</th>
                                                         <th scope="col">Nama Tugas</th>
                                                         <th scope="col">Jenis Tugas</th>
+                                                        <th scope="col">Tugas Dikerjakan</th>
                                                         <th scope="col">Jumlah Total</th>
 
                                                     </tr>
@@ -126,6 +127,7 @@
                                                             }else{
                                                                 echo '<td>Tambahan</td>';   
                                                             }?>
+                                                        <td><?= $rt['jumlah_tugas']?> </td>
                                                         <td><?= $rt['jumlah_total_tugas']?> </td>
                                                     </tr>
                                                     <?php endforeach?>
@@ -139,7 +141,7 @@
                                             <div class="progress">
                                                 <div class="progress-bar bg-info" role="progressbar" aria-valuenow="<?= $jumlah_tugas_berlangsung;?>"
                                                     aria-valuemin="0" aria-valuemax="<?= $jumlah_total_tugas;?>"
-                                                    style="width:<?= $jumlah_tugas_berlangsung;?>%; height:6px;">
+                                                    style="width:<?= (($jumlah_tugas_berlangsung/$jumlah_total_tugas) * 100);?>%; height:6px;">
                                                 </div>
                                             </div>
                                         </div>
@@ -271,7 +273,15 @@
                             </div>
                             <div class="form-group">
                                 <label for="message-text" class="control-label">Keterangan</label>
-                                <input type="text" class="form-control" id="message-text1" name="keterangan">
+                                <textarea class="form-control" id="message-text1" name="keterangan"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="message-text" class="control-label">Kategori</label>
+                                <select class="form-control" id="message-text1" name="kategori_izin">
+                                    <option value="1">Izin</option>
+                                    <option value="2">Sakit</option>
+                                    <option value="3">Cuti</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="message-text" class="control-label">Bukti</label>

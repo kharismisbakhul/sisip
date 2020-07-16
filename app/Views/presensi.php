@@ -43,13 +43,17 @@
                                     <div class="card-body">
                                         <div class="d-flex align-items-center">
                                             <div class="m-r-10">
-                                            <?php if($presensi == null || $presensi['waktu_presensi_keluar'] == null){?>
+                                            <?php if($presensi == null){?>
                                                 <h4>Reminder</h4>
-                                                <span>Anda belum melakukan presensi hari ini tanggal <b><?= date('d-m-Y')?></b>.
+                                                <span>Anda belum melakukan presensi <u>masuk</u> hari ini tanggal <b><?= date('d-m-Y')?></b>.
+                                                   <b> </b></span>
+                                            <?php }else if($presensi['waktu_presensi_keluar'] == null){?>
+                                                <h4>Reminder</h4>
+                                                <span>Anda belum melakukan presensi <u>keluar</u> hari ini tanggal <b><?= date('d-m-Y')?></b>.
                                                    <b> </b></span>
                                             <?php }else{?>
                                                 <h4>Reminder</h4>
-                                                <span>Anda sudah melakukan presensi hari ini tanggal <b><?= date('d-m-Y')?></b>.
+                                                <span>Anda <u>sudah</u> melakukan presensi hari ini tanggal <b><?= date('d-m-Y')?></b>.
                                                    <b> </b></span>
                                             <?php }?>
                                             </div>
@@ -80,9 +84,18 @@
                                 </div>
                                 <hr>
                                 <div class="row">
-                                    <div class="col-5 font-bold">Lokasi</div>
+                                    <div class="col-5 font-bold">Lokasi Masuk</div>
                                     <?php if($presensi != null) { ?>
                                         <div class="col-7"><?= $presensi['lokasi']?></div>
+                                    <?php } else { ?>
+                                        <div class="col-7">Belum Melakukan Presensi</div>
+                                    <?php } ?>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-5 font-bold">Lokasi Keluar</div>
+                                    <?php if($presensi != null && $presensi['waktu_presensi_keluar'] != null) { ?>
+                                        <div class="col-7"><?= $presensi['lokasi_keluar']?></div>
                                     <?php } else { ?>
                                         <div class="col-7">Belum Melakukan Presensi</div>
                                     <?php } ?>
@@ -94,9 +107,7 @@
                                     <div class="col-lg-12">
                                         <input type="hidden" name="user" value="<?= $user['id_riwayat_jabatan']?>" >
                                         <input type="hidden" name="no_induk" value="<?= $user['no_induk']?>" >
-                                        <?php if($presensi != null && $presensi['waktu_presensi_keluar'] == null) { ?>
-                                            <input type="hidden" name="lokasi" value="<?= $presensi['lokasi']?>" >
-                                            <fieldset class="radio">
+                                            <!-- <fieldset class="radio">
                                                 <label for="radio1">
                                                     <?php if($presensi['status_tempat_kerja'] == 1) { ?>
                                                         <input type="radio" id="radio1" name="status_kerja" value="1" checked> Work From Home (WFH)
@@ -106,8 +117,7 @@
                                                         <input type="radio" id="radio3" name="status_kerja" value="3" checked> Work From Other (WO)
                                                     <?php }?>
                                                 </label>
-                                            </fieldset>
-                                        <?php }else{ ?>
+                                            </fieldset> -->
                                             <fieldset class="radio">
                                                 <label for="radio1">
                                                     <input type="radio" id="radio1" name="status_kerja" value="1" checked> Work From
@@ -126,25 +136,28 @@
                                                     (WO)
                                                 </label>
                                             </fieldset>
-                                        <?php } ?>
                                     </div>
                                 </div>
-                                    <?php if($presensi == null) { ?>
                                     <hr>
                                     <div class="row">
                                         <div class="col-12">
                                                 <div class="input-group">
-                                                    <input class="form-control" type="text" placeholder="Lokasi..."
-                                                        name="lokasi">
+                                                <?php if($presensi == null) { ?>
+                                                    <input class="form-control" type="text" placeholder="Lokasi..." id="lokasi"
+                                                        name="lokasi" onload="initMap()">
+                                                <?php }else{ ?>
+                                                    <input class="form-control" type="text" placeholder="Lokasi..." id="lokasi"
+                                                        name="lokasi" value="<?= $presensi['lokasi']?>" onload="initMap()">
+                                                <?php } ?>
                                                     <div class="input-group-append">
-                                                        <button class="btn btn-info" type="button"><i
+                                                        <button class="btn btn-info" type="button" onclick="getLocation()"><i
                                                                 class="fas fa-map-marker-alt"></i> Deteksi
                                                         </button>
                                                     </div>
                                                 </div>
                                         </div>
                                     </div>
-                                    <?php } ?>
+                                    <div id="mapholder" style="width:300px;height:300px;" class="mt-2"></div>
                                 <hr>
                                 <div class="row">
                                     <div class="col-lg-12 mb-2">
@@ -205,7 +218,10 @@
                                                     </div>
                                                     <div class="comment-text w-100">
                                                         <h3 class="font-medium"><?= $p['tanggal_bahasa']?></h3>
-                                                        <span class="m-b-15 d-block"><?= $p['lokasi']?></span>
+                                                        <span class="m-b-15 d-block"><b>Lokasi Absen Masuk:</b> <?= $p['lokasi']?></span>
+                                                        <?php if($p['lokasi_keluar'] != null) { ?>
+                                                        <span class="m-b-15 d-block"><b>Lokasi Absen Keluar:</b> <?= $p['lokasi_keluar']?></span>
+                                                        <?php } ?>
                                                         <div class="comment-footer">
                                                             <span class="label label-rounded label-primary">In :
                                                                 <?= $p['waktu_presensi_masuk']?></span>

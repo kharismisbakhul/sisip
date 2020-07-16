@@ -179,15 +179,17 @@
     <script src="<?= base_url('assets/extra-libs/c3/d3.min.js')?>"></script>
     <script src="<?= base_url('assets/extra-libs/c3/c3.min.js')?>"></script>
     <!--chartjs -->
-    <script src="<?= base_url('assets/libs/raphael/raphael.min.js')?>"></script>
-    <script src="<?= base_url('assets/libs/morris.js/morris.min.js')?>"></script>
-    <script src="<?= base_url('dist/js/pages/dashboards/dashboard1.js')?>"></script>
+    <!-- <script src="<?= base_url('assets/libs/raphael/raphael.min.js')?>"></script> -->
+    <!-- <script src="<?= base_url('assets/libs/morris.js/morris.min.js')?>"></script> -->
+    <!-- /* <script src="<?= base_url('dist/js/pages/dashboards/dashboard1.js')?>"></script> */ -->
 
-    <script src="<?= base_url('dist/js/pages/dashboards/dashboard2.js')?>"></script>
+    <!-- /* <script src="<?= base_url('dist/js/pages/dashboards/dashboard2.js')?>"></script> */ -->
 
     <!-- Custom Js -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD4NcKjfbIxsPeUU-42gGEiRWz-EI8ASpc"></script>     
     <script src="<?= base_url('assets/js/user.js')?>"></script>
     <script src="<?= base_url('assets/js/script.js') ?>"></script>
+    <script src="<?= base_url('assets/js/geolocation.js') ?>"></script>
 </body>
 
 </html>

@@ -44,7 +44,7 @@
                                             <div class="card-body no-border">
                                                 <h4 class="card-title">Tugas Pegawai</h4>
                                                 <div class="table-responsive">
-                                                    <table class="table no-border">
+                                                    <table class="table no-border" id="logbook-utama">
                                                         <thead>
                                                             <th style="width: 5%">No</th>
                                                             <th style="width: 45%;">Tugas Utama</th>
@@ -57,22 +57,17 @@
                                                                 <td><?= $i++; ?></td>
                                                                 <td><?= $rt['nama_tugas']?></td>
                                                                 <td>
-                                                                    <form action="<?= base_url('/staff/inputLogbook')?>" method="post">
-                                                                        <?= csrf_field(); ?>
                                                                         <div class="input-group">
                                                                             <input class="form-control" type="hidden"
                                                                                 name="id_rancangan_tugas" value="<?= $rt['id_rancangan_tugas']?>">
                                                                             <input class="form-control" type="number"
-                                                                                placeholder="Jumlah..." name="jumlah">
+                                                                                placeholder="Jumlah..." name="jumlah" id="jumlah<?= $rt['id_rancangan_tugas']?>">
                                                                             <div class="input-group-append">
-                                                                                <button class="btn btn-info"
-                                                                                    type="submit"><i
-                                                                                        class="fas fa-send"></i>
+                                                                                <button class="btn btn-info submit-logbook" data-id="<?= $rt['id_rancangan_tugas']?>" data-no="<?= session('no_induk')?>"><i class="fas fa-send"></i>
                                                                                     Kirim
                                                                                 </button>
                                                                             </div>
                                                                         </div>
-                                                                    </form>
                                                                 </td>
 
                                                             </tr>
@@ -80,7 +75,7 @@
                                                             
                                                         </tbody>
                                                     </table>
-                                                    <table class="table no-border">
+                                                    <table class="table no-border" id="logbook-tambahan">
                                                         <thead>
                                                             <th style="width: 40%">Tugas Tambahan</th>
                                                             <th style="width: 25%;">Jumlah</th>
@@ -89,21 +84,17 @@
                                                         </thead>
                                                         <tbody>
                                                             <tr>
-                                                                <form action="<?= base_url('/staff/inputLogbook')?>" method="post">
-                                                                <?= csrf_field(); ?>
                                                                     <td>
                                                                         <input class="form-control" type="hidden"
                                                                         name="id_rancangan_tugas" value="0">
                                                                         <div class="form-group">
-                                                                            <input type="text" class="form-control"
-                                                                                name="nama_tugas_tambahan"
-                                                                                placeholder="tugas tambahan ...">
+                                                                            <textarea class="form-control" name="nama_tugas_tambahan" id="nama_tugas_tambahan">Tugas Tambahan</textarea>
                                                                         </div>
                                                                     </td>
                                                                     <td>
                                                                         <div class="form-group">
                                                                             <input type="number" class="form-control"
-                                                                                name="jumlah" placeholder="Jumlah...">
+                                                                                name="jumlah" placeholder="Jmlh" id="jumlah0">
                                                                         </div>
                                                                     </td>
                                                                     <td>
@@ -115,12 +106,10 @@
                                                                         </div>
                                                                     </td>
                                                                     <td>
-                                                                        <button class="btn btn-info" type="submit"><i
-                                                                                class="fas fa-send"></i>
+                                                                        <button class="btn btn-info submit-logbook" data-id="0" data-no="<?= session('no_induk')?>"><i class="fas fa-send"></i>
                                                                             Kirim
                                                                         </button>
                                                                     </td>
-                                                                </form>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -128,14 +117,14 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <a href="<?= base_url('/staff/selesaiInput/'.$presensi_hari_ini['id_presensi'])?>" class="btn btn-success">Selesai Input</a>
+                                        <!-- <a href="<?= base_url('/staff/selesaiInput/'.$presensi_hari_ini['id_presensi'])?>" class="btn btn-success">Selesai Input</a> -->
                                         <?php }?>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="card">
                                             <div class="card-body no-border">
                                                 <h4 class="card-title">Sudah Diselesaikan Hari Ini</h4>
-                                                <table class="table no-border" id="klarifikasi-tugas-utama">
+                                                <table class="table no-border" id="logbook-tugas-utama">
                                                     <thead>
                                                         <th style="width: 5%">No</th>
                                                         <th style="width: 50%;">Tugas Utama</th>
@@ -143,7 +132,7 @@
                                                         <th style="width: 30%">Status</th>
                                                         <th style="width: 10%">Aksi</th>
                                                     </thead>
-                                                    <tbody>
+                                                    <tbody id="table-tugas-utama">
                                                         <?php $i = 1; foreach($tugas_hari_ini as $t) : ?>
                                                             <tr>
                                                                 <td><?= $i++; ?></td>
@@ -164,7 +153,7 @@
                                                                     <td>
                                                                         <i class="fas fa-dot-circle mr-2 text-purple"></i>
                                                                         Klarifikasi
-                                                                        <a href="#" class="bukti-klarifikasi-tugas" data-id="<?= $t['bukti']?>"><i class="fas fa-file-alt"></i></a>
+                                                                        <a target="_blank" href="<?= base_url('/assets/images/bukti_klarifikasi/'.$t['bukti'])?>"><i class="fas fa-file-alt"></i></a>
                                                                         <p><?= $t['catatan']?></p>
                                                                     </td>
                                                                 <?php }?>
@@ -172,7 +161,7 @@
                                                         <?php endforeach?>
                                                     </tbody>
                                                 </table>
-                                                <table class="table no-border" id="klarifikasi-tugas-tambahan">
+                                                <table class="table no-border" id="logbook-tugas-tambahan">
                                                     <thead>
                                                         <th style="width: 5%">No</th>
                                                         <th style="width: 50%;">Tugas Tambahan</th>
@@ -180,7 +169,7 @@
                                                         <th style="width: 30%">Status</th>
                                                         <th style="width: 10%">Aksi</th>
                                                     </thead>
-                                                    <tbody>
+                                                    <tbody id="table-tugas-tambahan">
                                                     <?php $i = 1; foreach($tugas_tambahan_hari_ini as $tt) : ?>
                                                         <tr>
                                                             <td><?= $i++; ?></td>
@@ -201,7 +190,7 @@
                                                                 <td>
                                                                     <i class="fas fa-dot-circle mr-2 text-purple"></i>
                                                                     Klarifikasi
-                                                                    <a href="#" class="bukti-klarifikasi-fix" data-id="<?= $tt['bukti']?>"><i class="fas fa-file-alt"></i></a>
+                                                                    <a target="_blank" href="<?= base_url('/assets/images/bukti_klarifikasi/'.$tt['bukti'])?>"><i class="fas fa-file-alt"></i></a>
                                                                     <p><?= $tt['catatan']?></p>
                                                                 </td>
                                                             <?php }?>

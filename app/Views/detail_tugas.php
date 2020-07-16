@@ -43,7 +43,11 @@
                                             </h2>
                                             <h4><i class="fas fa-calendar-alt mr-2"></i><?= $presensi['tanggal_bahasa']?></h4>
                                             <div class="comment-footer mb-2">
-                                                <span><i class="fas fa-map-marker-alt mr-2"></i><?= $presensi['lokasi']?></span>
+                                                <?php if($presensi['waktu_presensi_keluar'] != null) { ?>
+                                                    <span><i class="fas fa-map-marker-alt mr-2"></i>(Masuk) <?= $presensi['lokasi']?> - (Keluar) <?= $presensi['lokasi_keluar']?></span>
+                                                <?php }else{ ?>
+                                                    <span><i class="fas fa-map-marker-alt mr-2"></i>(Masuk) <?= $presensi['lokasi']?></span>
+                                                <?php } ?>
                                             </div>
                                             <span class="label label-rounded label-primary">In :
                                                 <?= $presensi['waktu_presensi_masuk']?></span>
@@ -109,7 +113,7 @@
                                                 <?php } else {?>
                                                     <td><i class="fas fa-dot-circle mr-2 text-purple"></i>
                                                     Klarifikasi
-                                                    <a href="#" class="bukti-klarifikasi-detail" data-id="<?= $t['bukti']?>"><i class="fas fa-file-alt"></i></a>
+                                                    <a target="_blank" href="<?= base_url('/assets/images/bukti_klarifikasi/'.$t['bukti'])?>"><i class="fas fa-file-alt"></i></a>
                                                     <p><?= $t['catatan']?></p>
                                                     </td>
                                                 <?php }?>
