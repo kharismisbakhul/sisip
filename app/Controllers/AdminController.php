@@ -8,6 +8,13 @@ use App\Models\feedback;
 use App\Models\indeksKepuasan;
 use App\Models\indeksPertanyaan;
 use App\Models\indeksNilai;
+use App\Models\penilaian_kinerja;
+use App\Models\nilai_pk;
+use App\Models\pertanyaan_pk;
+use App\Models\pengumuman;
+use App\Models\rancangan_tugas;
+use App\Models\jabatan;
+use App\Models\riwayat_jabatan;
 
 class AdminController extends BaseController
 {
@@ -18,6 +25,13 @@ class AdminController extends BaseController
     protected $indeksModel;
     protected $indeksPertanyaanModel;
     protected $indeksNilaiModel;
+    protected $penilaianKinerjaModel;
+    protected $nilaipkModel;
+    protected $pertanyaanpkModel;
+    protected $pengumumanModel;
+    protected $rancanganTugasModel;
+    protected $jabatanModel;
+    protected $riwayatJabatanModel;
     protected $data = [];
     public function __construct()
     {
@@ -27,11 +41,19 @@ class AdminController extends BaseController
         $this->indeksModel = new indeksKepuasan();
         $this->indeksPertanyaanModel = new indeksPertanyaan();
         $this->indeksNilaiModel = new indeksNilai();
+        $this->penilaianKinerjaModel = new penilaian_kinerja();
+        $this->nilaipkModel = new nilai_pk();
+        $this->pertanyaanpkModel = new pertanyaan_pk();
+        $this->pengumumanModel = new pengumuman();
+        $this->rancanganTugasModel = new rancangan_tugas();
+        $this->jabatanModel = new jabatan();
+        $this->riwayatJabatanModel = new riwayat_jabatan();
         $menu = model('menu');
         $kategori = model('kategori_menu');
         $this->data['menu'] = $menu->where('status_user', session('id_status_user'))->findAll();
         $this->data['kategori_menu'] = $kategori->findAll();
         $this->data['user'] = $this->userModel->getUser(session('no_induk'));
+        $this->data['validation'] =  \Config\Services::validation();
     }
 
 
@@ -53,7 +75,8 @@ class AdminController extends BaseController
     {
         $this->data['title'] =  'Tambah Users';
         $this->data['status_user'] = $this->statusUserModel->getStatusUser();
-        $this->data['validation'] =  \Config\Services::validation();
+        $this->data['validation'] = \Config\Services::validation();
+
         return view('admin/tambahUser', $this->data);
     }
 
@@ -62,7 +85,13 @@ class AdminController extends BaseController
         // In the controller
         if (!$this->validate([
             'nama' => 'required',
-            'no_induk' => 'required|is_unique[user.no_induk]',
+            'no_induk' => [
+                'rules' => 'required|is_unique[user.no_induk]',
+                'errors' => [
+                    'required' => 'No induk harus diisi',
+                    'is_unique' => 'No induk sudah terdaftar',
+                ]
+            ],
             'tahun_masuk' => 'required',
             'email' => 'required',
             'no_telepon' => 'required',
@@ -70,8 +99,11 @@ class AdminController extends BaseController
             'status_user' => 'required',
             'foto_profil' => 'uploaded[foto_profil]|max_size[foto_profil,2048]|ext_in[foto_profil,jpg,png]'
         ])) {
-            $validation = \Config\Services::validation();
-            return redirect()->to('/admin/tambahUser')->withInput()->with('validation', $validation);
+            // // dd($this->data['validation']);
+            // session()->setFlashdata('pesan', '<span class="text-danger">Data gagal ditambahkan!</span>');
+            $this->data['validation'] = \Config\Services::validation();
+
+            return redirect()->to('/admin/tambahUser')->withInput()->with('test', 'cel');
         }
 
         $file = $this->request->getFile('foto_profil');
@@ -120,39 +152,72 @@ class AdminController extends BaseController
 
         $no_induk_baru = $this->request->getVar('no_induk');
         if ($user['no_induk'] == $no_induk_baru) {
-            $role2 = 'required';
+            $role2 = [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'No induk harus diisi',
+                ]
+            ];
         } else {
-            $role2 =  'required|is_unique[user.no_induk]';
+            $role2 =  [
+                'rules' => 'required|is_unique[user.no_induk]',
+                'errors' => [
+                    'required' => 'No induk harus diisi',
+                    'is_unique' => 'No induk sudah terdaftar',
+                ]
+            ];
         }
-        $validation = \Config\Services::validation();
+
 
         if ($file->getName()) {
-            if (!$this->validate([
-                'nama' => 'required',
-                'no_induk' => $role2,
-                'tahun_masuk' => 'required',
-                'email' => 'required',
-                'no_telepon' => 'required',
-                'alamat' => 'required',
-                'status_user' => 'required',
-                'foto_profil' => 'uploaded[foto_profil]|max_size[foto_profil,2048]|ext_in[foto_profil,jpg,png]'
-            ])) {
-                return redirect()->to('/admin/ubahUser/' . $no_induk)->withInput()->with('validation', $validation);
+            if (session('id_status_user') == 1 || session('id_status_user') == 2) {
+                if (!$this->validate([
+                    'nama' => 'required',
+                    'no_induk' => $role2,
+                    'foto_profil' => 'uploaded[foto_profil]|max_size[foto_profil,2048]|ext_in[foto_profil,jpg,png]'
+                ])) {
+                    $this->data['validation'] = \Config\Services::validation();
+                    return redirect()->to('/admin/ubahUser/' . $no_induk)->withInput()->with('test', 'cek');
+                }
+            } else {
+                if (!$this->validate([
+                    'nama' => 'required',
+                    'no_induk' => $role2,
+                    'tahun_masuk' => 'required',
+                    'email' => 'required',
+                    'no_telepon' => 'required',
+                    'alamat' => 'required',
+                    'status_user' => 'required',
+                    'foto_profil' => 'uploaded[foto_profil]|max_size[foto_profil,2048]|ext_in[foto_profil,jpg,png]'
+                ])) {
+                    $this->data['validation'] = \Config\Services::validation();
+                    return redirect()->to('/admin/ubahUser/' . $no_induk)->withInput()->with('test', 'cek');
+                }
             }
         } else {
-            if (!$this->validate([
-                'nama' => 'required',
-                'no_induk' => $role2,
-                'tahun_masuk' => 'required',
-                'email' => 'required',
-                'no_telepon' => 'required',
-                'alamat' => 'required',
-                'status_user' => 'required',
-            ])) {
-                return redirect()->to('/admin/ubahUser/' . $no_induk)->withInput()->with('validation', $validation);
+            if (session('id_status_user') == 1 || session('id_status_user') == 2) {
+                if (!$this->validate([
+                    'nama' => 'required',
+                    'no_induk' => $role2,
+                ])) {
+                    $this->data['validation'] = \Config\Services::validation();
+                    return redirect()->to('/admin/ubahUser/' . $no_induk)->withInput()->with('test', 'cek');
+                }
+            } else {
+                if (!$this->validate([
+                    'nama' => 'required',
+                    'no_induk' => $role2,
+                    'tahun_masuk' => 'required',
+                    'email' => 'required',
+                    'no_telepon' => 'required',
+                    'alamat' => 'required',
+                    'status_user' => 'required',
+                ])) {
+                    $this->data['validation'] = \Config\Services::validation();
+                    return redirect()->to('/admin/ubahUser/' . $no_induk)->withInput()->with('test', 'cek');
+                }
             }
         }
-
 
         if ($file->getName()) {
             $file->move(FCPATH . 'assets/images/users/');
@@ -205,9 +270,26 @@ class AdminController extends BaseController
 
     public function settingPekerjaan($no_induk)
     {
+        $pekerjaan_aktif = [];
         $this->data['title'] =  'Setting Pekerjaan Users';
         $this->data['validation'] =  \Config\Services::validation();
         $this->data['u'] = $this->userModel->getUser($no_induk);
+        $this->data['status_user'] = $this->statusUserModel->whereNotIn('id_status_user', [1, 2])->findAll();
+        $this->data['riwayat_pekerjaan'] = $this->riwayatJabatanModel->getRiwayatJabatan($no_induk);
+        foreach ($this->data['riwayat_pekerjaan'] as $r) {
+            if ($r['status_aktif'] == 1) {
+                $pekerjaan_aktif = $r;
+            }
+        }
+
+        if ($pekerjaan_aktif) {
+            $this->data['pekerjaan_sekarang'] = $this->rancanganTugasModel->where('id_jabatan', $pekerjaan_aktif['id_jabatan'])->findAll();
+            $this->data['pekerjaan'] = $pekerjaan_aktif;
+        } else {
+            $this->data['pekerjaan_sekarang'] = null;
+            $this->data['pekerjaan'] = null;
+        }
+        // dd($this->data);
 
         return view('admin/settingPekerjaan', $this->data);
     }
@@ -305,27 +387,36 @@ class AdminController extends BaseController
         return view('admin/editIndeksKepuasan', $this->data);
     }
 
+    public function apiPertanyaan($id)
+    {
+        $data = $this->indeksPertanyaanModel->getPertanyaan($id);
+        echo json_encode($data);
+    }
+
     public function tambahIndeksPertanyaan()
     {
         $data = [
             'pertanyaan' => $this->request->getVar('pertanyaan'),
             'id_indeks' => $this->request->getVar('id_indeks'),
         ];
-
         $this->indeksPertanyaanModel->insert($data);
-        session()->setFlashdata('pesan', 'Pertanyaan berhasil ditambah');
-        return redirect()->to('/admin/editIndeksKepuasan/' . $this->request->getVar('id_indeks'));
+        $id_pertanyaan = $this->indeksPertanyaanModel->getLastId();
+        $data['nomer'] = count($this->indeksPertanyaanModel->getPertanyaan($this->request->getVar('id_indeks')));
+        $data['pertanyaan'] = $this->indeksPertanyaanModel->where(['id_pertanyaan' => $id_pertanyaan['id_pertanyaan']])->first();
+        echo json_encode($data);
     }
 
-    public function editIndeksPertanyaan($id_pertanyaan)
+    public function editIndeksPertanyaan()
     {
+        $id_pertanyaan = $this->request->getVar('id_pertanyaan');
         $data = [
             'pertanyaan' => $this->request->getVar('pertanyaan')
         ];
 
         $this->indeksPertanyaanModel->update($id_pertanyaan, $data);
-        session()->setFlashdata('pesan', 'Pertanyaan berhasil diubah');
-        return redirect()->to('/admin/editIndeksKepuasan/' . $this->request->getVar('id_indeks'));
+        echo json_encode($id_pertanyaan);
+        // session()->setFlashdata('pesan', 'Pertanyaan berhasil diubah');
+        // return redirect()->to('/admin/editIndeksKepuasan/' . $this->request->getVar('id_indeks'));
     }
 
     public function ubahStatusIndeks($id)
@@ -379,5 +470,342 @@ class AdminController extends BaseController
         $this->indeksModel->where('id', $id_indeks)->delete();
         session()->setFlashdata('pesan', 'Indeks kepuasan berhasil dihapus');
         return redirect()->to('/admin/indeksKepuasan');
+    }
+
+    public function penilaianKinerja()
+    {
+        $this->data['title'] = 'Penilaian Kinerja';
+        $this->data['penilaian'] = $this->penilaianKinerjaModel->findAll();
+
+        $data = [];
+        $data2 = [];
+        for ($i = 0; $i < count($this->data['penilaian']); $i++) {
+            $data[$this->data['penilaian'][$i]['id_pk']] = count($this->pertanyaanpkModel->getPertanyaanpk($this->data['penilaian'][$i]['id_pk']));
+            $data2[$this->data['penilaian'][$i]['id_pk']] = $this->penilaianKinerjaModel->jumlahRespond($this->data['penilaian'][$i]['id_pk']);
+        }
+
+        $this->data['jumlah'] = $data;
+        $this->data['responden'] = $data2;
+        return view('/admin/daftarPenilaianKinerja', $this->data);
+    }
+
+    public function tambahPenilaianKinerja()
+    {
+        $data = [
+            'tanggal_pk' => $this->request->getVar('tanggal_pk'),
+            'nama_pk' => $this->request->getVar('nama_pk')
+        ];
+
+        $this->penilaianKinerjaModel->insert($data);
+        session()->setFlashdata('pesan', 'Penilaian kinerja pegawai berhasil ditambah!');
+        return redirect()->to('/admin/penilaianKinerja');
+    }
+
+    public function hapusPenilaianKinerja()
+    {
+        $id_pk = $this->request->getVar('id_pk');
+        $dataPertanyaan = $this->pertanyaanpkModel->where('id_pk', $id_pk)->findAll();
+        foreach ($dataPertanyaan as $p) {
+            $this->nilaipkModel->where('id_pertanyaan_pk', $p['id_pertanyaan_pk'])->delete();
+        }
+        $this->pertanyaanpkModel->where('id_pk', $id_pk)->delete();
+        $this->penilaianKinerjaModel->where('id_pk', $id_pk)->delete();
+        session()->setFlashdata('pesan', 'Indeks kepuasan berhasil dihapus');
+        return redirect()->to('/admin/penilaianKinerja');
+    }
+
+    public function ubahStatusPenilaian($id)
+    {
+        $cekIndek = $this->penilaianKinerjaModel->where(['id_pk' => $id])->first();
+        if ($cekIndek['status_pk'] == 1) {
+            $data2 = [
+                'status_pk' => 0
+            ];
+            $this->penilaianKinerjaModel->update($id, $data2);
+            session()->setFlashdata('pesan', 'Status penilaian kinerja berhasil diubah');
+            return redirect()->to('/admin/penilaianKinerja');
+        } else {
+            $penilaian = $this->penilaianKinerjaModel->findAll();
+            $data = [];
+            for ($i = 0; $i < count($penilaian); $i++) {
+                $data[$i] = [
+                    'id_pk' => $penilaian[$i]['id_pk'],
+                    'status_pk' => 0
+                ];
+            }
+
+            $this->penilaianKinerjaModel->updateBatch($data, 'id_pk');
+            $data2 = [
+                'status_pk' => 1
+            ];
+            $this->penilaianKinerjaModel->update($id, $data2);
+            session()->setFlashdata('pesan', 'Status penilaian kinerja berhasil diubah');
+            return redirect()->to('/admin/penilaianKinerja');
+        }
+    }
+
+    public function editPenilaianKinerja($id_pk)
+    {
+        $this->data['title'] = 'Edit Penilaian Kinerja';
+        $this->data['pertanyaan'] = $this->pertanyaanpkModel->where(['id_pk' => $id_pk])->findAll();
+        $this->data['penilaian'] = $this->penilaianKinerjaModel->where(['id_pk' => $id_pk])->first();
+        return view('admin/editPenilaianKinerja', $this->data);
+    }
+
+    public function tambahPertanyaanPenilaian()
+    {
+        $data = [
+            'pertanyaan_pk' => $this->request->getVar('pertanyaan_pk'),
+            'id_pk' => $this->request->getVar('id_pk'),
+        ];
+
+        $this->pertanyaanpkModel->insert($data);
+        $id_pertanyaan_pk = $this->pertanyaanpkModel->getLastID();
+
+        $data['nomer'] = count($this->pertanyaanpkModel->getPertanyaanpk($this->request->getVar('id_pk')));
+        $data['pertanyaan_pk'] = $this->pertanyaanpkModel->where(['id_pertanyaan_pk' => $id_pertanyaan_pk['id_pertanyaan_pk']])->first();
+        echo json_encode($data);
+    }
+
+    public function ubahPertanyaanPenilaian()
+    {
+        $id_pertanyaan_pk = $this->request->getVar('id_pertanyaan_pk');
+        $data = [
+            'pertanyaan_pk' => $this->request->getVar('pertanyaan_pk')
+        ];
+
+        $this->pertanyaanpkModel->update($id_pertanyaan_pk, $data);
+        echo json_encode($id_pertanyaan_pk);
+    }
+
+    public function hapusPertanyaanPenilaian($id_pertanyaan_pk, $id_pk)
+    {
+        $this->nilaipkModel->where('id_pertanyaan_pk', $id_pertanyaan_pk)->delete();
+        $this->pertanyaanpkModel->where('id_pertanyaan_pk', $id_pertanyaan_pk)->delete();
+        session()->setFlashdata('pesan', 'Pertanyaan berhasil dihapus');
+        return redirect()->to('/admin/editPenilaianKinerja/' . $id_pk);
+    }
+
+    public function hasilPenilaianKinerja($id_pk)
+    {
+        $this->data['title'] = 'Hasil Penilaian Kinerja';
+        $user = $this->userModel->getUserKepuasan();
+
+        foreach ($user as $u) {
+            $data[$u['no_induk']] = [
+                'nama' => $u['nama'],
+                'status' => $u['nama_status_user'],
+                'no_induk' => $u['no_induk'],
+                'pekerjaan' => $this->userModel->getDaftarPekerjaanUser($u['no_induk']),
+                'nilai' => $this->penilaianKinerjaModel->getPertanyaan($id_pk, $u['no_induk'])
+            ];
+        }
+        $this->data['penilaian'] = $this->penilaianKinerjaModel->where('id_pk', $id_pk)->first();
+        $this->data['penilaian_kinerja'] = $data;
+        $this->data['pertanyaan'] = $this->pertanyaanpkModel->where('id_pk', $id_pk)->findAll();
+        // dd($this->data);
+        return view('hasilPenilaianKinerja', $this->data);
+    }
+
+    public function daftarPengumuman()
+    {
+        $this->data['title'] = 'Daftar Pengumuman';
+        $this->data['pengumuman'] = $this->pengumumanModel->getPengumuman();
+
+        return view('admin/daftarPengumuman', $this->data);
+    }
+
+    public function tambahPengumuman()
+    {
+        $data = [
+            'pengumuman' => $this->request->getVar('pengumuman'),
+            'tanggal_pengumuman' => date('Y-m-d'),
+            'waktu_pengumuman' => date("h:i:s"),
+            'publisher' => session('no_induk'),
+            'status_pengumuman' => 0,
+        ];
+        $this->pengumumanModel->insert($data);
+        session()->setFlashdata('pesan', 'Data pengumuman berhasil ditambah');
+        return redirect()->to('/admin/daftarPengumuman');
+    }
+
+    public function hapusPengumuman()
+    {
+        $id_pengumuman = $this->request->getVar('id_pengumuman');
+        $this->pengumumanModel->where('id_pengumuman', $id_pengumuman)->delete();
+        session()->setFlashdata('pesan', 'Data pengumuman berhasil dihapus');
+        return redirect()->to('/admin/daftarPengumuman');
+    }
+
+    public function editPengumuman()
+    {
+        $id_pengumuman = $this->request->getVar('id_pengumuman');
+        $data = [
+            'pengumuman' => $this->request->getVar('pengumuman'),
+            'tanggal_pengumuman' => date('Y-m-d'),
+            'waktu_pengumuman' => date("h:i:s"),
+            'status_pengumuman' => $this->request->getVar('status_pengumuman'),
+        ];
+
+
+        $this->pengumumanModel->update($id_pengumuman, $data);
+        session()->setFlashdata('pesan', 'Data pengumuman berhasil diubah');
+        return redirect()->to('/admin/daftarPengumuman');
+    }
+
+    public function daftarRancanganTugas()
+    {
+        $this->data['title'] = "Daftar Rancangan Tugas";
+        $jabatan = $this->jabatanModel->whereNotIn(
+            'kode_jabatan',
+            [1, 2]
+        )->orderBy('kode_jabatan')->findAll();
+        $data = [];
+        $i = 1;
+        foreach ($jabatan as $j) {
+            $data[$j['id_jabatan']] = $this->jabatanModel->getJabtan($j['kode_jabatan'], $j['detail_jabatan']);
+        }
+        $this->data['jabatan'] = $data;
+        return view('admin/daftarRancanganTugas', $this->data);
+    }
+
+    public function lihatRancanganTugas($id_jabatan)
+    {
+        $this->data['title'] = 'Daftar Rancangan Tugas';
+        $id = $this->jabatanModel->where('id_jabatan', $id_jabatan)->first();
+        $this->data['jabatan'] = $this->jabatanModel->getJabtan($id['kode_jabatan'], $id['detail_jabatan']);
+        $this->data['rancangan'] = $this->rancanganTugasModel->where('id_jabatan', $id_jabatan)->orderBy('nomor_pekerjaan', 'ASC')->findAll();
+        return view('admin/editRancanganTugas', $this->data);
+    }
+
+    public function tambahRancanganTugas()
+    {
+        $data = [
+            'id_jabatan' => $this->request->getVar('id_jabatan'),
+            'nama_tugas' => $this->request->getVar('nama_tugas'),
+            'periode' => $this->request->getVar('periode'),
+            'jumlah_tugas' => $this->request->getVar('jumlah_tugas'),
+            'nomor_pekerjaan' => $this->request->getVar('nomor_pekerjaan'),
+            'status_tugas' => 1,
+        ];
+
+        $this->rancanganTugasModel->insert($data);
+        $id_rancangan_tugas = $this->rancanganTugasModel->getLastID();
+
+        $this->data['rancangan'] = $this->rancanganTugasModel->where(['id_rancangan_tugas' => $id_rancangan_tugas['id_rancangan_tugas']])->first();
+        echo json_encode($this->data);
+    }
+
+    public function ubahRancanganTugas()
+    {
+        $id_rancangan_tugas = $this->request->getVar('id_rancangan_tugas');
+
+        $data = [
+            'nama_tugas' => $this->request->getVar('nama_tugas'),
+            'periode' => $this->request->getVar('periode'),
+            'jumlah_tugas' => $this->request->getVar('jumlah_tugas'),
+            'nomor_pekerjaan' => $this->request->getVar('nomor_pekerjaan'),
+        ];
+
+        $this->rancanganTugasModel->update($id_rancangan_tugas, $data);
+        echo json_encode($data);
+    }
+
+    public function hapusRancanganTugas($id_rancangan_tugas, $id_jabatan)
+    {
+        $this->rancanganTugasModel->where('id_rancangan_tugas', $id_rancangan_tugas)->delete();
+        session()->setFlashdata('pesan', 'Data rancangan tugas berhasil dihapus');
+        return redirect()->to('/admin/lihatRancanganTugas/' . $id_jabatan);
+    }
+
+    public function apiDetailJabatan($id_status_user)
+    {
+        $data = $this->jabatanModel->getDaftarJabatan($id_status_user);
+        echo json_encode($data);
+    }
+
+    public function tambahRiwayatPekerjaan($no_induk)
+    {
+
+        $data = [
+            'no_induk' => $no_induk,
+            'id_jabatan' => $this->request->getVar('id_jabatan'),
+            'status_aktif' => 0,
+            'periode_mulai_jabatan' => $this->request->getVar('periode_mulai_jabatan'),
+        ];
+
+        $this->riwayatJabatanModel->insert($data);
+        session()->setFlashdata('pesan', 'Data riwayat pekerjaan berhasil ditambah');
+        return redirect()->to('/admin/settingPekerjaan/' . $no_induk);
+    }
+
+    public function hapusRiwayatPekerjaan($id_riwayat)
+    {
+        $no_induk = $this->request->getVar('no_induk');
+
+        $tugas = model('tugas');
+        $validasi = model('validasi');
+        $presensi = model('presensi');
+        $dataTugas =  $tugas->where('id_riwayat_jabatan', $id_riwayat)->findAll();
+        $dataPresensi = $presensi->where('id_riwayat_jabatan', $id_riwayat)->findAll();
+        // Jika memiliki data tugas
+        if ($dataTugas) {
+            foreach ($dataTugas as $dt) {
+                $validasi->where('id_tugas', $dt['id_tugas'])->delete();
+            }
+            $tugas->where('id_riwayat_jabatan', $id_riwayat)->delete();
+        }
+
+        // jika memiliki data presensi
+        if ($dataPresensi) {
+            $presensi->where('id_riwayat_jabatan', $id_riwayat)->findAll();
+        }
+
+        $this->riwayatJabatanModel->where('id_riwayat_jabatan', $id_riwayat)->delete();
+        session()->setFlashdata('pesan', 'Data riwayat pekerjaan berhasil dihapus');
+        return redirect()->to('/admin/settingPekerjaan/' . $no_induk);
+    }
+
+    public function ubahTanggalMenjabat($id_riwayat)
+    {
+        $no_induk = $this->request->getVar('no_induk');
+        $data = [
+            'periode_mulai_jabatan' => $this->request->getVar('periode_mulai_jabatan'),
+            'periode_akhir_jabatan' => $this->request->getVar('periode_akhir_jabatan')
+        ];
+        $this->riwayatJabatanModel->update($id_riwayat, $data);
+        session()->setFlashdata('pesan', 'Periode riwayat pekerjaan berhasil diubah');
+        return redirect()->to('/admin/settingPekerjaan/' . $no_induk);
+    }
+
+    public function ubahStatusRiwayat($id_riwayat)
+    {
+        $no_induk = $this->request->getVar('no_induk');
+        $cekRiwayat = $this->riwayatJabatanModel->where(['id_riwayat_jabatan' => $id_riwayat])->first();
+        if ($cekRiwayat['status_aktif'] == 1) {
+            $data2 = [
+                'status_aktif' => 0
+            ];
+            $this->riwayatJabatanModel->update($id_riwayat, $data2);
+            session()->setFlashdata('pesan', 'Status riwayat pekerjaan berhasil diubah');
+            return redirect()->to('/admin/settingPekerjaan/' . $no_induk);
+        } else {
+            $indek = $this->riwayatJabatanModel->findAll();
+            $data = [];
+            for ($i = 0; $i < count($indek); $i++) {
+                $data[$i] = [
+                    'id_riwayat_jabatan' => $indek[$i]['id_riwayat_jabatan'],
+                    'status_aktif' => 0
+                ];
+            }
+
+            $this->riwayatJabatanModel->updateBatch($data, 'id_riwayat_jabatan');
+            $data2 = [
+                'status_aktif' => 1
+            ];
+            $this->riwayatJabatanModel->update($id_riwayat, $data2);
+            session()->setFlashdata('pesan', 'Status riwayat pekerjaan berhasil diubah');
+            return redirect()->to('/admin/settingPekerjaan/' . $no_induk);
+        }
     }
 }

@@ -48,7 +48,7 @@ $routes->get('/admin/daftarSaran', 'AdminController::daftarSaran');
 $routes->get('/admin/indeksKepuasan', 'AdminController::indeksKepuasan');
 $routes->get('/admin/editIndeksKepuasan/(:any)', 'AdminController::editIndeksKepuasan/$1');
 $routes->post('/admin/tambahIndeksPertanyaan', 'AdminController::tambahIndeksPertanyaan');
-$routes->post('/admin/editIndeksPertanyaan/(:any)', 'AdminController::editIndeksPertanyaan/$1');
+$routes->post('/admin/editIndeksPertanyaan', 'AdminController::editIndeksPertanyaan');
 $routes->get('/admin/hapusIndeksPertanyaan/(:any)/(:any)', 'AdminController::hapusIndeksPertanyaan/$1/$2');
 $routes->post('/admin/tambahIndeksKepuasan', 'AdminController::tambahIndeksKepuasan');
 $routes->get('/admin/apiPassword/(:any)', 'AdminController::apiPassword/$1');
@@ -58,6 +58,21 @@ $routes->get('/admin/settingPekerjaan/(:any)', 'AdminController::settingPekerjaa
 $routes->get('/admin/ubahUser/(:any)', 'AdminController::ubahUser/$1');
 $routes->get('/admin/hasilIndeksKepuasan/(:any)', 'AdminController::hasilIndeksKepuasan/$1');
 $routes->post('/admin/editUser/(:any)', 'AdminController::editUser/$1');
+$routes->get('/admin/penilaianKinerja', 'AdminController::penilaianKinerja');
+$routes->post('/admin/tambahPenilaianKinerja', 'AdminController::tambahPenilaianKinerja');
+$routes->get('/admin/editPenilaianKinerja/(:any)', 'AdminController::editPenilaianKinerja/$1');
+$routes->get('/admin/hasilPenilaianKinerja/(:any)', 'AdminController::hasilPenilaianKinerja/$1');
+$routes->post('/admin/tambahPertanyaanPenilaian', 'AdminController::tambahPertanyaanPenilaian');
+$routes->post('/admin/ubahPertanyaanPenilaian', 'AdminController::ubahPertanyaanPenilaian');
+$routes->get('/admin/hapusPertanyaanPenilaian/(:any)/(:any)', 'AdminController::hapusPertanyaanPenilaian/$1/$2');
+$routes->get('/admin/daftarPengumuman', 'AdminController::daftarPengumuman');
+$routes->get('/admin/daftarRancanganTugas', 'AdminController::daftarRancanganTugas');
+$routes->get('/admin/lihatRancanganTugas/(:any)', 'AdminController::lihatRancanganTugas/$1');
+$routes->post('/admin/tambahRancanganTugas', 'AdminController::tambahRancanganTugas');
+$routes->post('/admin/ubahRancanganTugas', 'AdminController::ubahRancanganTugas');
+$routes->get('/admin/hapusRancanganTugas/(:any)/(:any)', 'AdminController::hapusRancanganTugas/$1/$2');
+$routes->get('/admin/apiDetailJabatan/(:any)', 'AdminController::apiDetailJabatan/$1');
+$routes->post('/admin/tambahRiwayatPekerjaan/(:any)', 'AdminController::tambahRiwayatPekerjaan/$1');
 $routes->delete('/admin/(:any)', 'AdminController::deleteUser/$1');
 
 // Operator
@@ -80,6 +95,10 @@ $routes->get('/supervisor/saran', 'SupervisorController::saran');
 $routes->get('/supervisor/klarifikasi', 'SupervisorController::klarifikasi');
 $routes->get('/supervisor/indeksKepuasan', 'SupervisorController::indeksKepuasan');
 $routes->get('/supervisor/validasi', 'SupervisorController::validasi');
+$routes->get('/supervisor/daftarPenilaian/(:any)', 'SupervisorController::daftarPenilaian/$1');
+$routes->post('/supervisor/savePertanyaanPenilaian/(:any)', 'SupervisorController::savePertanyaanPenilaian/$1');
+
+
 
 // Staff
 $routes->get('/staff', 'StaffController::index');

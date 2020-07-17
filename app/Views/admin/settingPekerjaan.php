@@ -28,10 +28,10 @@
         <div class="col-lg-4 col-xlg-3 col-md-5">
             <div class="card">
                 <div class="card-body">
-                    <center class="m-t-30"> <img src="../../assets/images/users/1.jpg" class="rounded-circle" width="150" />
-                        <h4 class="card-title m-t-10">Ayu Salsabila</h4>
-                        <h5 class="card-title m-t-10">Pegawai</h5>
-                        <h6 class="card-subtitle">Accoubts Manager Amix corp</h6>
+                    <center class="m-t-30"> <img src="<?= $u['foto_profil'] ?>" class="rounded-circle" width="150" />
+                        <h4 class="card-title m-t-10"><?= $u['nama'] ?></h4>
+                        <h5 class="card-title m-t-10"><?= $u['nama_status_user'] ?></h5>
+                        <h6 class="card-subtitle"><?= ($pekerjaan != null) ? $pekerjaan['nama'] : 'Belum memiliki pekerjaan' ?></h6>
 
                     </center>
                 </div>
@@ -39,9 +39,9 @@
                     <hr>
                 </div>
                 <div class="card-body"> <small class="text-muted">Email </small>
-                    <h6>hannagover@gmail.com</h6> <small class="text-muted p-t-30 db">Nomer Telepon</small>
-                    <h6>+91 654 784 547</h6> <small class="text-muted p-t-30 db">Alamat</small>
-                    <h6>71 Pilgrim Avenue Chevy Chase, MD 20815</h6>
+                    <h6><?= $u['email'] ?></h6> <small class="text-muted p-t-30 db">Nomer Telepon</small>
+                    <h6><?= $u['no_telepon'] ?></h6> <small class="text-muted p-t-30 db">Alamat</small>
+                    <h6><?= $u['alamat'] ?></h6>
                 </div>
             </div>
         </div>
@@ -63,66 +63,103 @@
                     <div class="tab-pane fade show active" id="last-month" role="tabpanel" aria-labelledby="pills-tupoksi-tab">
                         <div class="card-body">
                             <div class="table-responsive">
-                                <form class="m-b-25" action="" method="POST">
-                                    <div class="form-group">
-                                        <select class="custom-select" id="inputGroupSelect04">
-                                            <option selected="">Periode Kerja...</option>
-                                            <option value="1">2018</option>
-                                            <option value="2">2019</option>
-                                            <option value="3">2020</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <select class="custom-select" id="inputGroupSelect04">
-                                            <option selected="">Jenis Pekerjaan...</option>
-                                            <option value="1">Kasir</option>
-                                            <option value="2">Satpam</option>
-                                            <option value="3">Resepsionis</option>
-                                        </select>
-                                    </div>
-                                    <div class=" text-center justify-content-md-center">
-                                        <button type="button" class="btn waves-effect waves-light btn-block btn-info">Simpan</button>
-                                    </div>
-                                </form>
-                                <h4>Pekerjaan <b>Accoubts Manager Amix corp</b> Periode 2020</h4>
+                                <h4>Riwayat Jabatan <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#responsive-modal"><i class="fas fa-plus"></i></button></h4>
                                 <table class="table table-hover table-bordered">
                                     <thead>
                                         <tr>
                                             <th scope="col">No</th>
-                                            <th scope="col">Nama Tugas</th>
-                                            <th scope="col">Jenis Tugas</th>
-                                            <th scope="col">Count</th>
-
+                                            <th scope="col" style="width: 20%;">Jabatan</th>
+                                            <th scope="col">Tanggal Menjabat</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>Memimpin UB Guest House dan
-                                                International Dormitory serta menjadi
-                                                motivator bagi karyawan</td>
-                                            <td>Utama</td>
-                                            <td>100</td>
+                                        <?php $j = 1; ?>
+                                        <?php foreach ($riwayat_pekerjaan as $rp) : ?>
+                                            <tr>
+                                                <th scope="row"><?= $j++ ?></th>
+                                                <td>
+                                                    <h5 class="m-b-0 font-16 font-medium"><?= $rp['nama_status_user'] ?></h5><span><?= $rp['nama']  ?></span>
+                                                </td>
+                                                <td>
+                                                    <form action="/AdminController/ubahTanggalMenjabat/<?= $rp['id_riwayat_jabatan'] ?>" method="post">
+                                                        <input type="hidden" name="no_induk" value="<?= $u['no_induk'] ?>">
+                                                        <div class="form-group input-group mb-3">
+                                                            <label style="margin-right: 20px;" for="tgl_mulai_jabat">Mulai</label>
+                                                            <input type="date" name="periode_mulai_jabatan" id="tgl_mulai_jabat" class="form-control" value="<?= $rp['periode_mulai_jabatan'] ?>">
+                                                            <div class="input-group-append">
+                                                                <button class="btn btn-info" type="submit"><i class="fas fa-check-circle"></i></button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="input-group mb-3">
+                                                            <label style="margin-right: 10px;" for="tgl_selesai_jabat">Selesai</label>
+                                                            <?php if ($rp['periode_akhir_jabatan']) : ?>
+                                                                <input id="tgl_selesai_jabat" type="date" name="periode_akhir_jabatan" class="form-control" value="<?= $rp['periode_akhir_jabatan'] ?>">
+                                                                <div class="input-group-append">
+                                                                    <button class="btn btn-info" type="submit"><i class="fas fa-check-circle"></i></button>
+                                                                </div>
+                                                            <?php else : ?>
+                                                                <input name="periode_akhir_jabatan" id="tgl_selesai_jabat" type="date" class="form-control">
+                                                                <div class="input-group-append">
+                                                                    <button class="btn btn-secondary" type="submit"><i class="fas fa-check-circle"></i></button>
+                                                                </div>
+                                                            <?php endif; ?>
+                                                        </div>
+                                                    </form>
 
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-                                            <td>Memutuskan dan membuat kebijakan
-                                                UB Guest House</td>
-                                            <td>Utama</td>
-                                            <td>80</td>
+                                                </td>
+                                                <td>
+                                                    <?php if ($rp['status_aktif'] == 1) : ?>
+                                                        <span class="btn btn-success btn-sm">Aktif</span>
+                                                    <?php else : ?>
+                                                        <span class="btn btn-danger btn-sm">Tidak Aktif</span>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td>
+                                                    <div class="button-group">
+                                                        <a href="/AdminController/hapusRiwayatPekerjaan/<?= $rp['id_riwayat_jabatan'] ?>?no_induk=<?= $u['no_induk'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Sistem akan menghapus data tugas, data daftar validasi tugas dan data presensi yang berkaitan dengan data riwayat pekerjaan bidang <?= $rp['nama'] ?> jabatan <?= $rp['nama_status_user'] ?>. Apakah anda yakin untuk dihapus ?')"><i class="fas fa-trash"></i></a>
+                                                        <a href="/AdminController/ubahStatusRiwayat/<?= $rp['id_riwayat_jabatan'] ?>?no_induk=<?= $u['no_induk'] ?>" class="btn btn-info btn-sm"><i class="fas fa-check-circle"></i></a>
+                                                    </div>
 
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-                                            <td>Membuat prosedur standar UB Guest
-                                                House</td>
-                                            <td>Tambahan</td>
-                                            <td>90</td>
-                                        </tr>
+                                                </td>
+
+                                            </tr>
+                                        <?php endforeach; ?>
                                     </tbody>
                                 </table>
+                                <?php if ($pekerjaan_sekarang) : ?>
+                                    <h4>Pekerjaan <b><?= $pekerjaan['nama'] ?></b> Periode Mulai Jabatan <?= $pekerjaan['periode_mulai_jabatan'] ?></h4>
+                                    <table class="table table-hover table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">No</th>
+                                                <th scope="col">Nama Tugas</th>
+                                                <th scope="col">Jenis Tugas</th>
+                                                <th scope="col">Jumlah Tugas</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($pekerjaan_sekarang as $ps) : ?>
+                                                <tr>
+                                                    <th scope="row"><?= $ps['nomor_pekerjaan'] ?></th>
+                                                    <td><?= $ps['nama_tugas'] ?></td>
+                                                    <td>
+                                                        <?php if ($ps['periode'] == 1) : ?>
+                                                            Harian
+                                                        <?php else : ?>
+                                                            Bulanan
+                                                        <?php endif; ?>
+                                                    </td>
+                                                    <td><?= $ps['jumlah_tugas'] ?></td>
 
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                <?php else : ?>
+                                    <h4>Belum memiliki pekerjaan</h4>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -131,6 +168,44 @@
             </div>
         </div>
         <!-- Column -->
+    </div>
+
+    <div id="responsive-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Tambah Riwayat Pekerjaan</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <form method="post" action="/admin/tambahRiwayatPekerjaan/<?= $u['no_induk'] ?>">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="riwayat_jabatan" class="control-label">Jabatan:</label>
+                            <select class="custom-select mr-sm-2" id="riwayat_jabatan">
+                                <option value="0" selected="">Pilih jabatan...</option>
+                                <?php foreach ($status_user as $su) : ?>
+                                    <option value="<?= $su['id_status_user'] ?>"><?= $su['nama_status_user'] ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="riwayat_bidang" class="control-label">Bidang:</label>
+                            <select name="id_jabatan" required class="custom-select mr-sm-2" id="riwayat_bidang">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="periode_mulai_jabatan" class="control-label">Periode Mulai Jabatan:</label>
+                            <input required class="custom-select mr-sm-2" id="periode_mulai_jabatan" name="periode_mulai_jabatan" type="date">
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success waves-effect waves-light">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
     <!-- Row -->
     <!-- ============================================================== -->

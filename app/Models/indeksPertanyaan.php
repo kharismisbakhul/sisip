@@ -19,4 +19,9 @@ class indeksPertanyaan extends Model
         }
         return $this->findAll();
     }
+
+    public function getLastId()
+    {
+        return $this->selectMax('id_pertanyaan')->first();
+    }
 }

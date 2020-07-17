@@ -190,9 +190,14 @@
     <script src="<?= base_url('assets/extra-libs/DataTables/datatables.min.js') ?>"></script>
     <script src="<?= base_url('dist/js/pages/datatable/datatable-basic.init.js') ?>"></script>
 
+    <!-- footable -->
+    <script src="<?= base_url('assets/libs/footable/dist/footable.all.min.js') ?>"></script>
+    <script src="<?= base_url('dist/js/pages/tables/footable-init.js') ?>"></script>
 
     <!-- my Script -->
     <script src="<?= base_url('assets/js/script.js') ?>"></script>
+
+
 </body>
 
 </html>

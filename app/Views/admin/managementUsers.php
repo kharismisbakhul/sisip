@@ -74,11 +74,15 @@
                                                     <form action="/admin/<?= $u['no_induk']  ?>" method="post" class="d-inline">
                                                         <?= csrf_field(); ?>
                                                         <input type="hidden" name="_method" value="DELETE">
-                                                        <button type="submit" class="btn waves-effect waves-light btn-danger" onclick="return confirm('Apakah anda yakin ?')"><i class="fas fa-trash"></i></button>
+                                                        <button type="submit" class="btn waves-effect waves-light btn-danger" onclick="return confirm('Apakah anda yakin <?= $u['nama'] ?> akan dihapus ?')"><i class="fas fa-trash"></i></button>
                                                     </form>
 
                                                     <a href="/admin/ubahUser/<?= $u['no_induk'] ?>" class="btn btn-info"><i class="fas fa-edit"></i></a>
-                                                    <a href="/admin/settingPekerjaan/<?= $u['no_induk'] ?>" class="btn btn-primary"><i class="fas fa-id-badge"></i></a>
+
+                                                    <?php if ($u['id_status_user'] != 1 && $u['id_status_user'] != 2) : ?>
+                                                        <a href="/admin/settingPekerjaan/<?= $u['no_induk'] ?>" class="btn btn-primary"><i class="fas fa-id-badge"></i></a>
+                                                    <?php endif; ?>
+
                                                     <button type="button" class="btn btn-warning btn-password" data-id="<?= $u['no_induk'] ?>" data-toggle="modal" data-target="#ubahPassword" data-whatever="@mdo"><i class="fas fa-key"></i></button>
                                                 </div>
                                             </td>

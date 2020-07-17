@@ -23,9 +23,35 @@ class user extends Model
     public function getUserKepuasan()
     {
         return $this->whereNotIn(
-            'id_status_user',
+            'user.id_status_user',
             [1, 2]
+        )->join('status_user as s', 's.id_status_user=user.id_status_user', 'left')->findAll();
+    }
 
-        )->findAll();
+    public function getDaftarPekerjaanUser($no_induk)
+    {
+
+        $data = $this->join('riwayat_jabatan', 'riwayat_jabatan.no_induk = user.no_induk')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan')->first();
+        switch ($data['kode_jabatan']) {
+            case '3':
+                return $this->select('d.nama')->join('riwayat_jabatan', 'riwayat_jabatan.no_induk = user.no_induk')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan')->join('direktur as d', 'd.id_direktur=jabatan.detail_jabatan', 'left')->where('user.no_induk', $no_induk)->first();
+                break;
+            case '4':
+                return $this->select('gm.nama')->join('riwayat_jabatan', 'riwayat_jabatan.no_induk = user.no_induk')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan')->join('general_manager as gm', 'gm.id_general_manager=jabatan.detail_jabatan', 'left')->where('user.no_induk', $no_induk)->first();
+                break;
+            case '5':
+                return $this->select('m.nama')->join('riwayat_jabatan', 'riwayat_jabatan.no_induk = user.no_induk')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan')->join('manager as m', 'm.id_manager=jabatan.detail_jabatan', 'left')->where('user.no_induk', $no_induk)->first();
+                break;
+            case '6':
+                return $this->select('s.nama')->join('riwayat_jabatan', 'riwayat_jabatan.no_induk = user.no_induk')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan')->join('supervisor as s', 's.id_supervisor=jabatan.detail_jabatan', 'left')->where('user.no_induk', $no_induk)->first();
+                break;
+            case '7':
+                return $this->select('s.nama')->join('riwayat_jabatan', 'riwayat_jabatan.no_induk = user.no_induk')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan')->join('staff as s', 's.id_staff=jabatan.detail_jabatan', 'left')->where('user.no_induk', $no_induk)->first();
+                break;
+
+            default:
+                return null;
+                break;
+        }
     }
 }
