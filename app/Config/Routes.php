@@ -75,6 +75,8 @@ $routes->get('/admin/apiDetailJabatan/(:any)', 'AdminController::apiDetailJabata
 $routes->post('/admin/tambahRiwayatPekerjaan/(:any)', 'AdminController::tambahRiwayatPekerjaan/$1');
 $routes->delete('/admin/(:any)', 'AdminController::deleteUser/$1');
 
+$routes->get('/admin/daftarJamKerja', 'AdminController::daftarJamKerja');
+
 // Operator
 $routes->get('/operator', 'OperatorController::index');
 

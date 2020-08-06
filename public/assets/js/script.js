@@ -82,6 +82,51 @@ function editPertanyaanpk(id) {
     });
 }
 
+$('.editJamKerja').on('click', function () {
+    let id = $(this).data('id')
+    let jammasuk = $(this).data('jammasuk')
+    let jamkeluar = $(this).data('jamkeluar')
+    let statusaktif = $(this).data('statusaktif')
+    let statusjam = $(this).data('statusjam')
+    let jabatan = $(this).data('jabatan')
+    let bidang = $(this).data('bidang')
+
+
+
+
+    $('#riwayat_jabatan_edit').val(jabatan)
+    $('#riwayat_bidang_edit').val(bidang)
+    $('#id_jam_kerja_edit').val(id)
+    $('#jam_kerja_masuk_edit').val(jammasuk)
+    $('#jam_kerja_keluar_edit').val(jamkeluar)
+
+    if (statusaktif == 1) {
+        $('#status_aktif_edit').html(`
+        <option selected value="1">Aktif</option>
+        <option value="0">Tidak Aktif</option>
+        `)
+    } else {
+        $('#status_aktif_edit').html(`
+        <option  value="1">Aktif</option>
+        <option selected value="0">Tidak Aktif</option>
+        `)
+    }
+
+    if (statusjam == 1) {
+        $('#status_jam_kerja_edit').html(`
+        <option selected value="1">Aktif</option>
+        <option value="0">Tidak Aktif</option>
+        `)
+    } else {
+        $('#status_jam_kerja_edit').html(`
+        <option  value="1">Aktif</option>
+        <option selected value="0">Tidak Aktif</option>
+        `)
+    }
+})
+
+
+
 $('#tambah-pertanyaan').click(function (e) {
     e.preventDefault();
     $.ajax({

@@ -15,6 +15,7 @@ use App\Models\pengumuman;
 use App\Models\rancangan_tugas;
 use App\Models\jabatan;
 use App\Models\riwayat_jabatan;
+use App\Models\jam_kerja;
 
 class AdminController extends BaseController
 {
@@ -32,6 +33,7 @@ class AdminController extends BaseController
     protected $rancanganTugasModel;
     protected $jabatanModel;
     protected $riwayatJabatanModel;
+    protected $jamKerjaModel;
     protected $data = [];
     public function __construct()
     {
@@ -48,6 +50,7 @@ class AdminController extends BaseController
         $this->rancanganTugasModel = new rancangan_tugas();
         $this->jabatanModel = new jabatan();
         $this->riwayatJabatanModel = new riwayat_jabatan();
+        $this->jamKerjaModel = new jam_kerja();
         $menu = model('menu');
         $kategori = model('kategori_menu');
         $this->data['menu'] = $menu->where('status_user', session('id_status_user'))->findAll();
@@ -876,5 +879,61 @@ class AdminController extends BaseController
             session()->setFlashdata('pesan', 'Status riwayat pekerjaan berhasil diubah');
             return redirect()->to('/admin/settingPekerjaan/' . $no_induk);
         }
+    }
+
+
+
+    public function daftarJamKerja()
+    {
+        $this->data['title'] = 'Management Jam Kerja';
+        $this->data['jam_kerja']  = $this->jamKerjaModel->getJamKerja();
+        $this->data['status_user'] = $this->statusUserModel->whereNotIn('id_status_user', [1, 2])->findAll();
+        //dd($this->data['jam_kerja']);
+        return view('admin/daftarJamKerja', $this->data);
+    }
+
+    public function tambahJamKerja()
+    {
+        // cek jam kerja sebelumnya
+        $cek = $this->jamKerjaModel->where('id_jabatan', $this->request->getVar('id_jabatan'))->first();
+        if (!empty($cek) == false) {
+            $data = [
+                'jam_kerja_masuk' => $this->request->getVar('jam_kerja_masuk'),
+                'jam_kerja_keluar' => $this->request->getVar('jam_kerja_keluar'),
+                'id_jabatan' => $this->request->getVar('id_jabatan'),
+                'status_aktif' => $this->request->getVar('status_aktif'),
+                'status_jam_kerja' => $this->request->getVar('status_jam_kerja')
+            ];
+
+
+            $this->jamKerjaModel->insert($data);
+            session()->setFlashdata('pesan', 'Jam kerja berhasil ditambah');
+        } else {
+            session()->setFlashdata('pesan', '<span class="text-danger">Jam kerja sudah ada</span>');
+        }
+        return redirect()->to('/admin/daftarJamKerja/');
+    }
+
+    public function  hapusJamKerja($id_jam_kerja)
+    {
+        $this->jamKerjaModel->where('id_jam_kerja', $id_jam_kerja)->delete();
+        session()->setFlashdata('pesan', 'Jam kerja berhasil dihapus');
+        return redirect()->to('/admin/daftarJamKerja/');
+    }
+
+    public function editJamKerja()
+    {
+        $id = $this->request->getVar('id_jam_kerja');
+        $data = [
+            'jam_kerja_masuk' => $this->request->getVar('jam_kerja_masuk'),
+            'jam_kerja_keluar' => $this->request->getVar('jam_kerja_keluar'),
+            'status_aktif' => $this->request->getVar('status_aktif'),
+            'status_jam_kerja' => $this->request->getVar('status_jam_kerja')
+        ];
+
+        $this->jamKerjaModel->update($id, $data);
+        session()->setFlashdata('pesan', 'Jam kerja berhasil diubah');
+
+        return redirect()->to('/admin/daftarJamKerja/');
     }
 }
