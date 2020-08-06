@@ -26,7 +26,7 @@
 <![endif]-->
 </head>
 
-<body>
+<body onload="initMap()">
     <!-- ============================================================== -->
     <!-- Preloader - style you can find in spinners.css -->
     <!-- ============================================================== -->
@@ -134,7 +134,7 @@
             <!-- footer -->
             <!-- ============================================================== -->
             <footer class="footer text-center">
-                Copyright &copy; UB Guest House 2020
+                Copyright &copy; BUNA UB 2020
             </footer>
             <!-- ============================================================== -->
             <!-- End footer -->
@@ -178,15 +178,20 @@
     <!--c3 charts -->
     <script src="<?= base_url('assets/extra-libs/c3/d3.min.js')?>"></script>
     <script src="<?= base_url('assets/extra-libs/c3/c3.min.js')?>"></script>
-    <!--chartjs -->
-    <!-- <script src="<?= base_url('assets/libs/raphael/raphael.min.js')?>"></script> -->
-    <!-- <script src="<?= base_url('assets/libs/morris.js/morris.min.js')?>"></script> -->
-    <!-- /* <script src="<?= base_url('dist/js/pages/dashboards/dashboard1.js')?>"></script> */ -->
+    <!-- DataTables -->
+    <script src="<?= base_url('assets/extra-libs/DataTables/datatables.min.js')?>"></script>
+    <script src="<?= base_url('dist/js/pages/datatable/datatable-basic.init.js')?>"></script>
 
-    <!-- /* <script src="<?= base_url('dist/js/pages/dashboards/dashboard2.js')?>"></script> */ -->
+    <!--chartjs -->
+    <!--<script src="<?= base_url('assets/libs/raphael/raphael.min.js')?>"></script>-->
+    <!--<script src="<?= base_url('assets/libs/morris.js/morris.min.js')?>"></script>-->
+    <!--<script src="<?= base_url('dist/js/pages/dashboards/dashboard1.js')?>"></script>-->
+
+    <!--<script src="<?= base_url('dist/js/pages/dashboards/dashboard2.js')?>"></script>-->
 
     <!-- Custom Js -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD4NcKjfbIxsPeUU-42gGEiRWz-EI8ASpc"></script>     
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD4NcKjfbIxsPeUU-42gGEiRWz-EI8ASpc"></script>      -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1UN7cFiG_kqvrABPV1kbXBVbU8Awhot8"></script>     
     <script src="<?= base_url('assets/js/user.js')?>"></script>
     <script src="<?= base_url('assets/js/script.js') ?>"></script>
     <script src="<?= base_url('assets/js/geolocation.js') ?>"></script>

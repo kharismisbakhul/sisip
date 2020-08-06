@@ -10,7 +10,7 @@
     <meta name="author" content="">
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="assets/images/ub_icon.png">
-    <title>Sisip - Login Page</title>
+    <title>Siboksi - Login Page</title>
     <!-- Custom CSS -->
     <link href="dist/css/style.min.css" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -81,7 +81,7 @@
 
                                 <div class="form-group m-b-0 m-t-10">
                                     <div class="col-sm-12 text-center">
-                                        Copyright &copy; Guest UB 2020
+                                        Copyright &copy; BUNA UB 2020
                                     </div>
                                 </div>
 

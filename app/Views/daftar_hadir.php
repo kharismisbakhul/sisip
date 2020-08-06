@@ -11,12 +11,14 @@
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('assets/images/ub_icon.png')?>">
     <title>Daftar Hadir</title>
+    <!-- This page plugin CSS -->
+    <link href="<?= base_url('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css')?>" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="assets/libs/chartist/dist/chartist.min.css" rel="stylesheet">
-    <link href="assets/extra-libs/c3/c3.min.css" rel="stylesheet">
-    <link href="assets/libs/morris.js/morris.css" rel="stylesheet">
+    <link href="<?= base_url('assets/libs/chartist/dist/chartist.min.css')?>" rel="stylesheet">
+    <link href="<?= base_url('assets/extra-libs/c3/c3.min.css')?>" rel="stylesheet">
+    <link href="<?= base_url('assets/libs/morris.js/morris.css')?>" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="dist/css/style.min.css" rel="stylesheet">
+    <link href="<?= base_url('dist/css/style.min.css')?>" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -75,7 +77,7 @@
                 <!-- Info box -->
                 <!-- ============================================================== -->
 
-                <div class="d-flex justify-content-end mb-2">
+                <!-- <div class="d-flex justify-content-end mb-2">
 
                     <form action="" method="">
                         <div class="input-group">
@@ -86,19 +88,27 @@
                             </div>
                         </div>
                     </form>
-                </div>
+                </div> -->
 
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-hover">
+                            <div class="table-responsive">
+                                    <table id="zero_config" class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
                                         <tbody>
                                         <?php foreach ($pegawai as $p) : ?>
                                             <tr>
                                                 <td>
-                                                    <img src="<?= $p['foto_profil']?>" alt="user" width="100"
+                                                    <img src="<?= ($p['foto_profil']) ? base_url($p['foto_profil']) : base_url('assets/images/users/default.jpg') ?>" alt="user" width="100"
                                                         class="rounded-circle">
                                                 </td>
                                                 <td>
@@ -125,9 +135,9 @@
                                                             <?php if($p['presensi']['status_tempat_kerja'] == 1) {?>
                                                                 <span class="label label-rounded label-warning">WFH</span>
                                                             <?php } else if($p['presensi']['status_tempat_kerja'] == 2) {?>
-                                                                <span class="label label-rounded label-warning">WFO</span>
+                                                                <span class="label label-rounded label-info">WFO</span>
                                                             <?php } else {?>
-                                                                <span class="label label-rounded label-warning">WO</span>
+                                                                <span class="label label-rounded label-success">WO</span>
                                                             <?php }?>
                                                         </div>
                                                     </div>
@@ -140,20 +150,6 @@
                                         <?php endforeach ?>
                                         </tbody>
                                     </table>
-
-                                    <!-- <div class="d-flex justify-content-end mb-2">
-
-                                        <nav aria-label="Page navigation example">
-                                            <ul class="pagination">
-                                                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                                            </ul>
-                                        </nav>
-                                    </div> -->
-
                                 </div>
                             </div>
                         </div>
@@ -173,7 +169,7 @@
             <!-- footer -->
             <!-- ============================================================== -->
             <footer class="footer text-center">
-                Copyright &copy; UB Guest House 2020
+                Copyright &copy; BUNA UB 2020
             </footer>
             <!-- ============================================================== -->
             <!-- End footer -->
@@ -193,35 +189,38 @@
     <!-- ============================================================== -->
     <!-- All Jquery -->
     <!-- ============================================================== -->
-    <script src="assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="<?= base_url('assets/libs/jquery/dist/jquery.min.js')?>"></script>
     <!-- Bootstrap tether Core JavaScript -->
-    <script src="assets/libs/popper.js/dist/umd/popper.min.js"></script>
-    <script src="assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="<?= base_url('assets/libs/popper.js/dist/umd/popper.min.js')?>"></script>
+    <script src="<?= base_url('assets/libs/bootstrap/dist/js/bootstrap.min.js')?>"></script>
     <!-- apps -->
-    <script src="dist/js/app.min.js"></script>
-    <script src="dist/js/app.init.horizontal.js"></script>
-    <script src="dist/js/app-style-switcher.horizontal.js"></script>
+    <script src="<?= base_url('dist/js/app.min.js')?>"></script>
+    <script src="<?= base_url('dist/js/app.init.horizontal.js')?>"></script>
+    <script src="<?= base_url('dist/js/app-style-switcher.horizontal.js')?>"></script>
     <!-- slimscrollbar scrollbar JavaScript -->
-    <script src="assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
-    <script src="assets/extra-libs/sparkline/sparkline.js"></script>
+    <script src="<?= base_url('assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js')?>"></script>
+    <script src="<?= base_url('assets/extra-libs/sparkline/sparkline.js')?>"></script>
     <!--Wave Effects -->
-    <script src="dist/js/waves.js"></script>
+    <script src="<?= base_url('dist/js/waves.js')?>"></script>
     <!--Menu sidebar -->
-    <script src="dist/js/sidebarmenu.js"></script>
+    <script src="<?= base_url('dist/js/sidebarmenu.js')?>"></script>
     <!--Custom JavaScript -->
-    <script src="dist/js/custom.min.js"></script>
+    <script src="<?= base_url('dist/js/custom.min.js')?>"></script>
     <!--This page JavaScript -->
     <!--chartis chart-->
-    <script src="assets/libs/chartist/dist/chartist.min.js"></script>
-    <script src="assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script>
+    <script src="<?= base_url('assets/libs/chartist/dist/chartist.min.js')?>"></script>
+    <script src="<?= base_url('assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js')?>"></script>
     <!--c3 charts -->
-    <script src="assets/extra-libs/c3/d3.min.js"></script>
-    <script src="assets/extra-libs/c3/c3.min.js"></script>
+    <script src="<?= base_url('assets/extra-libs/c3/d3.min.js')?>"></script>
+    <script src="<?= base_url('assets/extra-libs/c3/c3.min.js')?>"></script>
     <!--chartjs -->
-    <script src="assets/libs/raphael/raphael.min.js"></script>
-    <script src="assets/libs/morris.js/morris.min.js"></script>
+    <!-- <script src="<?= base_url('assets/libs/raphael/raphael.min.js')?>"></script>
+    <script src="<?= base_url('assets/libs/morris.js/morris.min.js')?>"></script>
 
-    <script src="dist/js/pages/dashboards/dashboard1.js"></script>
+    <script src="<?= base_url('dist/js/pages/dashboards/dashboard1.js')?>"></script> -->
+    <!--This page plugins -->
+    <script src="<?= base_url('assets/extra-libs/DataTables/datatables.min.js')?>"></script>
+    <script src="<?= base_url('dist/js/pages/datatable/datatable-basic.init.js')?>"></script>
 </body>
 
 </html>

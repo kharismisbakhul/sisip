@@ -1,3 +1,25 @@
+var url = $(location).attr("href");
+var segments = url.split("/");
+
+// console.log(segments);
+
+// $('#table-daftar-hadir').on('click', function(){
+//     console.log("HAHAHAH");
+// });
+
+$('#riwayat-presensi').DataTable({
+    "pageLength": 5,
+    'order' : []
+});
+$('#tabel-riwayat-presensi').DataTable({
+    "pageLength": 5,
+    'order' : []
+});
+$('#tabel-riwayat-saran').DataTable({
+    "pageLength": 5
+});
+$('#tabel-klarifikasi').DataTable();
+
 $('#tabel-klarifikasi').on('click', '.klarifikasi_tugas',function(){
     let id = $(this).data('id');
     $('#id_tugas_modal').val(id);
@@ -12,11 +34,11 @@ $('#validasi-tugas-detail').on('click', '.validasi-revisi',function(){
 
 $('#validasi-tugas-detail').on('click', '.bukti-validasi-detail',function(){
     let id = $(this).data('id');
-    window.open(window.location.origin+'/sisip/public/assets/images/bukti_klarifikasi/'+id);
+    window.open(window.location.origin+':8080/assets/images/bukti_klarifikasi/'+id);
 })
 
 $(function() {
-    $.getJSON('http://localhost/sisip/public/kinerjaApi', {
+    $.getJSON(segments[0] + '/kinerjaApi', {
         format: 'json',
         }, function (result) {
             var chart = c3.generate({
@@ -52,6 +74,40 @@ $(function() {
                   pattern: ['#22c6ab', '#4798e8', '#ffbc34']
                 }
               });
+              var chart2 = c3.generate({
+                bindto: '#admin-chart',
+                data: {
+                  columns: [['Valid', result.jumlah_validasi], ['Belum Validasi', result.jumlah_belum_validasi], ['Revisi', result.jumlah_revisi]],
+            
+                  type: 'donut',
+                  onclick: function(d, i) {
+                    // console.log('onclick', d, i);
+                  },
+                  onmouseover: function(d, i) {
+                    // console.log('onmouseover', d, i);
+                  },
+                  onmouseout: function(d, i) {
+                    // console.log('onmouseout', d, i);
+                  }
+                },
+                donut: {
+                  label: {
+                    show: false
+                  },
+                  title: 'Progress Kinerja',
+                  width: 25
+                },
+            
+                legend: {
+                  hide: true
+                  //or hide: 'data1'
+                  //or hide: ['data1', 'data2']
+                },
+                color: {
+                  pattern: ['#22c6ab', '#4798e8', '#ffbc34']
+                }
+              });
+              
     })
     
 })
@@ -63,7 +119,7 @@ $('#logbook-utama').on('click', '.submit-logbook', function(){
     var no_ind = $(this).data('no');
 
     $.ajax({
-        url: 'http://localhost/sisip/public/staff/inputLogbookApi',
+        url: segments[0] + '/staff/inputLogbookApi',
         type: 'post',
         data: {
             id_rancangan_tugas: id_rancangan,
@@ -74,7 +130,7 @@ $('#logbook-utama').on('click', '.submit-logbook', function(){
         success: function(data){
             // console.log("SUKSESDONG");
             $.ajax({
-                url: 'http://localhost/sisip/public/logbookApi/'+no_ind,
+                url: segments[0] + '/logbookApi/'+no_ind,
                 type: 'get',
                 dataType: 'json',
                 success: function(dataA){
@@ -107,7 +163,7 @@ $('#logbook-tambahan').on('click', '.submit-logbook', function(){
     // $('#periode').val('');
     var no_ind = $(this).data('no');
     $.ajax({
-        url: 'http://localhost/sisip/public/staff/inputLogbookApi',
+        url: segments[0] + '/staff/inputLogbookApi',
         type: 'post',
         data: {
             id_rancangan_tugas: id_rancangan,
@@ -120,7 +176,7 @@ $('#logbook-tambahan').on('click', '.submit-logbook', function(){
         success: function(data){
             console.log("SUKSESDONG");
             $.ajax({
-                url: 'http://localhost/sisip/public/logbookApi/'+no_ind,
+                url: segments[0] + '/logbookApi/'+no_ind,
                 type: 'get',
                 dataType: 'json',
                 success: function(dataA){
@@ -178,11 +234,11 @@ $('#logbook-tugas-utama').on('click', '.hapus_Tugas', function(){
     var no_induk = $(this).data('no');
 
     $.ajax({
-        url: 'http://localhost/sisip/public/hapusTugasApi/'+id_tugas,
+        url: segments[0] + '/hapusTugasApi/'+id_tugas,
         type: 'get',
         success: function(data){
             $.ajax({
-                url: 'http://localhost/sisip/public/logbookApi/'+no_induk,
+                url: segments[0] + '/logbookApi/'+no_induk,
                 type: 'get',
                 dataType: 'json',
                 success: function(dataA){
@@ -211,11 +267,11 @@ $('#logbook-tugas-tambahan').on('click', '.hapus_Tugas', function(){
     var no_induk = $(this).data('no');
 
     $.ajax({
-        url: 'http://localhost/sisip/public/hapusTugasApi/'+id_tugas,
+        url: segments[0] + '/hapusTugasApi/'+id_tugas,
         type: 'get',
         success: function(data){
             $.ajax({
-                url: 'http://localhost/sisip/public/logbookApi/'+no_induk,
+                url: segments[0] + '/logbookApi/'+no_induk,
                 type: 'get',
                 dataType: 'json',
                 success: function(dataA){
@@ -238,3 +294,70 @@ $('#logbook-tugas-tambahan').on('click', '.hapus_Tugas', function(){
     });
 
 })
+
+var input = document.getElementById("chat-masuk");
+
+// Execute a function when the user releases a key on the keyboard
+input.addEventListener("keyup", function(event) {
+  // Number 13 is the "Enter" key on the keyboard
+  if (event.keyCode === 13) {
+    // Cancel the default action, if needed
+    event.preventDefault();
+    // Trigger the button element with a click
+    document.getElementById("kirim-chat").click();
+  }
+}); 
+
+$('#kirim-chat').on('click', function(){
+    var uname = $('#chat-username').val();
+    var  psn = $('#chat-masuk').val();
+    $.ajax({
+        url: segments[0] + '/chat',
+        type: 'post',
+        data: {
+            username: uname,
+            pesan: psn,
+        },
+        dataType: 'json',
+        success: function(data){
+            // console.log(data);
+            $('#list-chat-box').html('');
+            $('#chat-masuk').val('');
+            data.forEach(function(pp) {
+                if(pp['no_induk'] == uname){
+                    $('#list-chat-box').append(`
+                    <li class="odd chat-item">
+                        <div class="chat-content">
+                            <div class="box bg-light-inverse">`+pp['pesan']+`</div>
+                            <br>
+                        </div>
+                        <div class="chat-time">`+pp['tanggal']+` `+pp['waktu']+`</div>
+                    </li>
+                    `);
+                }else{
+                    $('#list-chat-box').append(`
+                    <li class="chat-item">
+                        <div class="chat-img">
+                            <img src="`+window.location.origin+pp['foto_profil']+`" alt="user">
+                        </div>
+                        <div class="chat-content">
+                            <h6 class="font-medium">`+pp['nama']+`</h6>
+                            <div class="box bg-light-info">`+pp['pesan']+`</div>
+                        </div>
+                        <div class="chat-time">`+pp['tanggal']+` `+pp['waktu']+`</div>
+                    </li>
+                    `);
+                }
+                
+            })
+            
+            var listChat = document.querySelector('.chat-box');
+            listChat.scrollTop = listChat.scrollHeight - listChat.clientHeight;
+
+
+        }
+    });
+})
+
+var listChat = document.querySelector('.chat-box');
+listChat.scrollTop = listChat.scrollHeight - listChat.clientHeight;

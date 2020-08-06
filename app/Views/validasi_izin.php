@@ -42,63 +42,52 @@
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Tanggal</th>
                                                 <th>Nama</th>
-                                                <th>Pekerjaan</th>
                                                 <th>Range Tanggal</th>
                                                 <th>Alasan</th>
+                                                <th>Kategori Izin</th>
                                                 <th>Status</th>
+                                                <th>Bukti</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                        <?php $i = 1; foreach($perizinan_bawahan as $pb) : ?>
                                             <tr>
-                                                <td>1</td>
-                                                <td>12-05-2020</td>
-                                                <td>Aditya Yusril Fikri <br>
-                                                    <span>3210398098</span>
+                                                <td><?= $i++; ?></td>
+                                                <td><?= $pb['nama']?><br>
+                                                    <span><?= $pb['no_induk']?></span>
                                                 </td>
-                                                <td>Kasir</td>
-                                                <td>20-05-2020 s/d 22-05-2020</td>
-                                                <td>Menikah</td>
+                                                <td><?= $pb['tanggal_mulai']?> s/d <?= $pb['tanggal_selesai']?></td>
+                                                <td><?= $pb['alasan']?></td>
+                                                <?php if($pb['kategori_izin'] == 1) {?>
+                                                <td>Izin</td>
+                                                <?php }else if($pb['kategori_izin'] == 2) {?>
+                                                <td>Sakit</td>
+                                                <?php }else{?>
+                                                <td>Cuti</td>
+                                                <?php }?>
+                                                <?php if($pb['status_izin'] == 0) {?>
                                                 <td class="text-info">Proses</td>
+                                                <td><a target="_blank" href="<?= base_url('/assets/images/izin/'.$pb['bukti'])?>"><i class="fas fa-file-alt"></i></a></td>
                                                 <td>
-                                                    <a href="v_detail_validasi.html" type="button"
+                                                    <a href="<?= base_url('/supervisor/terimaIzin/'.$pb['id_perizinan'])?>" type="button"
                                                         class="btn btn-success">Terima</a>
-                                                    <a href="v_detail_validasi.html" type="button"
+                                                    <a href="<?= base_url('/supervisor/tolakIzin/'.$pb['id_perizinan'])?>" type="button"
                                                         class="btn btn-danger">Tolak</a>
                                                 </td>
+                                                <?php }else if($pb['status_izin'] == 1) {?>
+                                                <td class="text-success">Diterima</td>
+                                                <td><a target="_blank" href="<?= base_url('/assets/images/izin/'.$pb['bukti'])?>"><i class="fas fa-file-alt"></i></a></td>
+                                                <td></td>
+                                                <?php }else{?>
+                                                <td class="text-danger">Ditolak</td>
+                                                <td><a target="_blank" href="<?= base_url('/assets/images/izin/'.$pb['bukti'])?>"><i class="fas fa-file-alt"></i></a></td>
+                                                <td></td>
+                                                <?php }?>
+                                                
                                             </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>12-05-2020</td>
-                                                <td>Aditya Yusril Fikri <br>
-                                                    <span>3210398098</span>
-                                                </td>
-                                                <td>Kasir</td>
-                                                <td>20-05-2020 s/d 22-05-2020</td>
-                                                <td>Menikah</td>
-                                                <td class="text-success">Terima</td>
-                                                <td>
-
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>3 </td>
-                                                <td>12-05-2020</td>
-                                                <td>Aditya Yusril Fikri <br>
-                                                    <span>3210398098</span>
-                                                </td>
-                                                <td>Kasir</td>
-                                                <td>20-05-2020 s/d 22-05-2020</td>
-                                                <td>Menikah</td>
-                                                <td class="text-danger">Tolak</td>
-                                                <td>
-
-                                                </td>
-                                            </tr>
-
-
+                                            <?php endforeach?>
                                         </tbody>
                                     </table>
                                 </div>

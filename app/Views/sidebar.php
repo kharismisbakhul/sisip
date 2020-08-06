@@ -11,9 +11,9 @@
                         <li>
                             <!-- User Profile-->
                             <div class="user-profile dropdown m-t-20">
-                                <div class="user-pic">
-                                    <img src="<?=base_url($user['foto_profil'])?>" alt="users"
-                                        class="rounded-circle img-fluid" />
+                                <div class="gambar2 rounded-circle user-pic">
+                                    <img src="<?= ($user['foto_profil']) ?  base_url($user['foto_profil']) : 'assets/images/users/default.jpg'  ?>" alt="users"
+                                        class="rounded-circle img-fluid portrait2" />
                                 </div>
                                 <div class="user-content hide-menu m-t-10">
                                     <h5 class="m-b-10 user-name font-medium"><?= $user['nama'] ?></h5>

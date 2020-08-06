@@ -46,7 +46,7 @@
                             <thead>
                                 <tr>
 
-                                    <th style="width: 70%;">Tambah Pertanyaan</th>
+                                    <th style="width: 70%;">Tambah Soal</th>
                                     <th style="width: 25%;">Action</th>
 
                                 </tr>
@@ -54,14 +54,14 @@
                             <tbody>
 
                                 <tr>
-                                    <form action="<?= base_url('/admin/tambahIndeksPertanyaan')?>" method="post">
+                                    <form id="createForm" method="post">
                                         <td>
-                                            <input type="hidden" name="id_indeks" value="<?= $indeks['id'] ?>">
-                                            <textarea style="width: 850px;" type="text" name="pertanyaan" class="form-control"></textarea>
+                                            <input type="hidden" id="id_indeks" name="id_indeks" value="<?= $indeks['id'] ?>">
+                                            <textarea style="width: 850px;" id="pertanyaan" type="text" name="pertanyaan" class="form-control"></textarea>
                                         </td>
                                         <td>
                                             <div class="button-group">
-                                                <button type="submit" class="btn waves-effect waves-light btn-success"><i class="fas fa-plus mr-2"></i>Tambah</button>
+                                                <button type="button" id="tambah-pertanyaan" class="btn waves-effect waves-light btn-success"><i class="fas fa-plus mr-2"></i>Tambah</button>
 
                                             </div>
                                         </td>
@@ -82,20 +82,21 @@
 
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="tabel-pertanyaan">
                                 <?php $i = 1; ?>
                                 <?php foreach ($pertanyaan as $p) : ?>
                                     <tr>
-                                        <form action="<?= base_url('/admin/editIndeksPertanyaan/'.$p['id_pertanyaan']) ?>" method="post">
+                                        <form class="editForm<?= $p['id_pertanyaan'] ?>" method="post">
                                             <td><?= $i++; ?></td>
                                             <td>
                                                 <input type="hidden" name="id_indeks" value="<?= $p['id_indeks'] ?>">
+                                                <input type="hidden" name="id_pertanyaan" id="id_pertanyaan<?= $p['id_pertanyaan']  ?>" value="<?= $p['id_pertanyaan'] ?> ">
                                                 <textarea style="width: 800px;" name="pertanyaan" type="text" class="form-control"><?= $p['pertanyaan'] ?></textarea>
                                             </td>
                                             <td>
                                                 <div class="button-group">
-                                                    <button type="submit" class="btn waves-effect waves-light btn-info"><i class="fas fa-edit mr-2"></i>Simpan</button>
-                                                    <a href="<?= base_url('/admin/hapusIndeksPertanyaan/'. $p['id_pertanyaan'].'/'. $p['id_indeks']) ?>" class="btn waves-effect waves-light btn-danger"><i class="fas fa-trash mr-2"></i>Hapus</a>
+                                                    <button type="button" class="btn waves-effect waves-light btn-info edit-pertanyaan" data-id="<?= $p['id_pertanyaan'] ?>" onclick="editPertanyaan(<?= $p['id_pertanyaan'] ?>)"><i class=" fas fa-edit mr-2"></i>Simpan</button>
+                                                    <a href="/admin/hapusIndeksPertanyaan/<?= $p['id_pertanyaan'] ?>/<?= $p['id_indeks'] ?>" class="btn waves-effect waves-light btn-danger"><i class="fas fa-trash mr-2"></i>Hapus</a>
                                                 </div>
                                             </td>
                                         </form>
@@ -124,6 +125,12 @@
     </div>
 
 </div>
+
+<script>
+
+
+</script>
+
 <!-- ============================================================== -->
 <!-- End Page wrapper  -->
 <!-- ============================================================== -->

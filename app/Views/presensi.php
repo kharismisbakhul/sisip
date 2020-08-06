@@ -144,10 +144,10 @@
                                                 <div class="input-group">
                                                 <?php if($presensi == null) { ?>
                                                     <input class="form-control" type="text" placeholder="Lokasi..." id="lokasi"
-                                                        name="lokasi" onload="initMap()">
+                                                        name="lokasi" onclick="initMap()">
                                                 <?php }else{ ?>
                                                     <input class="form-control" type="text" placeholder="Lokasi..." id="lokasi"
-                                                        name="lokasi" value="<?= $presensi['lokasi']?>" onload="initMap()">
+                                                        name="lokasi" value="<?= $presensi['lokasi']?>" onclick="initMap()">
                                                 <?php } ?>
                                                     <div class="input-group-append">
                                                         <button class="btn btn-info" type="button" onclick="getLocation()"><i
@@ -179,20 +179,13 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <div class="d-flex justify-content-end mb-2">
-
-                                        <form action="" method="">
-                                            <div class="input-group">
-                                                <input type="date" class="form-control">
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-info" type="button"><i
-                                                            class="fas fa-search"></i></button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <table class="table">
-
+                                    <table class="table" id="riwayat-presensi">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                    <tbody>
                                     <?php if($semua_presensi == null) {?>
                                     <tr>
                                         <h4 class="alert alert-warning text-center p-3">Belum ada presensi</h4>
@@ -236,6 +229,7 @@
                                         </tr>
                                         <?php endforeach ?>
                                     <?php } ?>
+                                    </tbody>
                                     </table>
                                 </div>
                             </div>

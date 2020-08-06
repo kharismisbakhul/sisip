@@ -14,6 +14,7 @@ function initMap(){
     marker = new google.maps.Marker({position:latlon,map:map,title:"Anda SekarangDisini"});
 
     map.addListener('click', function(event) {
+      // console.log("HAHAHA");
         marker.setMap(null);          
         marker = new google.maps.Marker({
             position: event.latLng,
@@ -33,6 +34,8 @@ function initMap(){
 }
 
 var x = document.getElementById("lokasi");
+// console.log(x);
+// x.onload = function(){initMap()};
 
 function getLocation() {
     if (navigator.geolocation) {

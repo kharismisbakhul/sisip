@@ -77,24 +77,26 @@
                                                     </table>
                                                     <table class="table no-border" id="logbook-tambahan">
                                                         <thead>
-                                                            <th style="width: 40%">Tugas Tambahan</th>
+                                                            <th style="width: 50%">Tugas Tambahan</th>
                                                             <th style="width: 25%;">Jumlah</th>
                                                             <th style="width: 25%;">Periode</th>
                                                             <th style="width: 10%">Action</th>
                                                         </thead>
                                                         <tbody>
                                                             <tr>
-                                                                    <td>
+                                                                    <td colspan="4">
                                                                         <input class="form-control" type="hidden"
                                                                         name="id_rancangan_tugas" value="0">
                                                                         <div class="form-group">
                                                                             <textarea class="form-control" name="nama_tugas_tambahan" id="nama_tugas_tambahan">Tugas Tambahan</textarea>
                                                                         </div>
                                                                     </td>
+                                                            </tr>
+                                                            <tr>
                                                                     <td>
                                                                         <div class="form-group">
                                                                             <input type="number" class="form-control"
-                                                                                name="jumlah" placeholder="Jmlh" id="jumlah0">
+                                                                                name="jumlah" placeholder="Jumlah" id="jumlah0">
                                                                         </div>
                                                                     </td>
                                                                     <td>
@@ -218,7 +220,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="zero_config" class="table table-hover table-bordered">
+                                    <table id="tabel-riwayat-presensi" class="table table-hover table-bordered">
                                         <thead>
                                             <tr>
                                                 <th>No</th>

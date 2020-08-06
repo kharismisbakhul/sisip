@@ -42,11 +42,11 @@
                                                 class="btn waves-effect waves-light btn-block btn-info" data-toggle="modal" data-target="#ubahFoto">Ubah Gambar
                                                 Profil</button>
                                         </div>
-                                        <div class="col-lg-12 mb-2">
+                                        <!-- <div class="col-lg-12 mb-2">
                                             <button type="button"
                                                 class="btn waves-effect waves-light btn-block btn-warning" data-toggle="modal" data-target="#izin">Ajukan
                                                 Izin</button>
-                                        </div>
+                                        </div> -->
                                         <div class="col-lg-12 mb-2">
                                             <button type="button"
                                                 class="btn waves-effect waves-light btn-block btn-success" data-toggle="modal" data-target="#ubahPassword">Ubah
@@ -141,7 +141,7 @@
                                             <div class="progress">
                                                 <div class="progress-bar bg-info" role="progressbar" aria-valuenow="<?= $jumlah_tugas_berlangsung;?>"
                                                     aria-valuemin="0" aria-valuemax="<?= $jumlah_total_tugas;?>"
-                                                    style="width:<?= (($jumlah_tugas_berlangsung/$jumlah_total_tugas) * 100);?>%; height:6px;">
+                                                    style="width:<?= ((1) * 100);?>%; height:6px;">
                                                 </div>
                                             </div>
                                         </div>

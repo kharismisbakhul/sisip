@@ -9,6 +9,6 @@ class perizinan extends Model
 
     protected $useTimestamps = false;
     protected $allowedFields = [
-        'id_perizinan', 'tanggal_mulai', 'tanggal_selesai', 'alasan', 'bukti', 'no_induk'
+        'id_perizinan', 'tanggal_mulai', 'tanggal_selesai', 'alasan', 'bukti', 'no_induk', 'status_izin', 'kategori_izin', 'tanggal_izin'
     ];
 }

@@ -59,11 +59,13 @@ class Database extends \CodeIgniter\Database\Config
 	 */
 	public $tests = [
 		'DSN'      => '',
-		'hostname' => '127.0.0.1',
+		'hostname' => 'localhost',
 		'username' => '',
 		'password' => '',
+		// 'database' => 'db_siboksibuna',
 		'database' => ':memory:',
 		'DBDriver' => 'SQLite3',
+		// 'DBDriver' => 'MySQLi',
 		'DBPrefix' => 'db_',  // Needed to ensure we're working correctly with prefixes live. DO NOT REMOVE FOR CI DEVS
 		'pConnect' => false,
 		'DBDebug'  => (ENVIRONMENT !== 'production'),
@@ -74,6 +76,7 @@ class Database extends \CodeIgniter\Database\Config
 		'swapPre'  => '',
 		'encrypt'  => false,
 		'compress' => false,
+		// 'strictOn' => true,
 		'strictOn' => false,
 		'failover' => [],
 		'port'     => 3306,
