@@ -120,7 +120,15 @@
                                 <label for="message-text" class="control-label">Nama:</label>
                                 <input type="text" name="nama_pk" class="form-control" id="message-text1" required>
                             </div>
-
+                            <div class="form-group">
+                                <label for="message-text" class="control-label">Pertanyaan Penilaian:</label>
+                                <select name="jenis_penilaian" class="form-control">
+                                    <option value="0">Pertanyaan Baru</option>
+                                    <?php foreach ($penilaian as $p) : ?>
+                                        <option value="<?= $p['id_pk'] ?>">Pertanyaan Sama Dengan <?= $p['nama_pk'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>

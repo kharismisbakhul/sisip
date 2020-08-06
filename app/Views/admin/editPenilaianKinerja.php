@@ -42,21 +42,28 @@
                 <div class="card-body">
                     <div class="table-responsive">
 
-                        <table class="table table-hover ">
-                            <thead>
+                        <table class="table table-hover table-bordered">
+                            <thead class="bg-success text-white">
                                 <tr>
-                                    <th style="width: 70%;">Tambah Pertanyaan</th>
+                                    <th style="width: 25%;">Tambah Pertanyaan</th>
+                                    <th style="width: 50%;">Aspek</th>
                                     <th style="width: 25%;">Action</th>
-
                                 </tr>
                             </thead>
                             <tbody>
-
                                 <tr>
                                     <form id="createFormPertanyaan" method="post">
                                         <td>
                                             <input type="hidden" id="id_pk" name="id_pk" value="<?= $penilaian['id_pk'] ?>">
-                                            <textarea style="width: 850px;" id="pertanyaan_pk" type="text" name="pertanyaan_pk" class="form-control"></textarea>
+                                            <textarea style="width: 500px;" id="pertanyaan_pk" type="text" name="pertanyaan_pk" class="form-control"></textarea>
+                                        </td>
+                                        <td>
+                                            <select name="aspek_pk" id="aspek_pk" class="form-control">
+                                                <option value="Aspek Teknis Pekerjaan">Aspek Teknis Pekerjaan</option>
+                                                <option value="Aspek Non Teknis">Aspek Non Teknis</option>
+                                                <option value="Aspek Kepribadian">Aspek Kepribadian</option>
+                                                <option value="Aspek Kepemimpinan (Khusus untuk: GM, Manajer, Supervisor, dan Koordinator)">Aspek Kepemimpinan (Khusus untuk: GM, Manajer, Supervisor, dan Koordinator)</option>
+                                            </select>
                                         </td>
                                         <td>
                                             <div class="button-group">
@@ -71,11 +78,12 @@
                         </table>
 
 
-                        <table class="table table-hover ">
-                            <thead>
+                        <table class="table table-hover table-bordered">
+                            <thead class="bg-info text-white">
                                 <tr>
                                     <th style="width: 5%;">No</th>
-                                    <th style="width: 70%;">Pertanyaan</th>
+                                    <th style="width: 50%;">Pertanyaan</th>
+                                    <th style="width: 60%;">Aspek</th>
                                     <th style="width: 25%;">Action</th>
 
                                 </tr>
@@ -89,12 +97,25 @@
                                             <td>
                                                 <input type="hidden" name="id_pk" value="<?= $p['id_pk'] ?>">
                                                 <input type="hidden" name="id_pertanyaan_pk" id="id_pertanyaan_pk<?= $p['id_pertanyaan_pk']  ?>" value="<?= $p['id_pertanyaan_pk'] ?> ">
-                                                <textarea style="width: 800px;" name="pertanyaan_pk" type="text" class="form-control" id="pertanyaan_pk<?= $p['id_pertanyaan_pk']  ?>"><?= $p['pertanyaan_pk'] ?></textarea>
+                                                <textarea style="width: 500px;" name="pertanyaan_pk" type="text" class="form-control" id="pertanyaan_pk<?= $p['id_pertanyaan_pk']  ?>"><?= $p['pertanyaan_pk'] ?></textarea>
                                             </td>
                                             <td>
-                                                <div class="button-group">
-                                                    <button type="button" class="btn waves-effect waves-light btn-info edit-pertanyaan-pk" data-id="<?= $p['id_pertanyaan_pk'] ?>" onclick="editPertanyaanpk(<?= $p['id_pertanyaan_pk'] ?>)"><i class=" fas fa-edit mr-2"></i>Simpan</button>
-                                                    <a href="/admin/hapusPertanyaanPenilaian/<?= $p['id_pertanyaan_pk'] ?>/<?= $p['id_pk'] ?>" class="btn waves-effect waves-light btn-danger"><i class="fas fa-trash mr-2"></i>Hapus</a>
+                                                <select name="aspek_pk" id="aspek_pk<?= $p['id_pertanyaan_pk'] ?>" class="form-control">
+                                                    <option value="">Tidak ada aspek</option>
+                                                    <?php foreach ($aspek as $a) : ?>
+                                                        <?php if ($a == $p['aspek_pk']) : ?>
+                                                            <option selected value="<?= $a ?>"><?= $a ?></option>
+                                                        <?php else : ?>
+                                                            <option value="<?= $a ?>"><?= $a ?></option>
+                                                        <?php endif; ?>
+
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn waves-effect waves-light btn-info edit-pertanyaan-pk" data-id="<?= $p['id_pertanyaan_pk'] ?>" onclick="editPertanyaanpk(<?= $p['id_pertanyaan_pk'] ?>)"><i class=" fas fa-edit"></i></button>
+                                                    <a href="/admin/hapusPertanyaanPenilaian/<?= $p['id_pertanyaan_pk'] ?>/<?= $p['id_pk'] ?>" class="btn waves-effect waves-light btn-danger"><i class="fas fa-trash"></i></a>
                                                 </div>
                                             </td>
                                         </form>

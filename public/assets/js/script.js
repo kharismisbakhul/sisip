@@ -63,11 +63,13 @@ function editPertanyaan2(id) {
 function editPertanyaanpk(id) {
     let id_per = $('#id_pertanyaan_pk' + id).val()
     let per = $('#pertanyaan_pk' + id).val()
+    let aspek_pk = $('#aspek_pk' + id).val()
     $.ajax({
         url: segments[0] + '/admin/ubahPertanyaanPenilaian',
         data: {
             'id_pertanyaan_pk': id_per,
             'pertanyaan_pk': per,
+            'aspek_pk': aspek_pk
         },
         method: "post",
         dataType: 'json',
@@ -124,32 +126,59 @@ $('#tambah-pertanyaan-pk').click(function (e) {
     e.preventDefault();
     confirm($('#pertanyaan_pk').val());
 
+
     $.ajax({
         url: segments[0] + '/admin/tambahPertanyaanPenilaian',
         data: {
             'id_pk': $('#id_pk').val(),
             'pertanyaan_pk': $('#pertanyaan_pk').val(),
+            'aspek_pk': $('#aspek_pk').val()
         },
         method: "post",
         dataType: 'json',
         success: function (result) {
-            console.log(result)
             var data = result['pertanyaan_pk']
             let no = result['nomer']
+            let aspek = [
+                "Aspek Teknis Pekerjaan",
+                "Aspek Non Teknis",
+                "Aspek Kepribadian",
+                "Aspek Kepemimpinan (Khusus untuk: GM, Manajer, Supervisor, dan Koordinator)"
+            ];
+
+            let td_aspek = '';
+
+            for (var i in aspek) {
+                if (aspek[i] == data['aspek_pk']) {
+                    td_aspek += `<option selected value="` + aspek[i] + `">` + aspek[i] + `</option>`
+                } else {
+                    td_aspek += `<option value="` + aspek[i] + `">` + aspek[i] + `</option>`
+                }
+            }
+
+
+            console.log(result)
+
             $('.tabel-pertanyaan-pk').append(
                 `
                     <tr>
                         <form class="editFormPertanyaan` + data['id_pertanyaan_pk'] + `" method="post">
                             <td>` + (no++) + `</td>
                             <td>
-                                <input type="hidden" name="id_pk" value="<?= $p['id_pk'] ?>">
+                                <input type="hidden" name="id_pk" value="` + data['id_pk'] + `">
                                 <input type="hidden" name="id_pertanyaan_pk" id="id_pertanyaan_pk` + data['id_pertanyaan_pk'] + `" value="` + data['id_pertanyaan_pk'] + ` ">
-                                <textarea style="width: 800px;" name="pertanyaan_pk" id="pertanyaan_pk` + data['id_pertanyaan_pk'] + `" type="text" class="form-control">` + data['pertanyaan_pk'] + `</textarea>
+                                <textarea style="width: 500px;" name="pertanyaan_pk" id="pertanyaan_pk` + data['id_pertanyaan_pk'] + `" type="text" class="form-control">` + data['pertanyaan_pk'] + `</textarea>
                             </td>
                             <td>
-                                <div class="button-group">
-                                    <button type="button" class="btn waves-effect waves-light btn-info edit-pertanyaan-pk" data-id="` + data['id_pertanyaan_pk'] + `" onclick="editPertanyaanpk(` + data['id_pertanyaan_pk'] + `)"><i class=" fas fa-edit mr-2"></i>Simpan</button>
-                                    <a href="/admin/hapusPertanyaanPenilaian/` + data['id_pertanyaan_pk'] + `/` + data['id_pk'] + `" class="btn waves-effect waves-light btn-danger"><i class="fas fa-trash mr-2"></i>Hapus</a>
+                                <select name="aspek_pk" id="aspek_pk` + data['id_pertanyaan_pk'] + `" class="form-control">
+                                        <option value="">Tidak ada aspek</option>
+                                        ` + td_aspek + `
+                                </select>
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn waves-effect waves-light btn-info edit-pertanyaan-pk" data-id="` + data['id_pertanyaan_pk'] + `" onclick="editPertanyaanpk(` + data['id_pertanyaan_pk'] + `)"><i class=" fas fa-edit"></i></button>
+                                    <a href="/admin/hapusPertanyaanPenilaian/` + data['id_pertanyaan_pk'] + `/` + data['id_pk'] + `" class="btn waves-effect waves-light btn-danger"><i class="fas fa-trash"></i></a>
                                 </div>
                             </td>
                         </form>

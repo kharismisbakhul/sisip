@@ -10,7 +10,7 @@ class pertanyaan_pk extends Model
     protected $primaryKey = 'id_pertanyaan_pk';
 
     protected $useTimestamps = false;
-    protected $allowedFields = ['id_pk', 'id_pertanyaan_pk', 'pertanyaan_pk'];
+    protected $allowedFields = ['id_pk', 'id_pertanyaan_pk', 'pertanyaan_pk', 'aspek_pk'];
 
     public function getPertanyaanpk($id_pk)
     {

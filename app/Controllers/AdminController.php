@@ -475,7 +475,7 @@ class AdminController extends BaseController
     public function penilaianKinerja()
     {
         $this->data['title'] = 'Penilaian Kinerja';
-        $this->data['penilaian'] = $this->penilaianKinerjaModel->findAll();
+        $this->data['penilaian'] = $this->penilaianKinerjaModel->orderBy('id_pk', 'DESC')->findAll();
 
         $data = [];
         $data2 = [];
@@ -496,7 +496,21 @@ class AdminController extends BaseController
             'nama_pk' => $this->request->getVar('nama_pk')
         ];
 
-        $this->penilaianKinerjaModel->insert($data);
+        $id = $this->penilaianKinerjaModel->insert($data);
+
+        if ($this->request->getVar('jenis_penilaian') != 0) {
+            $pertanyaan = $this->pertanyaanpkModel->where('id_pk', $this->request->getVar('jenis_penilaian'))->findAll();
+            $duplicate = [];
+            $indek = 0;
+            foreach ($pertanyaan as $p) {
+                $duplicate[$indek++] = [
+                    'pertanyaan_pk' => $p['pertanyaan_pk'],
+                    'id_pk' => $id
+                ];
+            }
+
+            $this->pertanyaanpkModel->insertBatch($duplicate);
+        }
         session()->setFlashdata('pesan', 'Penilaian kinerja pegawai berhasil ditambah!');
         return redirect()->to('/admin/penilaianKinerja');
     }
@@ -546,6 +560,15 @@ class AdminController extends BaseController
 
     public function editPenilaianKinerja($id_pk)
     {
+
+        $this->data['aspek'] = [
+            "Aspek Teknis Pekerjaan",
+            "Aspek Non Teknis",
+            "Aspek Kepribadian",
+            "Aspek Kepemimpinan (Khusus untuk: GM, Manajer, Supervisor, dan Koordinator)"
+        ];
+
+
         $this->data['title'] = 'Edit Penilaian Kinerja';
         $this->data['pertanyaan'] = $this->pertanyaanpkModel->where(['id_pk' => $id_pk])->findAll();
         $this->data['penilaian'] = $this->penilaianKinerjaModel->where(['id_pk' => $id_pk])->first();
@@ -557,6 +580,7 @@ class AdminController extends BaseController
         $data = [
             'pertanyaan_pk' => $this->request->getVar('pertanyaan_pk'),
             'id_pk' => $this->request->getVar('id_pk'),
+            'aspek_pk' => $this->request->getVar('aspek_pk')
         ];
 
         $this->pertanyaanpkModel->insert($data);
@@ -571,11 +595,44 @@ class AdminController extends BaseController
     {
         $id_pertanyaan_pk = $this->request->getVar('id_pertanyaan_pk');
         $data = [
-            'pertanyaan_pk' => $this->request->getVar('pertanyaan_pk')
+            'pertanyaan_pk' => $this->request->getVar('pertanyaan_pk'),
+            'aspek_pk' => $this->request->getVar('aspek_pk'),
         ];
 
         $this->pertanyaanpkModel->update($id_pertanyaan_pk, $data);
         echo json_encode($id_pertanyaan_pk);
+    }
+
+    public function exportPenilaianKinerja($id_pk)
+    {
+        $user = $this->userModel->getUserKepuasan();
+
+        foreach ($user as $u) {
+            $data[$u['no_induk']] = [
+                'nama' => $u['nama'],
+                'status' => $u['nama_status_user'],
+                'no_induk' => $u['no_induk'],
+                'pekerjaan' => $this->userModel->getDaftarPekerjaanUser($u['no_induk']),
+                'nilai' => $this->penilaianKinerjaModel->getPertanyaan($id_pk, $u['no_induk'])
+            ];
+        }
+        $this->data['penilaian'] = $this->penilaianKinerjaModel->where('id_pk', $id_pk)->first();
+        $this->data['penilaian_kinerja'] = $data;
+        $this->data['pertanyaan'] = $this->pertanyaanpkModel->where('id_pk', $id_pk)->findAll();
+        $data3 = [];
+        foreach ($this->data['penilaian_kinerja'] as $pk) {
+            $data3[$pk['status']]['jumlah'] = 0;
+            $data3[$pk['status']]['nama'] = '';
+        }
+
+        foreach ($this->data['penilaian_kinerja'] as $pk) {
+            $indek = 1;
+            $data3[$pk['status']]['jumlah'] += $indek;
+            $data3[$pk['status']]['nama'] = $pk['status'];
+        }
+        ($this->data);
+        $this->data['status'] = $data3;
+        return view('layout/hasil_penilaian_export', $this->data);
     }
 
     public function hapusPertanyaanPenilaian($id_pertanyaan_pk, $id_pk)
@@ -603,7 +660,19 @@ class AdminController extends BaseController
         $this->data['penilaian'] = $this->penilaianKinerjaModel->where('id_pk', $id_pk)->first();
         $this->data['penilaian_kinerja'] = $data;
         $this->data['pertanyaan'] = $this->pertanyaanpkModel->where('id_pk', $id_pk)->findAll();
-        // dd($this->data);
+        $data3 = [];
+        foreach ($this->data['penilaian_kinerja'] as $pk) {
+            $data3[$pk['status']]['jumlah'] = 0;
+            $data3[$pk['status']]['nama'] = '';
+        }
+
+        foreach ($this->data['penilaian_kinerja'] as $pk) {
+            $indek = 1;
+            $data3[$pk['status']]['jumlah'] += $indek;
+            $data3[$pk['status']]['nama'] = $pk['status'];
+        }
+        ($this->data);
+        $this->data['status'] = $data3;
         return view('hasilPenilaianKinerja', $this->data);
     }
 
