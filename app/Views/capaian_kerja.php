@@ -37,14 +37,32 @@
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <div class="row">
-                                    <div class="d-flex col-lg-5 mb-2">
+                                    <div class="d-flex col-lg-8 mb-2">
                                         <form action="<?= base_url('/staff/capaianKerja')?>" method="get">
                                             <div class="input-group">
+                                                <!-- <select class="custom-select " id="inlineFormCustomSelect" name="minggu-ke">
+                                                    <option selected value="" hidden>Pilih Minggu</option>
+                                                    <option value="1">Minggu ke-1</option>
+                                                    <option value="2">Minggu ke-2</option>
+                                                    <option value="3">Minggu ke-3</option>
+                                                    <option value="4">Minggu ke-4</option>
+                                                </select>
+                                                <select class="custom-select " id="inlineFormCustomSelect" name="bulan">
+                                                    <option selected value="" hidden>Pilih Bulan...</option>
+                                                    <?php 
+                                                    foreach ($bulan as $b) { 
+                                                        echo '<option value="'.$b['id_bulan'].'">'.$b['nama_bulan'].'</option>';
+                                                    };
+                                                    ?>
+                                                </select> -->
                                                 <select class="custom-select " id="inlineFormCustomSelect" name="tahun">
-                                                    <option selected value="" hidden>Pilih Periode Kerja...</option>
-                                                    <option value="2020">2020</option>
-                                                    <option value="2021">2021</option>
-                                                    <option value="2022">2022</option>
+                                                    <option selected value="" hidden>Pilih Tahun...</option>
+                                                    <?php 
+                                                    for ($i=2020; $i < 2030; $i++) { 
+                                                        echo '<option value="'.$i.'">'.$i.'</option>';
+                                                    };
+                                                    ?>
+                                                    
                                                 </select>
                                                 <div class="input-group-append">
                                                     <button class="btn btn-info" type="submit"><i
@@ -53,8 +71,8 @@
                                             </div>
                                         </form>
                                     </div>
-                                    <div class="col-lg-7">
-                                        <a target="_blank" href="<?= base_url('/exportCapaianKerja') ?>" class="btn btn-success float-right"><i class="fas fa-file-excel mr-2 "></i>Export to excel</a>
+                                    <div class="col-lg-4">
+                                        <a target="_blank" href="<?= base_url('/exportCapaianKerja?tahun='.$tahun) ?>" class="btn btn-success float-right"><i class="fas fa-file-excel mr-2 "></i>Export to excel</a>
                                     </div>
                                     </div>
 
@@ -69,20 +87,22 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        <?php $i = 1; foreach($tugas as $t) : ?>
+                                        <?php $i = 1; foreach($rancangan_tugas as $rt) : ?>
                                             <tr>
                                                 <td><?= $i++; ?></td>
-                                                <?php if($t['id_rancangan_tugas'] != 0) { ?>
-                                                    <td><?= $t['nama_tugas']?></td>
-                                                    <td>Utama</td>
-                                                <?php } else {?>
-                                                    <td>Tugas Tambahan  <button class="btn btn-secondary" data-id="<?= $t['id_riwayat_jabatan']?>" data-toggle="modal" data-target="#detailTugasTambahan">Detail</button></td>
-                                                    <td>Tambahan</td>
-                                                <?php }?>
-                                                <td><?= $t['jumlah_tugas']?></td>
-                                                <td><?= $t['jumlah_total_tugas']?></td>
+                                                <td><?= $rt['nama_tugas']?></td>
+                                                <td>Utama</td>
+                                                <td><?= $rt['jumlah_tugas']?></td>
+                                                <td><?= $rt['jumlah_total_tugas']?></td>
                                             </tr>
                                         <?php endforeach?>
+                                            <tr>
+                                                <td><?= $i++; ?></td>
+                                                <td>Tugas Tambahan  <button class="btn btn-secondary" data-toggle="modal" data-target="#detailTugasTambahan">Detail</button></td>
+                                                <td>Tambahan</td>
+                                                <td><?= $jumlah_tugas_tambahan?></td>
+                                                <td>0</td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -120,6 +140,9 @@
                     </div>
                     <div class="modal-body">
                         <div class="table-responsive">
+                        <?php if($tugas_tambahan == null) {
+                                        echo '<div class="alert alert-warning text-center">Tidak ada tugas tambahan</div>';
+                                        } else {?>
                                     <table id="zero_config" class="table table-hover table-bordered">
                                         <thead>
                                             <tr>
@@ -137,9 +160,10 @@
                                                 <td><?= $t['jumlah_tugas']?></td>
                                                 <td><?= $t['tanggal_tugas']?></td>
                                             </tr>
-                                        <?php endforeach?>
+                                        <?php endforeach;?>
                                         </tbody>
                                     </table>
+                                    <?php }?>
                         </div>
                     </div>
                 </div>

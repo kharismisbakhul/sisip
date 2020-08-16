@@ -26,7 +26,11 @@
 <![endif]-->
 </head>
 
-<body onload="initMap()">
+<?php if($title == "Presensi Pegawai"){
+    echo '<body onload="initMap()">';
+}else{
+    echo  '<body>';
+}?>
     <!-- ============================================================== -->
     <!-- Preloader - style you can find in spinners.css -->
     <!-- ============================================================== -->

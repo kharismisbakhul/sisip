@@ -124,6 +124,15 @@
                                                         <span class="btn btn-danger">Tidak Hadir</span>
                                                     </td>
                                                 <?php } else {?>
+                                                    <?php if($p['presensi']['status_presensi'] != 0) {?>
+                                                    <td>
+                                                        <div class="comment-text w-100">
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <span class="btn btn-warning">Izin</span>
+                                                    </td>
+                                                    <?php }else{?>
                                                     <td>
                                                     <div class="comment-text w-100">
                                                         <span class="m-b-15 d-block"><?= $p['presensi']['lokasi']?></span>
@@ -145,6 +154,7 @@
                                                     <td>
                                                         <span class="btn btn-success">Hadir</span>
                                                     </td>
+                                                    <?php }?>
                                                 <?php }?>
                                             </tr>
                                         <?php endforeach ?>

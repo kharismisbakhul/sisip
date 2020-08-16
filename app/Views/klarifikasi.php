@@ -54,7 +54,7 @@
                                         <?php $i = 1; foreach($tugas_revisi as $t) : ?>
                                         <tr>
                                             <td><?= $i++; ?></td>
-                                            <td><?= $t['tanggal_tugas'] ?></td>
+                                            <td><?= date('d-m-Y', strtotime($t['tanggal_tugas'])) ?></td>
                                             <td><?= $t['nama_tugas'] ?></td>
                                             <?php if($t['id_rancangan_tugas'] != 0) { ?>
                                                 <td>Utama</td>

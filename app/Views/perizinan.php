@@ -76,6 +76,12 @@
                             </div>
 
                         </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <button class="btn btn-success text-center" data-toggle="modal" data-target="#pop-up-perizinan"><i class="fas fa-file"></i> Download Template Surat Izin</button>
+                            </div>
+
+                        </div>
                     </div>
                     <!-- Column -->
                 </div>
@@ -110,10 +116,10 @@
                                                     <?= $a++;?>
                                                 </td>
                                                 <td>
-                                                    <?= $p['tanggal_izin']?>
+                                                    <?= date('d-m-Y', strtotime($p['tanggal_izin']))?>
                                                 </td>
                                                 <td>
-                                                    <?= $p['tanggal_mulai']. ' s/d '.$p['tanggal_selesai']?>
+                                                    <?= date('d-m-Y', strtotime($p['tanggal_mulai'])). ' s/d '.date('d-m-Y', strtotime($p['tanggal_selesai']))?>
                                                 </td>
                                                 <td>
                                                     <?= $p['alasan']?>
@@ -147,10 +153,57 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                </div>
 
             </div>
             <!-- ============================================================== -->
             <!-- End Container fluid  -->
             <!-- ============================================================== -->
+
+             <!-- Start Modal Perizinan -->
+        <!-- ============================================================== -->
+        <div class="modal fade" id="pop-up-perizinan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="exampleModalLabel1">Template Perizinan</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    </div>
+                    <form action="<?= base_url('/staff/template_perizinan')?>" method="post">
+                    <div class="modal-body">
+                        <?= csrf_field() ?>
+                        <div class="form-group">
+                            <label for="message-text" class="control-label">Tanggal Mulai</label>
+                            <input type="date" class="form-control" id="message-text1" name="tanggal_mulai" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="control-label">Tanggal Selesai</label>
+                            <input type="date" class="form-control" id="message-text1" name="tanggal_selesai" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="control-label">Keterangan</label>
+                            <textarea class="form-control" id="message-text1" name="keterangan" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="control-label">Kategori</label>
+                            <select class="form-control" id="message-text1" name="kategori_izin" required>
+                                <option value="1">Izin</option>
+                                <option value="2">Sakit</option>
+                                <option value="3">Cuti</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-success">Download Template Surat Izin</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Modal -->
+        <!-- ============================================================== -->
+
 <?= $this->endSection() ?>

@@ -103,6 +103,7 @@
                                                                         <div class="form-group">
                                                                             <select class="form-control" name="periode" id="periode">
                                                                                 <option value="1">Harian</option>
+                                                                                <option value="3">Mingguan</option>
                                                                                 <option value="2">Periodik</option>
                                                                             </select>
                                                                         </div>
@@ -151,6 +152,8 @@
                                                                 <?php }else if($t['status_tugas'] == 3){?>
                                                                     <td><i class="fas fa-dot-circle mr-2"></i> Belum valid</td>
                                                                     <td><a href="<?= base_url('/staff/hapusTugas/'.$t['id_tugas'])?>" class="btn btn-danger">Hapus</a></td>
+                                                                <?php }else if($t['status_tugas'] == 5){?>
+                                                                    <td><i class="fas fa-dot-circle mr-2 text-danger"></i> Tolak</td>
                                                                 <?php } else {?>
                                                                     <td>
                                                                         <i class="fas fa-dot-circle mr-2 text-purple"></i>
@@ -188,6 +191,8 @@
                                                             <?php }else if($tt['status_tugas'] == 3){?>
                                                                 <td><i class="fas fa-dot-circle mr-2"></i> Belum valid</td>
                                                                 <td><a href="<?= base_url('/staff/hapusTugas/'.$tt['id_tugas'])?>" class="btn btn-danger">Hapus</a></td>
+                                                            <?php }else if($tt['status_tugas'] == 5){?>
+                                                                <td><i class="fas fa-dot-circle mr-2 text-danger"></i> Tolak</td>
                                                             <?php } else {?>
                                                                 <td>
                                                                     <i class="fas fa-dot-circle mr-2 text-purple"></i>

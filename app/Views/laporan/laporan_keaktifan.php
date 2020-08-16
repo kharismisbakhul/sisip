@@ -62,45 +62,65 @@
                                         </form>
                                     </div>
                                     <div class="col-lg-7">
-                                        <a target="_blank" href="<?= base_url('/exportLaporanKeaktifan') ?>" class="btn btn-success float-right"><i class="fas fa-file-excel mr-2 "></i>Export to excel</a>
+                                        <a target="_blank" href="<?= base_url('/exportLaporanKeaktifan?bulan='.$bb.'&tahun='.$tahun) ?>" class="btn btn-success float-right"><i class="fas fa-file-excel mr-2 "></i>Export to excel</a>
                                     </div>
                                     </div>
 
                                     <table class="table table-hover table-bordered">
                                     <thead>
                                     <tr>
-                                        <th class="align-middle text-center" colspan="<?= $batas_tanggal['jumlah_tanggal']?>">Tanggal</th>
+                                        <th class="align-middle text-center" rowspan="2">Nama</th>
+                                        <th class="align-middle text-center" rowspan="2">Jabatan</th>
+                                        <th class="align-middle text-center" rowspan="2">Unit Kerja</th>
+                                        <th class="align-middle text-center" colspan="<?= $jumlah_tanggal?>">Tanggal</th>
                                         <th class="align-middle text-center" rowspan="2">Jumlah Kehadiran</th>
+                                        <th class="align-middle text-center" rowspan="2">Jumlah Izin</th>
                                     </tr>
                                     <tr>
-                                        <?php for($i = 1; $i <= intval($batas_tanggal['jumlah_tanggal']); $i++) {
+                                        <?php for($i = 1; $i <= intval($jumlah_tanggal); $i++) {
                                             echo '<th>'.$i.'</th>';
                                         }?>
                                     </tr>
         
                                 </thead>
                                 <tbody>
-                                    <?php $index = 1; $counter = 0;?>
+                                    <?php $index = 1; $counter = 0; $counter_izin = 0;?>
                                     <tr>
-                                    <?php for($i = 1; $i <= intval($batas_tanggal['jumlah_tanggal']); $i++) {
+                                    <td><?= $user['nama']?></td>
+                                    <td><?= $jabatan['nama_status_user'].' '.$jabatan['nama']?></td>
+                                    <td><?= $unit_kerja['nama']?></td>
+                                    <?php for($i = 1; $i <= intval($jumlah_tanggal); $i++) {
                                             $tanggal = ($i < 10) ? '0'.$i : $i; 
                                             $status = false;
                                             for ($j=0; $j < count($presensi); $j++) { 
-                                                // echo "2020-07-".$tanggal.' &&& '.$presensi[$j]['tanggal_presensi'];die;
-                                                if($presensi[$j]['tanggal_presensi'] == "2020-07-".$tanggal){
-                                                    echo '<td><i class="fa fa-check text-success" aria-hidden="true"></i>
-                                                    </td>';
-                                                    $status = true;
-                                                    $counter++;
-                                                    break;
+                                                if($presensi[$j]['tanggal_presensi'] == ($t.'-'.$bb.'-'.$tanggal)){
+                                                    if($presensi[$j]['status_presensi'] != 0){
+                                                        echo '<td><i class="fa fa-circle text-warning" aria-hidden="true"></i>
+                                                        </td>';
+                                                        $status = true;
+                                                        $counter_izin++;
+                                                        break;
+                                                    }else{
+                                                        echo '<td><i class="fa fa-check text-success" aria-hidden="true"></i>
+                                                        </td>';
+                                                        $status = true;
+                                                        $counter++;
+                                                        break;
+                                                    }
                                                 }
                                             }
                                             if($status == false){
-                                                echo '<td><i class="fa fa-times text-danger" aria-hidden="true"></i>
-                                                </td>';
+                                                if(in_array(($t.'-'.$bb.'-'.$tanggal),$weekend)){
+                                                    echo '<td><i class="fa fa-minus text-info" aria-hidden="true"></i>
+                                                    </td>';
+                                                }else{
+                                                    echo '<td><i class="fa fa-times text-danger" aria-hidden="true"></i>
+                                                    </td>';
+                                                }
                                             }
                                     }?>
                                     <td><?= $counter?></td>
+                                    <td><?= $counter_izin?></td>
                                     </tr>
                                 </tbody>
                                     </table>

@@ -9,13 +9,13 @@ class user extends Model
 
     protected $useTimestamps = false;
     protected $allowedFields = [
-        'no_induk','password','nama', 'email', 'alamat', 'email', 'tahun_masuk', 'foto_profil', 'isPresensi',  'id_status_user'
+        'no_induk','password','nama', 'email', 'alamat', 'email', 'tahun_masuk', 'foto_profil', 'isPresensi',  'id_status_user', 'no_telepon'
     ];
 
     public function getUser($no_induk = false)
     {
         if ($no_induk == false) {
-            return $this->join('status_user', 'user.id_status_user=status_user.id_status_user', 'left')->findAll();
+            return $this->join('status_user', 'user.id_status_user=status_user.id_status_user', 'left')->join('riwayat_jabatan', 'riwayat_jabatan.no_induk = user.no_induk')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan')->orderBy('user.no_induk', 'asc')->findAll();
         }
 
         return $this->join('status_user', 'user.id_status_user=status_user.id_status_user', 'left')->where(['no_induk' => $no_induk])->first();

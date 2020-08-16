@@ -8,4 +8,5 @@ class manager extends Model
     protected $primaryKey = 'id_manager';
 
     protected $useTimestamps = false;
+    protected $allowedFields = ['id_manager', 'nama', 'id_gm'];
 }

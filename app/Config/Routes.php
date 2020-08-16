@@ -33,6 +33,8 @@ $routes->setAutoRoute(true);
 
 // Root
 $routes->get('/', 'AuthController::login');
+$routes->get('/templateIzin', 'StaffController::templateIzin');
+$routes->post('/staff/template_perizinan', 'StaffController::template_perizinan');
 $routes->post('/login', 'AuthController::login');
 $routes->post('/chat', 'AuthController::tambahChat');
 $routes->get('/logout', 'AuthController::logout');
@@ -43,12 +45,17 @@ $routes->get('/kinerjaApi', 'StaffController::kinerjaApi');
 $routes->get('/exportCapaianKerja', 'StaffController::exportCapaianKerja');
 $routes->get('/exportLaporanEvaluasi', 'StaffController::exportLaporanEvaluasi');
 $routes->get('/exportLaporanKeaktifan', 'StaffController::exportLaporanKeaktifan');
+$routes->get('/exportLaporanKeaktifanAdmin', 'AdminController::exportLaporanKeaktifanAdmin');
+$routes->get('/exportLaporanEvaluasiAdmin', 'AdminController::exportLaporanEvaluasiAdmin');
 $routes->post('/staff/inputLogbookApi', 'StaffController::inputLogbookApi');
+$routes->post('/getPresensiBawahan', 'SupervisorController::getPresensiBawahan');
+$routes->post('/getLogbookBawahan', 'SupervisorController::getLogbookBawahan');
 
 // Admin
 $routes->get('/admin', 'AdminController::index');
 $routes->get('/admin/managementUsers', 'AdminController::managementUsers');
 $routes->get('/admin/profil', 'AdminController::profil');
+$routes->post('/admin/profil', 'AdminController::profil');
 $routes->get('/admin/tambahUser', 'AdminController::tambahUser');
 $routes->post('/admin/saveUser', 'AdminController::saveUser');
 $routes->get('/admin/daftarSaran', 'AdminController::daftarSaran');
@@ -80,9 +87,11 @@ $routes->post('/admin/tambahRancanganTugas', 'AdminController::tambahRancanganTu
 $routes->post('/admin/ubahRancanganTugas', 'AdminController::ubahRancanganTugas');
 $routes->get('/admin/hapusRancanganTugas/(:any)/(:any)', 'AdminController::hapusRancanganTugas/$1/$2');
 $routes->get('/admin/apiDetailJabatan/(:any)', 'AdminController::apiDetailJabatan/$1');
+$routes->get('/admin/apiAtasanJabatan/(:any)', 'AdminController::apiAtasanJabatan/$1');
 $routes->post('/admin/tambahRiwayatPekerjaan/(:any)', 'AdminController::tambahRiwayatPekerjaan/$1');
 $routes->delete('/admin/(:any)', 'AdminController::deleteUser/$1');
 $routes->get('/admin/daftarJamKerja', 'AdminController::daftarJamKerja');
+$routes->get('/admin/daftarJabatan', 'AdminController::daftarJabatan');
 $routes->get('/admin/laporanKeaktifan', 'AdminController::laporanKeaktifan');
 $routes->get('/admin/laporanKinerja', 'AdminController::laporanKinerja');
 $routes->get('/admin/LaporanEvaluasi', 'AdminController::laporanEvaluasi');

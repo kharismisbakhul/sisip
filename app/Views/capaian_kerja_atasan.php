@@ -32,26 +32,34 @@
         <div class="col-lg-12 col-xlg-12 col-md-12">
             <div class="card">
                 <div class="card-header bg-info text-white">
-                    <h4>Capaian Kerja Pegawai Tahun 2020</h4>
+                    <h4>Capaian Kerja Tahun <?= $tahun?></h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-
-                        <div class="d-flex justify-content-end mb-2">
-                            <form action="" method="get">
-                                <div class="input-group">
-                                    <select class="custom-select " id="inlineFormCustomSelect">
-                                        <option selected="">Pilih Periode Kerja...</option>
-                                        <option value="1">2020</option>
-                                        <option value="2">2019</option>
-                                        <option value="3">2018</option>
-                                    </select>
-                                    <div class="input-group-append">
-                                        <button class="btn btn-info" type="button"><i class="fas fa-search"></i></button>
+                    <div class="row">
+                                    <div class="d-flex col-lg-8 mb-2">
+                                        <form action="<?= base_url('/supervisor/capaianKerja')?>" method="get">
+                                            <div class="input-group">
+                                                <select class="custom-select " id="inlineFormCustomSelect" name="tahun">
+                                                    <option selected value="" hidden>Pilih Tahun...</option>
+                                                    <?php 
+                                                    for ($i=2020; $i < 2030; $i++) { 
+                                                        echo '<option value="'.$i.'">'.$i.'</option>';
+                                                    };
+                                                    ?>
+                                                    
+                                                </select>
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-info" type="submit"><i
+                                                            class="fas fa-search"></i></button>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
-                                </div>
-                            </form>
-                        </div>
+                                    <div class="col-lg-4">
+                                        <a target="_blank" href="<?= base_url('/exportCapaianKerja?tahun='.$tahun) ?>" class="btn btn-success float-right"><i class="fas fa-file-excel mr-2 "></i>Export to excel</a>
+                                    </div>
+                                    </div>
 
                         <table id="zero_config" class="table table-hover table-bordered">
                             <thead>
@@ -64,19 +72,22 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            <?php $i = 1; foreach($rancangan_tugas as $t) : ?>
+                            <?php $i = 1; foreach($rancangan_tugas as $rt) : ?>
                             <tr>
                                 <td><?= $i++; ?></td>
-                                <td><?= $t['nama_tugas']?></td>
-                                <?php if($t['id_rancangan_tugas'] != 0) { ?>
-                                    <td>Utama</td>
-                                <?php } else {?>
-                                    <td>Tambahan</td>
-                                <?php }?>
-                                <td><?= $t['jumlah_tugas']?></td>
-                                <td><?= $t['jumlah_total_tugas']?></td>
+                                <td><?= $rt['nama_tugas']?></td>
+                                <td>Utama</td>
+                                <td><?= $rt['jumlah_tugas']?></td>
+                                <td><?= $rt['jumlah_total_tugas']?></td>
                             </tr>
                         <?php endforeach?>
+                            <tr>
+                                <td><?= $i++; ?></td>
+                                <td>Tugas Tambahan  <button class="btn btn-secondary" data-toggle="modal" data-target="#detailTugasTambahanAtasan">Detail</button></td>
+                                <td>Tambahan</td>
+                                <td><?= $jumlah_tugas_tambahan?></td>
+                                <td>0</td>
+                            </tr>
 
 
                             </tbody>
@@ -103,7 +114,7 @@
                     </div>
                 </div>
                 <div class="card-body border-top">
-                    <table class="table v-middle ">
+                    <table class="table v-middle " id="tabel-daftar-bawahan">
                         <tbody>
                             <?php foreach ($staff_bawahan as $sb) :  ?>
                                 <tr>
@@ -117,9 +128,11 @@
                                     </td>
                                     <td align="right">
                                         <div class="button-group">
-                                            <button type="button" class="btn btn-sm waves-effect waves-light btn-info">Detail</button>
+                                            <button type="button" class="btn btn-sm waves-effect waves-light btn-info button-detail-bawahan" data-toggle="modal" data-target="#detail-bawahan" data-foto="<?= $sb['foto_profil'] ?>" data-nama="<?= $sb['nama']?>" data-nip="<?= $sb['no_induk']?>" data-jabatan="<?= $sb['nama_jabatan']?>" data-status="<?= $sb['nama_status_user']?>" data-email="<?= $sb['email']?>" data-no="<?= $sb['no_telepon']?>" data-alamat="<?= $sb['alamat']?>">Detail</button>
 
-                                            <a class="btn btn-sm  waves-effect waves-light btn-success" href="<?= base_url('/supervisor/daftarPenilaian') . '/' . $sb['no_induk'] ?>">Penilaian</a>
+                                            <button type="button" class="btn btn-sm waves-effect waves-light btn-secondary button-capaian-bawahan" data-toggle="modal" data-target="#capaian-bawahan" data-tahun="<?= $tahun ?>" data-induk="<?= $sb['no_induk']?>" >Capaian Kerja</button>
+
+                                            <a class="btn btn-sm  waves-effect waves-light btn-success" href="<?= base_url('/supervisor/daftarPenilaian') . '/' . $sb['no_induk'] ?>">Penilaian Kinerja</a>
 
 
                                         </div>
@@ -179,6 +192,159 @@
 <!-- ============================================================== -->
 <!-- End Container fluid  -->
 <!-- ============================================================== -->
+
+<!-- Modal Detail Bawahan-->
+<div class="modal fade detail-bawahan" id="detail-bawahan" tabindex="-1" role="dialog" aria-labelledby="detail-bawahanTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detail-bawahanTitle">Detail Pegawai</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6">
+                        <figure class="figure text-center">
+                            <img src="" class="img-thumbnail rounded-circle" style="width: 350px; height: 350px;" alt="" id="foto">
+                        </figure>
+                    </div>
+                    <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="nama">Nama</label>
+                                <input type="text" class="form-control" id="nama" name="nama" value="" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="no_induk">Nomor Induk</label>
+                                <input type="text" class="form-control" id="no_induk" name="no_induk" value="" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="jabatan">Jabatan</label>
+                                <input type="text" class="form-control" id="jabatan" name="jabatan" value="" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="text" class="form-control" id="email" name="email" value="" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="no_telepon">No Telepon</label>
+                                <input type="text" class="form-control" id="no_telepon" name="no_telepon" value="" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="alamat">Alamat</label>
+                                <input type="text" class="form-control" id="alamat" name="alamat" value="" readonly>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+        <div class="modal fade" id="detailTugasTambahanAtasan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="exampleModalLabel1">Detail Tugas Tambahan</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="table-responsive">
+                        <?php if($tugas_tambahan == null) {
+                                        echo '<div class="alert alert-warning text-center">Tidak ada tugas tambahan</div>';
+                                        } else {?>
+                                    <table id="zero_config" class="table table-hover table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Tugas Tambahan</th>
+                                                <th>Total Dicapai</th>
+                                                <th>Tanggal Tugas</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php $i = 1; foreach($tugas_tambahan as $t) : ?>
+                                            <tr>
+                                                <td><?= $i++; ?></td>
+                                                <td><?= $t['nama_tugas']?></td>
+                                                <td><?= $t['jumlah_tugas']?></td>
+                                                <td><?= $t['tanggal_tugas']?></td>
+                                            </tr>
+                                        <?php endforeach;?>
+                                        </tbody>
+                                    </table>
+                                    <?php }?>
+                        </div>
+                    </div>
+                </div>
+    </div>
+</div>
+<!-- End Modal -->
+
+<!-- Modal Capaian Bawahan-->
+<div class="modal fade capaian-bawahan" id="capaian-bawahan" tabindex="-1" role="dialog" aria-labelledby="detail-bawahanTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detail-bawahanTitle">Detail Capaian Bawahan Tahun <?= $tahun?></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h5>Nama:</h5>
+                <h5>No Induk:</h5>
+                <h5>Jabatan:</h5>
+            </div>
+        </div>
+    </div>
+    </div>
+
+        <div class="modal fade" id="detailTugasTambahanAtasan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="exampleModalLabel1">Detail Tugas Tambahan</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="table-responsive">
+                        <?php if($tugas_tambahan == null) {
+                                        echo '<div class="alert alert-warning text-center">Tidak ada tugas tambahan</div>';
+                                        } else {?>
+                                    <table id="zero_config" class="table table-hover table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Tugas Tambahan</th>
+                                                <th>Total Dicapai</th>
+                                                <th>Tanggal Tugas</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php $i = 1; foreach($tugas_tambahan as $t) : ?>
+                                            <tr>
+                                                <td><?= $i++; ?></td>
+                                                <td><?= $t['nama_tugas']?></td>
+                                                <td><?= $t['jumlah_tugas']?></td>
+                                                <td><?= $t['tanggal_tugas']?></td>
+                                            </tr>
+                                        <?php endforeach;?>
+                                        </tbody>
+                                    </table>
+                                    <?php }?>
+                        </div>
+                    </div>
+                </div>
+    </div>
+</div>
+<!-- End Modal -->
+
 
 
 <?= $this->endSection() ?>

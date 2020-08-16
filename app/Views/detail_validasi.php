@@ -72,7 +72,6 @@
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <div class="d-flex justify-content-end mb-2">
-
                                         <a href="<?= base_url('/supervisor/validasiSemua/'.$presensi['id_presensi'])?>" class="btn btn-success">Validasi Valid Semua Tugas</a>
                                     </div>
                                     <?php if($tugas == null) {?>
@@ -82,7 +81,8 @@
                                         <thead>
                                             <tr>
                                                 <th style="width: 5%;">No</th>
-                                                <th style="width: 35%;">Tugas</th>
+                                                <th style="width: 25%;">Tugas</th>
+                                                <th style="width: 10%;">Waktu Pengisian</th>
                                                 <th style="width: 10%;">Jenis Tugas</th>
                                                 <th style="width: 5%;">Jumlah</th>
                                                 <th style="width: 25%;">Status</th>
@@ -94,6 +94,7 @@
                                             <tr>
                                                 <td><?= $i++; ?></td>
                                                 <td><?= $t['nama_tugas']?></td>
+                                                <td><?= $t['waktu']?></td>
                                                 <?php if($t['id_rancangan_tugas'] != 0) { ?>
                                                     <td>Utama</td>
                                                 <?php } else {?>
@@ -109,6 +110,12 @@
                                                         <i class="fas fa-dot-circle mr-2 text-warning"></i>
                                                         <button class="btn btn-sm btn-warning">Revisi</button>
                                                         <p><?= $t['catatan']?></p>
+                                                    </td>
+                                                    <td></td>
+                                                <?php }else if($t['status_tugas'] == 5) {?>
+                                                    <td>
+                                                        <i class="fas fa-dot-circle mr-2 text-danger"></i>
+                                                        <button class="btn btn-sm btn-danger">Tolak</button>
                                                     </td>
                                                     <td></td>
                                                 <?php }else if($t['status_tugas'] == 3) {?>
@@ -146,7 +153,15 @@
                                 </div>
                                 <div class="row">
                                 <div class="col-12">
+                                <?php if(session('id_status_user') == 6){?>
                                    <a href="<?= base_url('/supervisor/validasi')?>" class="float-right btn btn-secondary">Kembali</a>
+                                <?php }else if(session('id_status_user') == 5){?>
+                                    <a href="<?= base_url('/manager/validasi')?>" class="float-right btn btn-secondary">Kembali</a>
+                                <?php }else if(session('id_status_user') == 4){?>
+                                    <a href="<?= base_url('/gm/validasi')?>" class="float-right btn btn-secondary">Kembali</a>
+                                <?php }else if(session('id_status_user') == 3){?>
+                                    <a href="<?= base_url('/direktur/validasi')?>" class="float-right btn btn-secondary">Kembali</a>
+                            <?php }?>
                                 </div>
                                 </div>
                             </div>

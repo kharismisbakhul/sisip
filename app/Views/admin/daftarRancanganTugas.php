@@ -51,8 +51,9 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Jabtan</th>
-                                        <th>Nama Jabatan</th>
+                                        <th>Jabatan</th>
+                                        <th>Detail Jabatan</th>
+                                        <th>Unit Kerja</th>
                                         <th style="width: 40%;">Action</th>
                                     </tr>
                                 </thead>
@@ -63,7 +64,7 @@
                                             <td><?= $i++ ?></td>
                                             <td><?= $in['nama_status_user'] ?></td>
                                             <td><?= $in['nama'] ?></td>
-
+                                            <td><?= $in['unit_kerja']['nama'] ?></td>
                                             <td>
                                                 <div class="button-group">
                                                     <a href="<?= base_url('/admin/lihatRancanganTugas/'.$in['id_jabatan']) ?>" class="btn btn-primary">Lihat Rancangan Tugas</a>

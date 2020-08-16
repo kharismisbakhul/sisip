@@ -258,9 +258,11 @@ $('#tambah-rancangan').click(function (e) {
             let periode = "";
 
             if (r['periode'] == 1) {
-                periode = '<option value="1" selected>Harian</option><option value="2">Bulanan</option>'
+                periode = '<option value="1" selected>Harian</option><option value="3">Mingguan</option><option value="2">Bulanan</option>'
+            } else if (r['periode'] == 3){
+                periode = '<option value="1" >Harian</option><option value="3" selected>Mingguan</option><option value="2">Bulanan</option>'
             } else {
-                periode = '<option value="1" >Harian</option><option value="2" selected>Bulanan</option>'
+                periode = '<option value="1" >Harian</option><option value="3">Mingguan</option><option value="2" selected>Bulanan</option>'
             }
 
 
@@ -283,7 +285,7 @@ $('#tambah-rancangan').click(function (e) {
                         </td>
                         <td>
                             <div class="form-group">
-                                <input id="jumlah_tugas` + r['id_rancangan_tugas'] + `" type="number" value="` + r['jumlah_tugas'] + `" class="form-control" name="jumlah_tugas">
+                                <input id="jumlah_tugas` + r['id_rancangan_tugas'] + `" type="number" value="` + r['jumlah_total_tugas'] + `" class="form-control" name="jumlah_tugas">
                             </div>
                         </td>
                         <td>
@@ -370,6 +372,35 @@ $('#riwayat_jabatan').on('change', function () {
             }
 
             $('#riwayat_bidang').html(pilihan)
+        }
+    });
+})
+
+$('#status_jabatan_modal').on('change', function () {
+    let id_status_user = $('#status_jabatan_modal').val()
+    console.log(id_status_user);
+    $.ajax({
+        url: segments[0] + '/admin/apiAtasanJabatan/' + id_status_user,
+        method: "get",
+        dataType: 'json',
+        success: function (result) {
+            console.log(result)
+            let pilihan = '';
+            if(result != null){
+                $('#atasan').html(`
+                <div class="form-group">
+                    <label for="atasan_langsung_modal" class="control-label">Atasan Langsung</label>
+                    <select class="custom-select mr-sm-2" id="atasan_langsung_modal" name="atasan_langsung">
+                    </select>
+                </div>
+                `)
+                for (var i in result) {
+                    pilihan += '<option value="' + result[i]['id_jabatan'] + '">' + result[i]['nama_status_user']+' '+result[i]['nama'] + '</option>'
+                }
+                $('#atasan_langsung_modal').append(pilihan);
+            }else{
+                $('#atasan').html(``)
+            }
         }
     });
 })

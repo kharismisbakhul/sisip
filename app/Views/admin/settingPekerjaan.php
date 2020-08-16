@@ -44,6 +44,11 @@
                     <h6><?= $u['alamat'] ?></h6>
                 </div>
             </div>
+            <div class="row">
+                 <div class="col-12">
+                    <a href="<?= base_url('/admin/managementUsers')?>" class="float-right btn btn-secondary">Kembali</a>
+                </div>
+            </div>
         </div>
         <!-- Column -->
         <!-- Column -->

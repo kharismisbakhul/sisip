@@ -8,4 +8,5 @@ class supervisor extends Model
     protected $primaryKey = 'id_supervisor';
 
     protected $useTimestamps = false;
+    protected $allowedFields = ['id_manager', 'nama', 'id_supervisor'];
 }

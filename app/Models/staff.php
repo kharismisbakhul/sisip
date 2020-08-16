@@ -8,4 +8,6 @@ class staff extends Model
     protected $primaryKey = 'id_staff';
 
     protected $useTimestamps = false;
+    protected $allowedFields = ['id_staff', 'nama', 'id_supervisor'];
+    
 }

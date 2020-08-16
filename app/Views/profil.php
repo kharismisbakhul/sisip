@@ -91,7 +91,7 @@
                                     aria-labelledby="pills-tupoksi-tab">
                                     <div class="card-body">
                                         <div class="table-responsive">
-                                            <form class="m-b-25" action="" method="POST">
+                                            <!-- <form class="m-b-25" action="" method="POST">
                                                 <div class="input-group">
                                                     <select class="custom-select" id="inputGroupSelect04">
                                                         <option selected="">Periode Kerja...</option>
@@ -104,8 +104,8 @@
                                                                 class="fas fa-search"></i></button>
                                                     </div>
                                                 </div>
-                                            </form>
-                                            <h4>Pekerjaan <b><?= $user['nama_jabatan'].' '.$user['jabatan']['nama']?></b> Periode <?= date('Y')?></h4>
+                                            </form> -->
+                                            <h4>Pekerjaan <b><?= $user['nama_jabatan'].' '.$user['jabatan']['nama']?></b></h4>
                                             <table class="table table-hover table-bordered">
                                                 <thead>
                                                     <tr>

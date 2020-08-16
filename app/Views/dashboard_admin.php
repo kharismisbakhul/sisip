@@ -34,7 +34,7 @@
                         <div class="text-white">
                             <h2><?= $jumlah_validasi 
                                 ?></h2>
-                            <h6>Pekerjaan yang
+                            <h6>Pekerjaan pegawai
                                 sudah divalidasi</h6>
                         </div>
                         <div class="ml-auto">
@@ -51,7 +51,7 @@
                         <div class="text-white">
                             <h2><?= $jumlah_belum_validasi 
                                 ?></h2>
-                            <h6>Pekerjaan yang
+                            <h6>Pekerjaan pegawai
                                 belum divalidasi</h6>
                         </div>
                         <div class="ml-auto">
@@ -68,7 +68,7 @@
                         <div class="text-white">
                             <h2><?= $jumlah_revisi 
                                 ?></h2>
-                            <h6>Pekerjaan yang direvisi</h6>
+                            <h6>Pekerjaan pegawai direvisi</h6>
                         </div>
                         <div class="ml-auto">
                             <span class="text-white display-6"><i class="ti-alert"></i></span>
@@ -200,6 +200,26 @@
 
                                                 </td>
                                             </tr>
+                                            <?php }else if($p['presensi']['status_presensi'] != 0) {?>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-flex align-items-center">
+                                                                <img src="<?= ($p['foto_profil']) ? base_url($p['foto_profil']) : base_url('/assets/images/users/default.jpg') ?>" alt="user" width="100" alt="user" width="60" class="rounded-circle">
+                                                                <div class="comment-text w-100">
+                                                                    <span class="mr-3"><i class="fas fa-user mr-2"></i><?= $p['nama']?></span>
+                                                                    <span class="mr-3"><i class="fas fa-calendar-plus mr-2"></i><?= date('d-m-Y')?></span>
+                                                                    
+        
+                                                                    <br>
+        
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td align="right">
+        
+                                                            <button type="button" class="btn btn-sm waves-effect waves-light btn-warning">Izin</button>
+                                                        </td>
+                                                    </tr>
                                         <?php } else {?>
                                             <tr>
                                                 <td>
@@ -258,7 +278,7 @@
         <div class="col-md-12 col-lg-4">
             <div class="card ">
                 <div class="card-body">
-                    <h4 class="card-title">Data Permintaan Validasi Pegawai</h4>
+                    <h4 class="card-title">Data Tugas Pegawai</h4>
                     <div id="admin-chart" style="height:253px; width:100%;" class="m-t-20"></div>
                     <!-- row -->
                     <div class="row m-t-30 m-b-15">

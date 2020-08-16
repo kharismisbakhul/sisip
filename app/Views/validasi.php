@@ -37,15 +37,18 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-
-                                    <table id="zero_config" class="table table-hover table-bordered">
+                                <?php if($presensi_bawahan == null) { ?>
+                                    <div class="alert alert-warning text-center">Tidak ada saran</div>
+                                <?php }else{ ?>
+                                    <table id="tabel_validasi_logbook" class="table table-hover table-bordered">
                                         <thead>
-                                            <tr>
+                                            <tr class="text-center align-middle">
                                                 <th>No</th>
                                                 <th>Tanggal</th>
+                                                <th>Waktu Presensi</th>
                                                 <th>Nama</th>
                                                 <th>Jenis Pekerjaan</th>
-                                                <th>Tempat Pelaksanaan</th>
+                                                <th>Lokasi</th>
                                                 <th>Permintaan Validasi</th>
                                                 <th>Action</th>
                                             </tr>
@@ -54,7 +57,12 @@
                                         <?php $i = 1; foreach($presensi_bawahan as $p) : ?>
                                             <tr>
                                                 <td><?= $i++; ?></td>
-                                                <td><?= $p['tanggal_presensi']?></td>
+                                                <td><?= date('d-m-Y', strtotime($p['tanggal_presensi']))?></td>
+                                                <?php if($p['waktu_presensi_keluar'] != null) {?>
+                                                    <td><?= 'Masuk : '.$p['waktu_presensi_masuk'].'<br>Keluar : '. $p['waktu_presensi_keluar']?></td>
+                                                <?php }else{?>
+                                                    <td><?= 'Masuk : '.$p['waktu_presensi_masuk']?></td>
+                                                <?php }?>
                                                 <td><?= $p['nama']?></td>
                                                 <?php if($p['status_tempat_kerja'] == 1) { ?>
                                                 <td>WFH</td>
@@ -75,6 +83,7 @@
                                         <?php endforeach?>
                                         </tbody>
                                     </table>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </div>

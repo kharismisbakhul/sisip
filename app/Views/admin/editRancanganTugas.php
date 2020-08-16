@@ -66,6 +66,7 @@
                                             <div class="form-group">
                                                 <select style="width: 100px;" class="custom-select col-12 periode" id="inlineFormCustomSelect" name="periode">
                                                     <option value="1" selected>Harian</option>
+                                                    <option value="3">Mingguan</option>
                                                     <option value="2">Bulanan</option>
                                                 </select>
                                             </div>
@@ -112,13 +113,19 @@
                                             <td>
                                                 <div class="form-group">
                                                     <select style="width: 100px;" class="custom-select col-12" id="periode<?= $r['id_rancangan_tugas'] ?>" name="periode">
-                                                        <?php if ($r['periode'] == 1) : ?>
+                                                        <?php if ($r['periode'] == 1) { ?>
                                                             <option value="1" selected>Harian</option>
+                                                            <option value="3">Mingguan</option>
                                                             <option value="2">Bulanan</option>
-                                                        <?php else : ?>
+                                                        <?php }else if ($r['periode'] == 3) { ?>
                                                             <option value="1">Harian</option>
+                                                            <option value="3" selected>Mingguan</option>
+                                                            <option value="2">Bulanan</option>
+                                                        <?php }else { ?>
+                                                            <option value="1">Harian</option>
+                                                            <option value="3">Mingguan</option>
                                                             <option value="2" selected>Bulanan</option>
-                                                        <?php endif; ?>
+                                                        <?php } ?>
                                                     </select>
                                                 </div>
                                             </td>

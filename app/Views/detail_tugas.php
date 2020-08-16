@@ -110,6 +110,8 @@
                                                     </td>
                                                 <?php }else if($t['status_tugas'] == 3) {?>
                                                     <td><i class="fas fa-dot-circle mr-2"></i> Belum valid</td>
+                                                <?php }else if($t['status_tugas'] == 5) {?>
+                                                    <td><i class="fas fa-dot-circle mr-2 text-danger"></i> Tolak</td>
                                                 <?php } else {?>
                                                     <td><i class="fas fa-dot-circle mr-2 text-purple"></i>
                                                     Klarifikasi
@@ -128,7 +130,17 @@
 
                         <div class="row">
                             <div class="col-12">
+                            <?php if(session('id_status_user') == 7){?>
                                 <a href="<?= base_url('/staff/logbook')?>" class="float-right btn btn-secondary">Kembali</a>
+                            <?php }else if(session('id_status_user') == 6){?>
+                                <a href="<?= base_url('/supervisor/logbook')?>" class="float-right btn btn-secondary">Kembali</a>
+                            <?php }else if(session('id_status_user') == 5){?>
+                                <a href="<?= base_url('/manager/logbook')?>" class="float-right btn btn-secondary">Kembali</a>
+                            <?php }else if(session('id_status_user') == 4){?>
+                                <a href="<?= base_url('/gm/logbook')?>" class="float-right btn btn-secondary">Kembali</a>
+                            <?php }else if(session('id_status_user') == 3){?>
+                                <a href="<?= base_url('/direktur/logbook')?>" class="float-right btn btn-secondary">Kembali</a>
+                            <?php }?>
                             </div>
                         </div>
                     </div>

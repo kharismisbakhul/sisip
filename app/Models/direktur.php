@@ -8,4 +8,5 @@ class direktur extends Model
     protected $primaryKey = 'id_direktur';
 
     protected $useTimestamps = false;
+    protected $allowedFields = ['id_direktur', 'nama'];
 }

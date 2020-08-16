@@ -8,4 +8,5 @@ class general_manager extends Model
     protected $primaryKey = 'id_general_manager';
 
     protected $useTimestamps = false;
+    protected $allowedFields = ['id_direktur', 'nama', 'id_gm'];
 }

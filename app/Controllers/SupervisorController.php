@@ -86,9 +86,20 @@ class SupervisorController extends BaseController
         $jumlah_bawahan = count($data['staff_bawahan']);
         $data['jumlah_bawahan'] = $jumlah_bawahan;
 
+        $jumlah_bawahan_validasi = 0;
+        $jumlah_bawahan_belum_validasi = 0;
+        $jumlah_bawahan_revisi = 0;
+
         for ($i=0; $i < count($data['staff_bawahan']); $i++) { 
             $data['staff_bawahan'][$i]['presensi'] = $presensi->where(['id_riwayat_jabatan' => $data['staff_bawahan'][$i]['id_riwayat_jabatan'], 'presensi.tanggal_presensi' => date("Y-m-d")])->first();
+            $jumlah_bawahan_validasi += count($tugas->where('status_tugas', 1)->where('id_riwayat_jabatan', $data['staff_bawahan'][$i]['id_riwayat_jabatan'])->findAll());
+            $jumlah_bawahan_belum_validasi += count($tugas->where('status_tugas', 0)->where('id_riwayat_jabatan', $data['staff_bawahan'][$i]['id_riwayat_jabatan'])->findAll());
+            $jumlah_bawahan_revisi += count($tugas->where('status_tugas', 2)->where('id_riwayat_jabatan', $data['staff_bawahan'][$i]['id_riwayat_jabatan'])->findAll());
         }
+
+        $data['jumlah_bawahan_validasi'] = $jumlah_bawahan_validasi;
+        $data['jumlah_bawahan_belum_validasi'] = $jumlah_bawahan_belum_validasi;
+        $data['jumlah_bawahan_revisi'] = $jumlah_bawahan_revisi;
 
         $data['menu'] = $menu->where('status_user', session('id_status_user'))->findAll();
         $data['kategori_menu'] = $kategori->findAll();
@@ -188,12 +199,37 @@ class SupervisorController extends BaseController
             $pesan = model('pesan');
             $data['chat']  = $pesan->asArray()->join('user', 'user.no_induk = pesan.user')->orderBy('waktu', 'asc')->orderBy('tanggal', 'asc')->findAll();
 
+            $presensi = model('presensi');
+            $jabatan = model('jabatan');
+            $staff = model('staff');
+            $data_id_staff = $staff->where('id_supervisor', $data['user']['detail_jabatan'])->findAll();
+            $id_staff = [];
+            for ($i=0; $i < count($data_id_staff); $i++) { 
+                array_push($id_staff, $data_id_staff[$i]['id_staff']);
+            }
+            $data_jabatan = $jabatan->where('kode_jabatan', 7)->whereIn('detail_jabatan', $id_staff)->findAll();
+            $id_jabatan_bawahan = [];
+            for ($i=0; $i < count($data_jabatan); $i++) { 
+                array_push($id_jabatan_bawahan, $data_jabatan[$i]['id_jabatan']);
+            }
+            $user_bawahan = $user->join('riwayat_jabatan', 'riwayat_jabatan.no_induk = user.no_induk')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan')->whereIn('riwayat_jabatan.id_jabatan', $id_jabatan_bawahan)->findAll();
+            $data['user_bawahan'] = $user_bawahan;
+            $id_riwayat_jabatan_bawahan = [];
+            for ($i=0; $i < count($user_bawahan); $i++) { 
+                $data['user_bawahan'][$i]['unit_kerja'] = $jabatan->getUnitKerja($data['user_bawahan'][$i]['id_status_user'], $data['user_bawahan'][$i]['detail_jabatan']);
+                $data['user_bawahan'][$i]['jabat'] = $jabatan->getJabtan($data['user_bawahan'][$i]['id_status_user'], $data['user_bawahan'][$i]['detail_jabatan']);
+                array_push($id_riwayat_jabatan_bawahan, $user_bawahan[$i]['id_riwayat_jabatan']);
+            }
+            $data['presensi_bawahan'] = $presensi->asArray()->join('riwayat_jabatan', 'riwayat_jabatan.id_riwayat_jabatan = presensi.id_riwayat_jabatan')->join('user', 'riwayat_jabatan.no_induk = user.no_induk')->whereIn('presensi.id_riwayat_jabatan', $id_riwayat_jabatan_bawahan)->findAll();
+            
+            // dd($data['user_bawahan']);
+
             return view('presensi', $data);
         }else{
             if($data['presensi'] == null){
                 // Absen Masuk
                 $data = [
-                    'waktu_presensi_masuk' => date("h:i:sa"),
+                    'waktu_presensi_masuk' => date("H:i:sa"),
                     'tanggal_presensi' => date("Y-m-d"),
                     'lokasi' => $this->request->getPost('lokasi'), 
                     'status_tempat_kerja' => $this->request->getPost('status_kerja'), 
@@ -203,7 +239,7 @@ class SupervisorController extends BaseController
                 // Absen Keluar
                 $data = [
                     'id_presensi' => $data['presensi']['id_presensi'],
-                    'waktu_presensi_keluar' => date("h:i:sa"),
+                    'waktu_presensi_keluar' => date("H:i:sa"),
                     'status_tempat_kerja' => $this->request->getPost('status_kerja'), 
                     'id_riwayat_jabatan' => $this->request->getPost('user'),
                 ];
@@ -212,6 +248,44 @@ class SupervisorController extends BaseController
 
             return redirect()->to(base_url().'/supervisor/presensi');
         }
+    }
+
+    public function getPresensiBawahan(){
+        $id_riwayat_jabatan = $this->request->getVar('id_riwayat');
+        $rj = model('riwayat_jabatan');
+        $presensi = model('presensi');
+        $jabatan = model('jabatan');
+        $data['user'] = $rj->where('id_riwayat_jabatan', $id_riwayat_jabatan)->join('user as u', 'u.no_induk=riwayat_jabatan.no_induk')->join('jabatan as j', 'j.id_jabatan=riwayat_jabatan.id_jabatan')->first();
+        $data['presensi'] = $presensi->where('id_riwayat_jabatan', $id_riwayat_jabatan)->where('status_presensi', 0)->orderBy('tanggal_presensi', 'desc')->findAll();
+        $jam_kerja = model('jam_kerja');
+        $data['jam_kerja'] = $jam_kerja->where('id_jabatan', $data['user']['id_jabatan'])->where('status_aktif', 1)->first();
+        for ($i=0; $i < count($data['presensi']); $i++) { 
+            $data['presensi'][$i]['tanggal_presensi'] = date('d-m-Y', strtotime($data['presensi'][$i]['tanggal_presensi']));
+            $selisih_jam_masuk = $data['presensi'][$i]['waktu_presensi_masuk'] > $data['jam_kerja']['jam_kerja_masuk'] ? "Terlambat" : "Tidak Terlambat";
+            $selisih_jam_keluar = $data['presensi'][$i]['waktu_presensi_keluar'] > $data['jam_kerja']['jam_kerja_keluar'] ? "Melebihi" : "Tidak Melebihi";
+            $data['presensi'][$i]['masuk'] = $selisih_jam_masuk;
+            $data['presensi'][$i]['keluar'] = $selisih_jam_keluar;
+        }
+        $data['user']['unit_kerja'] = $jabatan->getUnitKerja($data['user']['id_status_user'], $data['user']['detail_jabatan']);
+        $data['user']['jabat'] = $jabatan->getJabtan($data['user']['id_status_user'], $data['user']['detail_jabatan']);
+        echo json_encode($data);
+    }
+
+    public function getLogbookBawahan(){
+        $id_presensi = $this->request->getVar('id_p');
+        $rj = model('riwayat_jabatan');
+        $presensi = model('presensi');
+        $tugas = model('tugas');
+        $jabatan = model('jabatan');
+        $data['presensi'] = $presensi->where('id_presensi', $id_presensi)->first();
+        $data['user'] = $rj->where('id_riwayat_jabatan', $data['presensi']['id_riwayat_jabatan'])->join('user as u', 'u.no_induk=riwayat_jabatan.no_induk')->join('jabatan as j', 'j.id_jabatan=riwayat_jabatan.id_jabatan')->first();
+        
+        $data['user']['unit_kerja'] = $jabatan->getUnitKerja($data['user']['id_status_user'], $data['user']['detail_jabatan']);
+        $data['user']['jabat'] = $jabatan->getJabtan($data['user']['id_status_user'], $data['user']['detail_jabatan']);
+
+        $data['tugas'] =  $tugas->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.tanggal_tugas' => $data['presensi']['tanggal_presensi']])->orderBy('id_rancangan_tugas', 'DESC')->findAll();
+        
+        echo json_encode($data);
     }
 
     public function logbook(){
@@ -254,6 +328,11 @@ class SupervisorController extends BaseController
         // $data['tugas'] =  $tugas->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.tanggal_tugas >=' => date(date("Y").'-01-01'), 'tugas.tanggal_tugas <=' => date(date("Y").'-12-31')])->findAll();
         $tugas = model('tugas');
         $rancangan_tugas = model('rancangan_tugas');
+        $thn = date('Y');
+        if($this->request->getVar('tahun') != ""){
+            $thn = $this->request->getVar('tahun');
+        }
+        $data['tahun'] = $thn;
         $data['rancangan_tugas'] = $rancangan_tugas->where('id_jabatan', $data['user']['id_jabatan'])->findAll();
         $data['tugas'] =  $tugas->asArray()->select('id_tugas, id_riwayat_jabatan, tugas.nama_tugas, tanggal_tugas, tugas.periode, tugas.jumlah_tugas, tugas.nomor_pekerjaan, tugas.status_tugas, tugas.id_rancangan_tugas, rancangan_tugas.jumlah_total_tugas, tugas.kode_tugas')->selectSum('tugas.jumlah_tugas')->join('rancangan_tugas', 'rancangan_tugas.id_rancangan_tugas = tugas.id_rancangan_tugas')->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.tanggal_tugas >=' => date(date("Y").'-01-01'), 'tugas.tanggal_tugas <=' => date(date("Y").'-12-31'), 'tugas.id_rancangan_tugas !=' => 0])->groupBy("tugas.kode_tugas")->orderBy('tugas.id_rancangan_tugas', 'DESC')->findAll();
         $jumlah_tugas_berlangsung = 0;
@@ -270,14 +349,34 @@ class SupervisorController extends BaseController
         for ($i=0; $i < count($data['tugas']); $i++) { 
             $jumlah_tugas_berlangsung += intval($data['tugas'][$i]['jumlah_tugas']);
         }
+        $data['tugas_tambahan'] = $tugas->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.tanggal_tugas >=' => date($thn.'-01-01'), 'tugas.tanggal_tugas <=' => date($thn.'-12-31'), 'tugas.id_rancangan_tugas' => 0])->groupBy("tugas.kode_tugas")->orderBy('tugas.tanggal_tugas', 'DESC')->findAll();
+        
+        for ($i=0; $i < count($data['rancangan_tugas']); $i++) { 
+            $data['rancangan_tugas'][$i]['jumlah_tugas'] = 0;
+            for ($j=0; $j < count($data['tugas']); $j++) { 
+                if($data['rancangan_tugas'][$i]['kode_tugas'] == $data['tugas'][$j]['kode_tugas']){
+                    $data['rancangan_tugas'][$i]['jumlah_tugas'] += intval($data['tugas'][$j]['jumlah_tugas']);
+                } 
+            }
+        }
+        $jumlah_tugas_tambahan = 0;
+        for ($i=0; $i < count($data['tugas_tambahan']); $i++) { 
+            $data['tugas_tambahan'][$i]['tanggal_tugas'] = $this->getTanggal($data['tugas_tambahan'][$i]['tanggal_tugas']);
+            $jumlah_tugas_tambahan += intval($data['tugas_tambahan'][$i]['jumlah_tugas']);
+        }
+        $data['jumlah_tugas_tambahan'] = $jumlah_tugas_tambahan;
+
+
         $data['menu'] = $menu->where('status_user', session('id_status_user'))->findAll();
         $data['kategori_menu'] = $kategori->findAll();
         $pesan = model('pesan');
         $data['chat']  = $pesan->asArray()->join('user', 'user.no_induk = pesan.user')->orderBy('waktu', 'asc')->orderBy('tanggal', 'asc')->findAll();
-        $data['staff_bawahan'] = $riwayat_jabatan->select('u.*,s.nama as nama_jabatan')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan', 'left')->where('jabatan.id_jabatan', 7)->join('staff as s', 's.id_staff=jabatan.detail_jabatan', 'left')->where('id_supervisor', $data['user']['detail_jabatan'])->join('user as u', 'u.no_induk=riwayat_jabatan.no_induk', 'left')->findAll();
+        $data['staff_bawahan'] = $riwayat_jabatan->select('u.*,su.*,s.nama as nama_jabatan')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan', 'left')->where('jabatan.id_jabatan', 7)->join('staff as s', 's.id_staff=jabatan.detail_jabatan', 'left')->where('id_supervisor', $data['user']['detail_jabatan'])->join('user as u', 'u.no_induk=riwayat_jabatan.no_induk', 'left')->join('status_user as su', 'su.id_status_user=u.id_status_user', 'left')->findAll();
         
         $data['penilaian_kinerja'] = $pk->where('status_pk', 1)->first();
-        // dd($data['tugas']);
+        $bulan = model('bulan');
+        $data['bulan'] = $bulan->findAll();
+        // dd($data['staff_bawahan']);
         return view('capaian_kerja_atasan', $data);
     }
 
@@ -388,7 +487,7 @@ class SupervisorController extends BaseController
             array_push($id_riwayat_jabatan_bawahan, $user_bawahan[$i]['id_riwayat_jabatan']);
         }
         // $data['tugas_bawahan'] = $tugas->asArray()->join('riwayat_jabatan', 'riwayat_jabatan.id_riwayat_jabatan = tugas.id_riwayat_jabatan')->join('user', 'riwayat_jabatan.no_induk = user.no_induk')->whereIn('tugas.id_riwayat_jabatan', $id_riwayat_jabatan_bawahan)->where('status_tugas', 3)->findAll();
-        $data['presensi_bawahan'] = $presensi->asArray()->join('riwayat_jabatan', 'riwayat_jabatan.id_riwayat_jabatan = presensi.id_riwayat_jabatan')->join('user', 'riwayat_jabatan.no_induk = user.no_induk')->whereIn('presensi.id_riwayat_jabatan', $id_riwayat_jabatan_bawahan)->findAll();
+        $data['presensi_bawahan'] = $presensi->asArray()->join('riwayat_jabatan', 'riwayat_jabatan.id_riwayat_jabatan = presensi.id_riwayat_jabatan')->join('user', 'riwayat_jabatan.no_induk = user.no_induk')->where('status_presensi', 0)->whereIn('presensi.id_riwayat_jabatan', $id_riwayat_jabatan_bawahan)->orderBy('tanggal_presensi', 'desc')->findAll();
         
         for ($i=0; $i < count($data['presensi_bawahan']); $i++) { 
             $data['presensi_bawahan'][$i]['tugas'] =  $tugas->asArray()->where(['id_riwayat_jabatan' => $data['presensi_bawahan'][$i]['id_riwayat_jabatan'], 'tanggal_tugas' => $data['presensi_bawahan'][$i]['tanggal_presensi']])->whereIn('status_tugas', [2,3,4])->findAll();
@@ -479,6 +578,32 @@ class SupervisorController extends BaseController
     public function terimaIzin($id_perizinan){
         $perizinan = model('perizinan');
         $perizinan->update($id_perizinan, ['status_izin' => 1]);
+        $data = $perizinan->where('id_perizinan', $id_perizinan)->first();
+        // Range Tanggal Dimasukkan ke Presensi
+        $tanggal_mulai = $data['tanggal_mulai'];
+        $tanggal_selesai = $data['tanggal_selesai'];
+        $presensi = model('presensi');
+        $user = model('user');
+        $data_user = $user->join('riwayat_jabatan', 'riwayat_jabatan.no_induk = user.no_induk')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan')->where('user.no_induk', $data['no_induk'])->first();
+        $date = $tanggal_mulai;
+        while(true){
+            // Absen Masuk
+            $data = [
+                'waktu_presensi_masuk' => date("H:i:s"),
+                'tanggal_presensi' => $date,
+                'lokasi' => "-", 
+                'status_presensi' => 3, 
+                'status_tempat_kerja' => 3, 
+                'id_riwayat_jabatan' =>$data_user['id_riwayat_jabatan'],
+            ];
+            $presensi->save($data);
+            // echo $date."<br>";
+            $date = date('Y-m-d', strtotime($date . '+1 days'));
+            
+            if($date == $tanggal_selesai){
+                break;
+            }
+        }
         return redirect()->to(base_url().'/supervisor/perizinan');
     }
     public function tolakIzin($id_perizinan){

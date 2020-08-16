@@ -91,6 +91,56 @@
                     </div>
 
                 </div>
+                <div class="row">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card bg-success">
+                            <div class="card-body">
+                                <div class="d-flex no-block align-items-center">
+                                    <div class="text-white">
+                                        <h2><?= $jumlah_bawahan_validasi ?></h2>
+                                        <h6>Pekerjaan bawahan
+                                            sudah divalidasi</h6>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <span class="text-white display-6"><i class="ti-check-box"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card bg-info">
+                            <div class="card-body">
+                                <div class="d-flex no-block align-items-center">
+                                    <div class="text-white">
+                                        <h2><?= $jumlah_bawahan_belum_validasi ?></h2>
+                                        <h6>Pekerjaan bawahan
+                                            belum divalidasi</h6>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <span class="text-white display-6"><i class="ti-clipboard"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card bg-danger">
+                            <div class="card-body">
+                                <div class="d-flex no-block align-items-center">
+                                    <div class="text-white">
+                                        <h2><?= $jumlah_bawahan_revisi ?></h2>
+                                        <h6>Pekerjaan bawahan direvisi</h6>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <span class="text-white display-6"><i class="ti-alert"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
                 <!-- ============================================================== -->
                 <!-- Info box -->
                 <!-- ============================================================== -->
@@ -217,7 +267,25 @@
                                     <div class="card-body">
                                         <div class="d-flex align-items-center">
                                             <div>
-                                                <h4 class="card-title">Absensi Pegawai Hari Ini <?= date('d M Y')?></h4>
+                                                <h4 class="card-title">Absensi Pegawai Bawahan Hari Ini 
+                                                <?php 
+                                                    $bulan = array (1 =>   'Januari',
+                                                    'Februari',
+                                                    'Maret',
+                                                    'April',
+                                                    'Mei',
+                                                    'Juni',
+                                                    'Juli',
+                                                    'Agustus',
+                                                    'September',
+                                                    'Oktober',
+                                                    'November',
+                                                    'Desember'
+                                                    );
+                                                $split = explode('-', date('Y-m-d'));
+                                                echo $split[2] . ' ' . $bulan[ (int)$split[1] ] . ' ' . $split[0];
+                                                ?>
+                                                </h4>
                                             </div>
 
                                         </div>
@@ -246,6 +314,26 @@
                                                             <button type="button" class="btn btn-sm waves-effect waves-light btn-danger">Tidak Hadir</button>
         
         
+                                                        </td>
+                                                    </tr>
+                                                <?php }else if($p['presensi']['status_presensi'] != 0) {?>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-flex align-items-center">
+                                                                <img src="<?= ($p['foto_profil']) ? base_url($p['foto_profil']) : base_url('/assets/images/users/default.jpg') ?>" alt="user" width="100" alt="user" width="60" class="rounded-circle">
+                                                                <div class="comment-text w-100">
+                                                                    <span class="mr-3"><i class="fas fa-user mr-2"></i><?= $p['nama']?></span>
+                                                                    <span class="mr-3"><i class="fas fa-calendar-plus mr-2"></i><?= date('d-m-Y')?></span>
+                                                                    
+        
+                                                                    <br>
+        
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td align="right">
+        
+                                                            <button type="button" class="btn btn-sm waves-effect waves-light btn-warning">Izin</button>
                                                         </td>
                                                     </tr>
                                                 <?php } else {?>

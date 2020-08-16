@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 06, 2020 at 06:52 AM
+-- Generation Time: Aug 16, 2020 at 07:01 AM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.1
 
@@ -98,7 +98,8 @@ CREATE TABLE `direktur` (
 --
 
 INSERT INTO `direktur` (`id_direktur`, `nama`) VALUES
-(1, 'Guest House');
+(1, 'Guest House'),
+(4, 'Hotel');
 
 -- --------------------------------------------------------
 
@@ -216,10 +217,8 @@ INSERT INTO `indeks_nilai` (`id_nilai`, `id_pertanyaan`, `nilai`, `no_induk`) VA
 (9, 12, 3, '700'),
 (10, 13, 3, '700'),
 (11, 14, 3, '700'),
-(12, 15, 4, '700'),
-(13, 16, 2, '700'),
-(14, 15, 3, '600'),
-(15, 16, 3, '600');
+(16, 15, 4, '700'),
+(17, 16, 3, '700');
 
 -- --------------------------------------------------------
 
@@ -428,7 +427,7 @@ INSERT INTO `menu` (`id_menu`, `nama_menu`, `link`, `icon`, `status_user`, `id_k
 (35, 'Indeks Kepuasan Pegawai', '/admin/indeksKepuasan', 'icon-Pie-Chart2', 1, 2),
 (36, 'Penilaian Kinerja', '/admin/penilaianKinerja', 'icon-Pie-Chart2', 1, 2),
 (37, 'Daftar Pengumuman', '/admin/daftarPengumuman', 'icon-Pie-Chart', 1, 2),
-(38, 'Daftar Rancangan Tugas', 'admin/daftarRancanganTugas', 'icon-Pie-Chart3', 1, 2),
+(38, 'Daftar Rancangan Tugas', '/admin/daftarRancanganTugas', 'icon-Pie-Chart3', 1, 2),
 (39, 'Perizinan', '/supervisor/perizinan', 'icon-Mail', 6, 2),
 (40, 'Perizinan', '/staff/perizinan', 'icon-Mail', 7, 2),
 (42, 'Evaluasi', '/admin/LaporanEvaluasi', 'icon-Bar-Chart5', 1, 3),
@@ -463,7 +462,9 @@ INSERT INTO `menu` (`id_menu`, `nama_menu`, `link`, `icon`, `status_user`, `id_k
 (84, 'Indeks Kepuasan', '/direktur/indeksKepuasan', 'icon-Pie-Chart2', 3, 3),
 (85, 'Perizinan', '/direktur/perizinan', 'icon-Mail', 3, 2),
 (86, 'Dashboard', '/direktur', 'icon-Car-Wheel', 3, 1),
-(87, 'Profil', '/direktur/profil', 'icon-User', 3, 1);
+(87, 'Profil', '/direktur/profil', 'icon-User', 3, 1),
+(88, 'Daftar Jam Kerja', '/admin/daftarJamKerja', 'icon-Pie-Chart', 1, 2),
+(89, 'Daftar Jabatan', '/admin/daftarJabatan', 'icon-User', 1, 2);
 
 -- --------------------------------------------------------
 
@@ -531,9 +532,10 @@ CREATE TABLE `pengumuman` (
 --
 
 INSERT INTO `pengumuman` (`id_pengumuman`, `pengumuman`, `tanggal_pengumuman`, `waktu_pengumuman`, `publisher`, `status_pengumuman`) VALUES
-(1, 'Masuk New Normal dimulai Minggu Depan', '2020-08-03', '05:17:36', '100', 1),
-(2, 'Pelaksanaan kerja kembali untuk seluruh staff ub guest house mulai tanggal 27 juli 2020', '2020-07-14', '09:16:44', '100', 1),
-(5, 'Pengumuman A', '2020-08-03', '05:16:46', '100', 0);
+(1, 'Masuk New Normal dimulai Minggu Depan', '2020-08-06', '02:37:32', '100', 0),
+(2, 'Pelaksanaan kerja kembali untuk seluruh staff ub guest house mulai tanggal 27 juli 2020', '2020-08-06', '02:37:40', '100', 0),
+(5, 'Pengumuman A', '2020-08-03', '05:16:46', '100', 0),
+(6, 'Insentif Sudah Turun', '2020-08-06', '02:36:50', '100', 0);
 
 -- --------------------------------------------------------
 
@@ -584,7 +586,36 @@ CREATE TABLE `perizinan` (
 INSERT INTO `perizinan` (`id_perizinan`, `tanggal_izin`, `tanggal_mulai`, `tanggal_selesai`, `alasan`, `bukti`, `kategori_izin`, `no_induk`, `status_izin`) VALUES
 (2, '2020-07-01', '2020-07-10', '2020-07-14', 'ADDD', '', 1, '700', 1),
 (3, '2020-07-14', '2020-07-16', '2020-07-17', 'Cuti ya', '21.jpg', 2, '700', 2),
-(6, '2020-08-06', '2020-08-07', '2020-08-08', 'Izin Baru', '31518874_2016740351877482_1283966518790455296_n.jpg', 2, '700', 0);
+(6, '2020-08-06', '2020-08-14', '2020-08-17', 'Izin Baru', '31518874_2016740351877482_1283966518790455296_n.jpg', 2, '700', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `perizinan_temp`
+--
+
+CREATE TABLE `perizinan_temp` (
+  `id_perizinan` int(11) NOT NULL,
+  `tanggal_izin` date NOT NULL,
+  `tanggal_mulai` date NOT NULL,
+  `tanggal_selesai` date NOT NULL,
+  `alasan` varchar(500) NOT NULL,
+  `bukti` varchar(500) NOT NULL,
+  `kategori_izin` int(1) NOT NULL,
+  `no_induk` varchar(30) NOT NULL,
+  `status_izin` int(11) NOT NULL,
+  `waktu_izin` time NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `perizinan_temp`
+--
+
+INSERT INTO `perizinan_temp` (`id_perizinan`, `tanggal_izin`, `tanggal_mulai`, `tanggal_selesai`, `alasan`, `bukti`, `kategori_izin`, `no_induk`, `status_izin`, `waktu_izin`) VALUES
+(8, '2020-08-12', '2020-08-12', '2020-08-14', 'ASDDDD', '', 1, '700', 0, '15:13:41'),
+(9, '2020-08-12', '2020-08-15', '2020-08-17', 'Izin Baruuuuu', '', 2, '700', 0, '15:14:06'),
+(10, '2020-08-12', '2020-08-13', '2020-08-15', 'IZIN LAGIIII', '', 3, '700', 0, '15:24:16'),
+(11, '2020-08-12', '2020-08-13', '2020-08-21', 'ASSSs', '', 1, '700', 0, '15:25:13');
 
 -- --------------------------------------------------------
 
@@ -595,24 +626,25 @@ INSERT INTO `perizinan` (`id_perizinan`, `tanggal_izin`, `tanggal_mulai`, `tangg
 CREATE TABLE `pertanyaan_pk` (
   `id_pertanyaan_pk` int(11) NOT NULL,
   `pertanyaan_pk` varchar(255) NOT NULL,
-  `id_pk` int(11) NOT NULL
+  `id_pk` int(11) NOT NULL,
+  `aspek_pk` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `pertanyaan_pk`
 --
 
-INSERT INTO `pertanyaan_pk` (`id_pertanyaan_pk`, `pertanyaan_pk`, `id_pk`) VALUES
-(3, '', 1),
-(4, '', 1),
-(5, '', 1),
-(6, '', 1),
-(9, '', 5),
-(11, '', 5),
-(12, 'pertanyaan pertama aaa', 6),
-(13, 'pertanyaan kedua aa', 6),
-(14, 'Pertanyaan 1', 7),
-(15, 'Pertanyaan 2', 7);
+INSERT INTO `pertanyaan_pk` (`id_pertanyaan_pk`, `pertanyaan_pk`, `id_pk`, `aspek_pk`) VALUES
+(3, '', 1, ''),
+(4, '', 1, ''),
+(5, '', 1, ''),
+(6, '', 1, ''),
+(9, '', 5, ''),
+(11, '', 5, ''),
+(12, 'pertanyaan pertama aaa', 6, ''),
+(13, 'pertanyaan kedua aa', 6, ''),
+(14, 'Pertanyaan 1', 7, ''),
+(15, 'Pertanyaan 2', 7, '');
 
 -- --------------------------------------------------------
 
@@ -650,7 +682,13 @@ INSERT INTO `pesan` (`id_pesan`, `pesan`, `waktu`, `tanggal`, `user`) VALUES
 (37, 'Budi', '13:28:21', '2020-08-05', '700'),
 (38, 'Cek pesan baru', '13:28:57', '2020-08-05', '700'),
 (39, 'Pesan baru\n', '13:31:56', '2020-08-05', '700'),
-(40, 'pesan pesan\n', '13:32:02', '2020-08-05', '700');
+(40, 'pesan pesan\n', '13:32:02', '2020-08-05', '700'),
+(41, 'Halo', '12:48:17', '2020-08-06', '100'),
+(42, 'Hai', '13:30:34', '2020-08-06', '700'),
+(43, 'Ini chatting', '13:30:49', '2020-08-06', '700'),
+(44, 'halo', '13:44:08', '2020-08-06', '700'),
+(45, 'Halo min', '13:45:09', '2020-08-06', '700'),
+(46, 'Halo Gais', '10:17:41', '2020-08-12', '700');
 
 -- --------------------------------------------------------
 
@@ -686,9 +724,12 @@ INSERT INTO `presensi` (`id_presensi`, `waktu_presensi_masuk`, `waktu_presensi_k
 (14, '06:58:03', '07:03:22', 0, 'Malang, East Java, 65113, Indonesia', 'Karang Besuki, Malang, East Java, 65145, Indonesia', 2, 1, '2020-07-23', 0),
 (15, '07:14:18', NULL, 0, 'Universitas Islam Negeri Maulana Malik Ibrahim Malang, Jalan Kerto Sentono, Kelurahan Ketawanggede, Malang, East Java, 65145, Indonesia', NULL, 2, 1, '2020-07-31', 0),
 (16, '04:39:41', '04:40:37', 0, 'Malang, East Java, 65145, Indonesia', '04, Kel Penanggungan, Kec Klojen, Kota Malang, Malang, East Java, 65113, Indonesia', 2, 1, '2020-08-03', 0),
-(17, '07:03:08', NULL, 0, 'Jl. A', 'Jl. A', 1, 2, '2020-08-06', 0),
-(18, '11:22:25', NULL, 0, 'Jl. BB', NULL, 1, 10, '2020-08-06', 0),
-(19, '11:35:15', NULL, 0, 'Jl. GM', NULL, 1, 11, '2020-08-06', 0);
+(20, '13:15:02', NULL, 0, 'Malang, East Java, 65145, Indonesia', NULL, 1, 1, '2020-08-06', 0),
+(21, '18:20:25', NULL, 0, 'Jl. AA', NULL, 2, 1, '2020-08-12', 0),
+(22, '13:33:03', NULL, 0, 'Bunga', NULL, 1, 4, '2020-08-13', 0),
+(27, '15:58:14', NULL, 3, '-', NULL, 3, 1, '2020-08-14', 0),
+(28, '15:58:14', NULL, 3, '-', NULL, 3, 1, '2020-08-15', 0),
+(29, '15:58:14', NULL, 3, '-', NULL, 3, 1, '2020-08-16', 0);
 
 -- --------------------------------------------------------
 
@@ -715,10 +756,46 @@ INSERT INTO `rancangan_tugas` (`id_rancangan_tugas`, `id_jabatan`, `nama_tugas`,
 (0, NULL, NULL, NULL, 0, NULL, NULL, ''),
 (1, 7, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', 1, 10, 1, 1, 's512dd'),
 (2, 7, 'Menyiapkan kelengkapan permintaan uang persediaan aja', 1, 20, 2, 1, 'we23rr'),
-(3, 6, 'Monitoring', 1, 20, 12, 1, 'afdr11'),
 (13, 24, 'Tugas 1', 1, 5, 1, 1, '0b92ee'),
 (14, 24, 'Tugas 2', 1, 6, 2, 1, '9abe9e'),
-(15, 7, 'Tugas Baru', 1, 20, 3, 1, '27b6e3');
+(15, 7, 'Tugas Baru', 1, 20, 3, 1, '27b6e3'),
+(16, 4, 'Memimpin UB Guest House dan International Dormitory serta menjadi motivator bagi karyawan\n', 1, 0, 1, 1, '1fd24d'),
+(17, 4, 'Mengelola operasional harian UB Guest House dan International Dormitory\n', 1, 10, 2, 1, '05f0a5'),
+(18, 4, 'Mengawasi dan mengontrol aktivitas UB Guest House dan International Dormitory\n', 1, 10, 3, 1, 'a6b81f'),
+(19, 4, 'Memastikan setiap departemen melakukan strategi UB Guest House\n', 1, 10, 4, 1, '408df3'),
+(20, 4, 'Mengelola anggaran keuangan UB Guest House\n', 1, 10, 5, 1, '3a4f65'),
+(21, 4, 'Memutuskan dan membuat kebijakan UB Guest House\n', 1, 10, 6, 1, 'a4182b'),
+(22, 4, 'Membuat prosedur standar UB Guest House', 1, 10, 7, 1, 'f1578d'),
+(23, 4, 'Melakukan pengecekan stock opname keuangan\n', 1, 10, 8, 1, '465df3'),
+(24, 4, 'Merencanakan strategi UB Guest House\n', 1, 10, 9, 1, '7555dc'),
+(25, 4, 'Mengontrol setiap event di UB Guest House\n', 1, 10, 10, 1, 'bd9bd2'),
+(28, 5, 'Melakukan entry data, updating data penerimaan pendapatan dari Night Audit\n', 1, 10, 1, 1, 'a2be4d'),
+(29, 5, 'Memeriksa Laporan Pendapatan dan pengeluaran\n', 1, 10, 2, 1, '2b6d4a'),
+(30, 5, 'Mengarsip Setoran Pendapatan dan Pengeluaran dari bendahara\n', 1, 10, 3, 1, '239f5d'),
+(31, 5, 'Menyusun Laporan Keuangan\n', 1, 10, 4, 1, '387d03'),
+(32, 5, 'Melakukan pengecekan stock opname keuangan\n', 2, 10, 5, 1, '55b118'),
+(33, 5, 'Membuat Usulan pelatihan karyawan\n', 2, 10, 6, 1, '7de3a0'),
+(34, 5, 'Membuat Draft Rencana Anggaran Biaya\n', 2, 10, 7, 1, '0544ce'),
+(35, 22, 'Membuat dan memeriksa jadwal resepsionis, marketing dan umum', 2, 10, 1, 1, 'bdd618'),
+(36, 22, 'Memasukan jadwal ke bagian kepegawaian UB Guest House\n', 2, 10, 2, 1, '7a2edb'),
+(37, 22, 'Melaporkan rekap analisa pendapatan kamar\n', 1, 10, 3, 1, '1787b2'),
+(38, 22, 'Melaporkan rekap banquet event order\n', 2, 10, 4, 1, 'df198f'),
+(39, 22, 'Melaporkan data tingkat hunian kepada general manager UB Guest House\n', 1, 10, 5, 1, '827298'),
+(40, 22, 'Inventori dan penghitungan barang\n', 2, 10, 6, 1, '4b5e83'),
+(41, 22, 'Mengarsip data data tamu\n', 1, 10, 7, 1, '025fff'),
+(42, 23, 'Membuat Laporan Pendapatan Bulanan', 2, 10, 1, 1, 'dd3d49'),
+(43, 23, 'Menyusun Menu\n', 2, 10, 2, 1, 'b6c02c'),
+(44, 23, 'Menghitung biaya makanan yang dijual\n', 2, 10, 3, 1, 'f68743'),
+(45, 23, 'Menyusun standar Resep\n', 2, 10, 4, 1, '824fd2'),
+(46, 23, 'Pengecekan belanja harian\n', 1, 10, 5, 1, '147cfa'),
+(47, 23, 'Mengawasi standar rasa dan pelayanan\n', 1, 10, 6, 1, 'ca9ef1'),
+(48, 23, 'Mengawasi penataan interior dan layout \n', 2, 10, 7, 1, '7c3819'),
+(49, 23, 'Mengawasi pembelanjaan alat dan bahan operasional\n', 1, 10, 8, 1, '62bea4'),
+(50, 6, 'Memeriksa dan menindaklanjuti Piutang UB Guest House', 1, 10, 1, 1, '8dfd28'),
+(51, 6, 'Mengelola Kas Pendapatan\n', 1, 10, 2, 1, '0a9b84'),
+(52, 6, 'Menyediakan keperluan data laporan bulanan dan tahunan\n', 1, 10, 3, 1, 'c168e0'),
+(53, 6, 'Menyusun surat pertanggungjawaban bagian keuangan\n', 1, 10, 4, 1, 'bb7be3'),
+(54, 6, 'Memeriksa dan membuat laporan output night audit\n', 1, 10, 5, 1, '54ff3d');
 
 -- --------------------------------------------------------
 
@@ -848,31 +925,38 @@ CREATE TABLE `tugas` (
   `id_rancangan_tugas` int(11) NOT NULL,
   `kode_tugas` varchar(6) DEFAULT NULL,
   `catatan` varchar(500) DEFAULT NULL,
-  `bukti` varchar(500) DEFAULT NULL
+  `bukti` varchar(500) DEFAULT NULL,
+  `waktu` time NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tugas`
 --
 
-INSERT INTO `tugas` (`id_tugas`, `id_riwayat_jabatan`, `nama_tugas`, `tanggal_tugas`, `periode`, `jumlah_tugas`, `nomor_pekerjaan`, `status_tugas`, `id_rancangan_tugas`, `kode_tugas`, `catatan`, `bukti`) VALUES
-(2, 1, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', '2020-07-07', 1, 1, 1, 1, 1, 's512dd', '', NULL),
-(3, 1, 'Menyiapkan kelengkapan permintaan uang persediaan', '2020-07-07', 1, 3, 2, 1, 2, 'we23rr', '', NULL),
-(4, 1, 'Siram Bunga', '2020-07-07', 1, 2, 0, 1, 0, 'ww2211', '', NULL),
-(6, 1, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', '2020-07-08', 1, 1, 1, 4, 1, 's512dd', 'Saya masuk', 'computer-icons-user-profile-head-ico-download.jpg'),
-(7, 1, 'Ganti Baju', '2020-07-07', 1, 1, 0, 1, 0, '33wwee', '', NULL),
-(8, 1, 'Cuci Cuci', '2020-07-08', 1, 1, 0, 4, 0, 'rewq11', 'Saya sudah melakukan ini loh mas', 'ERD.png'),
-(10, 1, 'Menyiapkan kelengkapan permintaan uang persediaan', '2020-07-08', 1, 4, 2, 1, 2, 'we23rr', NULL, NULL),
-(12, 1, 'Bersih Bersih', '2020-07-09', 1, 2, 0, 1, 0, 'bds455', NULL, NULL),
-(13, 1, 'Menyiapkan kelengkapan permintaan uang persediaan', '2020-07-09', 1, 4, 2, 4, 2, 'we23rr', 'Saya melakukan ini', 'Abstrak Jurnal - Misbakhul Kharis 165150201111021.pdf'),
-(31, 1, 'Menyiapkan kelengkapan permintaan uang persediaan', '2020-07-16', 1, 6, 2, 2, 2, 'we23rr', 'Revisi Boi', NULL),
-(32, 1, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', '2020-07-16', 1, 5, 1, 2, 1, 's512dd', 'Revisi Juga ini', NULL),
-(37, 1, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', '2020-07-23', 1, 3, 1, 1, 1, 's512dd', NULL, NULL),
-(38, 1, 'Menyiapkan kelengkapan permintaan uang persediaan aja', '2020-07-23', 1, 4, 2, 1, 2, 'we23rr', NULL, NULL),
-(40, 1, 'Tugas Tambahan 2', '2020-07-23', 1, 3, 0, 1, 0, '04c642', NULL, NULL),
-(42, 1, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', '2020-08-03', 1, 6, 1, 4, 1, 's512dd', 'AAA', 'AksaraFILKOM.png'),
-(43, 1, 'Menyiapkan kelengkapan permintaan uang persediaan aja', '2020-08-03', 1, 4, 2, 1, 2, 'we23rr', NULL, NULL),
-(44, 1, 'Tugas Tambahan 1', '2020-08-03', 1, 3, 0, 2, 0, '89387c', 'Revisi 2', NULL);
+INSERT INTO `tugas` (`id_tugas`, `id_riwayat_jabatan`, `nama_tugas`, `tanggal_tugas`, `periode`, `jumlah_tugas`, `nomor_pekerjaan`, `status_tugas`, `id_rancangan_tugas`, `kode_tugas`, `catatan`, `bukti`, `waktu`) VALUES
+(2, 1, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', '2020-07-07', 1, 1, 1, 1, 1, 's512dd', '', NULL, '00:00:00'),
+(3, 1, 'Menyiapkan kelengkapan permintaan uang persediaan', '2020-07-07', 1, 3, 2, 1, 2, 'we23rr', '', NULL, '00:00:00'),
+(4, 1, 'Siram Bunga', '2020-07-07', 1, 2, 0, 1, 0, 'ww2211', '', NULL, '00:00:00'),
+(6, 1, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', '2020-07-08', 1, 1, 1, 4, 1, 's512dd', 'Saya masuk', 'computer-icons-user-profile-head-ico-download.jpg', '00:00:00'),
+(7, 1, 'Ganti Baju', '2020-07-07', 1, 1, 0, 1, 0, '33wwee', '', NULL, '00:00:00'),
+(8, 1, 'Cuci Cuci', '2020-07-08', 1, 1, 0, 4, 0, 'rewq11', 'Saya sudah melakukan ini loh mas', 'ERD.png', '00:00:00'),
+(10, 1, 'Menyiapkan kelengkapan permintaan uang persediaan', '2020-07-08', 1, 4, 2, 1, 2, 'we23rr', NULL, NULL, '00:00:00'),
+(12, 1, 'Bersih Bersih', '2020-07-09', 1, 2, 0, 1, 0, 'bds455', NULL, NULL, '00:00:00'),
+(13, 1, 'Menyiapkan kelengkapan permintaan uang persediaan', '2020-07-09', 1, 4, 2, 4, 2, 'we23rr', 'Saya melakukan ini', 'Abstrak Jurnal - Misbakhul Kharis 165150201111021.pdf', '00:00:00'),
+(31, 1, 'Menyiapkan kelengkapan permintaan uang persediaan', '2020-07-16', 1, 6, 2, 2, 2, 'we23rr', 'Revisi Boi', NULL, '00:00:00'),
+(32, 1, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', '2020-07-16', 1, 5, 1, 2, 1, 's512dd', 'Revisi Juga ini', NULL, '00:00:00'),
+(37, 1, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', '2020-07-23', 1, 3, 1, 1, 1, 's512dd', NULL, NULL, '00:00:00'),
+(38, 1, 'Menyiapkan kelengkapan permintaan uang persediaan aja', '2020-07-23', 1, 4, 2, 1, 2, 'we23rr', NULL, NULL, '00:00:00'),
+(40, 1, 'Tugas Tambahan 2', '2020-07-23', 1, 3, 0, 1, 0, '04c642', NULL, NULL, '00:00:00'),
+(42, 1, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', '2020-08-03', 1, 6, 1, 4, 1, 's512dd', 'AAA', 'AksaraFILKOM.png', '00:00:00'),
+(43, 1, 'Menyiapkan kelengkapan permintaan uang persediaan aja', '2020-08-03', 1, 4, 2, 1, 2, 'we23rr', NULL, NULL, '00:00:00'),
+(44, 1, 'Tugas Tambahan 1', '2020-08-03', 1, 3, 0, 2, 0, '89387c', 'Revisi 2', NULL, '00:00:00'),
+(51, 1, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', '2020-08-06', 1, 4, 1, 1, 1, 's512dd', NULL, NULL, '00:00:00'),
+(52, 1, 'Menyiapkan kelengkapan permintaan uang persediaan aja', '2020-08-06', 1, 3, 2, 2, 2, 'we23rr', 'Silahkan dibenahi jumlah tidak sesuai', NULL, '00:00:00'),
+(53, 1, 'Tugas Baru', '2020-08-06', 1, 2, 3, 3, 15, '27b6e3', NULL, NULL, '00:00:00'),
+(54, 1, 'Perwakilan ', '2020-08-06', 1, 1, 0, 5, 0, '39ea3b', NULL, NULL, '00:00:00'),
+(55, 1, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', '2020-08-15', 1, 2, 1, 5, 1, 's512dd', NULL, NULL, '14:36:37'),
+(56, 1, 'Tugas Tambahan', '2020-08-15', 1, 3, 0, 3, 0, '466a51', NULL, NULL, '14:49:21');
 
 -- --------------------------------------------------------
 
@@ -899,14 +983,14 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`no_induk`, `password`, `nama`, `no_telepon`, `alamat`, `email`, `tahun_masuk`, `foto_profil`, `isPenilaian`, `isPresensi`, `id_status_user`) VALUES
-('100', '123', 'Admin', NULL, NULL, NULL, NULL, '/assets/images/users/hwpng.png', NULL, NULL, 1),
+('100', '123', 'Admin', '082222', 'Jl. A', 'admin@gmail.com', NULL, '/assets/images/users/hwpng.png', NULL, NULL, 1),
 ('200', '123', 'Operator', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2),
-('300', '123', 'Donny Alair', '086666666', 'Jl. Kembang No. 44', 'donny@gmail.com', 2013, 'assets/images/users/kharis_ub.png', 0, 0, 3),
-('400', '123', 'Rita Wahyuningsih, S.S', '085555555555', 'Jl. Bunga Bunga No. 22', 'ritawahyu@gmail.com', 2013, 'assets/images/users/kharis_ub.png', 0, 0, 4),
-('500', '123', 'Adika Setia Hadi', '0899999999', 'Jl. Kucing No. 22', 'adika@gmail.com', 2014, 'assets/images/users/kharis_ub.png', 0, 0, 5),
-('600', '123', 'Cuikitalia, SE', '081111111', 'Jl. Mawar No. 333', 'cuikitalia@gmail.com', 2014, 'assets/images/users/kharis_ub.png', 0, 0, 6),
-('700', '321', 'Juniar Sofyan Syah', '082222222233', 'Jl. Melati No. 333', 'juniarS@gmail.com', 2013, 'assets/images/users/Kharis.jpg', 0, 0, 7),
-('701', '321', 'Joni AB', '082222222233', 'Jl. Melati No. 333', 'juniarS@gmail.com', 2013, 'assets/images/users/Kharis.jpg', 0, 0, 7),
+('300', '123', 'Donny Alair', '086666666', 'Jl. Kembang No. 44', 'donny@gmail.com', 2013, '/assets/images/users/kharis_ub.png', 0, 0, 3),
+('400', '123', 'Rita Wahyuningsih, S.S', '085555555555', 'Jl. Bunga Bunga No. 22', 'ritawahyu@gmail.com', 2013, '/assets/images/users/kharis_ub.png', 0, 0, 4),
+('500', '123', 'Adika Setia Hadi', '0899999999', 'Jl. Kucing No. 22', 'adika@gmail.com', 2014, '/assets/images/users/kharis_ub.png', 0, 0, 5),
+('600', '123', 'Cuikitalia, SE', '081111111', 'Jl. Mawar No. 333', 'cuikitalia@gmail.com', 2014, '/assets/images/users/kharis_ub.png', 0, 0, 6),
+('700', '321', 'Juniar Sofyan Syah', '082222222233', 'Jl. Melati No. 333', 'juniarS@gmail.com', 2013, '/assets/images/users/Kharis.jpg', 0, 0, 7),
+('701', '321', 'Joni AB', '082222222233', 'Jl. Melati No. 333', 'juniarS@gmail.com', 2013, '/assets/images/users/Kharis.jpg', 0, 0, 7),
 ('703', '321', 'Iris', NULL, 'Jl. Bunga No. 33', 'iris@gmail.com', 2020, '/assets/images/users/computer-icons-user-profile-head-ico-download.jpg', NULL, NULL, 7),
 ('8080', '123', 'Sutrisno', '083123123123', 'Jln. H. Samsuri', 'sutris@gmail.com', 2019, '/assets/images/users/workingspace.jpg', NULL, NULL, 7),
 ('999', '123', 'Boaz Salosa', '0831290977126', 'Jl. Sunan bonang No 3, Malang', 'adit9b02@gmail.com', 2020, '/assets/images/users/bukti_telah_skripsi.png', NULL, NULL, 7);
@@ -1069,6 +1153,13 @@ ALTER TABLE `perizinan`
   ADD KEY `no_induk` (`no_induk`);
 
 --
+-- Indexes for table `perizinan_temp`
+--
+ALTER TABLE `perizinan_temp`
+  ADD PRIMARY KEY (`id_perizinan`),
+  ADD KEY `no_induk` (`no_induk`);
+
+--
 -- Indexes for table `pertanyaan_pk`
 --
 ALTER TABLE `pertanyaan_pk`
@@ -1167,7 +1258,7 @@ ALTER TABLE `bulan`
 -- AUTO_INCREMENT for table `direktur`
 --
 ALTER TABLE `direktur`
-  MODIFY `id_direktur` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_direktur` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `feedback`
@@ -1197,7 +1288,7 @@ ALTER TABLE `indeks_kepuasan`
 -- AUTO_INCREMENT for table `indeks_nilai`
 --
 ALTER TABLE `indeks_nilai`
-  MODIFY `id_nilai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id_nilai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `indeks_pertanyaan`
@@ -1209,7 +1300,7 @@ ALTER TABLE `indeks_pertanyaan`
 -- AUTO_INCREMENT for table `jabatan`
 --
 ALTER TABLE `jabatan`
-  MODIFY `id_jabatan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id_jabatan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `jam_kerja`
@@ -1239,7 +1330,7 @@ ALTER TABLE `manager`
 -- AUTO_INCREMENT for table `menu`
 --
 ALTER TABLE `menu`
-  MODIFY `id_menu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
+  MODIFY `id_menu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
 
 --
 -- AUTO_INCREMENT for table `nilai_pk`
@@ -1257,7 +1348,7 @@ ALTER TABLE `penanggalan`
 -- AUTO_INCREMENT for table `pengumuman`
 --
 ALTER TABLE `pengumuman`
-  MODIFY `id_pengumuman` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_pengumuman` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `penilaian_kinerja`
@@ -1272,6 +1363,12 @@ ALTER TABLE `perizinan`
   MODIFY `id_perizinan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
+-- AUTO_INCREMENT for table `perizinan_temp`
+--
+ALTER TABLE `perizinan_temp`
+  MODIFY `id_perizinan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
 -- AUTO_INCREMENT for table `pertanyaan_pk`
 --
 ALTER TABLE `pertanyaan_pk`
@@ -1281,19 +1378,19 @@ ALTER TABLE `pertanyaan_pk`
 -- AUTO_INCREMENT for table `pesan`
 --
 ALTER TABLE `pesan`
-  MODIFY `id_pesan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id_pesan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `presensi`
 --
 ALTER TABLE `presensi`
-  MODIFY `id_presensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id_presensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `rancangan_tugas`
 --
 ALTER TABLE `rancangan_tugas`
-  MODIFY `id_rancangan_tugas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id_rancangan_tugas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT for table `riwayat_jabatan`
@@ -1323,7 +1420,7 @@ ALTER TABLE `supervisor`
 -- AUTO_INCREMENT for table `tugas`
 --
 ALTER TABLE `tugas`
-  MODIFY `id_tugas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id_tugas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `validasi`

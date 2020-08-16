@@ -52,23 +52,26 @@
                                         <th class="align-middle" rowspan="2">Unit</th>
                                         <th class="align-middle" rowspan="2">Jabatan</th>
                                         <th class="align-middle" rowspan="2">Nama</th>
-                                        <th class="align-middle" colspan="2">Deskripsi Tugas</th>
-                                        <th class="align-middle" colspan="2">Periode</th>
+                                        <th class="align-middle text-center" colspan="2">Deskripsi Tugas</th>
+                                        <th class="align-middle text-center" colspan="3">Periode</th>
+                                        <th class="align-middle" rowspan="2">Jumlah Tugas Dilakukan</th>
+                                        <th class="align-middle" rowspan="2">Jumlah Target Tugas</th>
                                     </tr>
                                     <tr>
-                                        <th class="align-middle">Utama</th>
-                                        <th class="align-middle">Tambahan</th>
-                                        <th class="align-middle">Harian</th>
-                                        <th class="align-middle">Periodik</th>
+                                        <th class="align-middle text-center">Utama</th>
+                                        <th class="align-middle text-center">Tambahan</th>
+                                        <th class="align-middle text-center">Harian</th>
+                                        <th class="align-middle text-center">Mingguan</th>
+                                        <th class="align-middle text-center">Periodik</th>
                                     </tr>
         
                                 </thead>
                                 <tbody>
-                                    <?php $index = 1; foreach($tugas as $t) :?>
+                                    <?php $index = 1; foreach($rancangan_tugas as $rt) :?>
                                     <tr>
                                         <?php if($index == 1) {?>
                                             <td><?= ($index++)?></td>
-                                            <td>Guest House</td>
+                                            <td><?= $unit_kerja['nama']?></td>
                                             <td><?= $user['nama_jabatan'].' '.$user['jabatan']['nama']?></td>
                                             <td><?= $user['nama']?></td>
                                         <?php }else{?>
@@ -77,15 +80,48 @@
                                                 <td></td>
                                                 <td></td>
                                         <?php }?>
-                                            <td><?= $t['nama_tugas']?></td>
-                                        <td></td>
-                                        <?php if($t['periode'] == 1) {?>
+                                            <td><?= $rt['nama_tugas']?></td>
+                                            <td></td>
+                                        <?php if($rt['periode'] == 1) {?>
+                                            <td>V</td>
+                                            <td></td>
+                                            <td></td>
+                                        <?php }else if($rt['periode'] == 3){?>
+                                            <td></td>
                                             <td>V</td>
                                             <td></td>
                                         <?php }else{?>
                                             <td></td>
+                                            <td></td>
                                             <td>V</td>
                                         <?php }?>
+                                            <td><?= $rt['jumlah_tugas']?></td>
+                                            <td><?= $rt['jumlah_total_tugas']?></td>
+                                    </tr>
+                                    <?php endforeach?>
+                                    <?php foreach($tugas_tambahan as $tt) :?>
+                                    <tr>
+                                        <td><?= ($index++)?></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><?= $tt['nama_tugas']?></td>
+                                        <?php if($tt['periode'] == 1) {?>
+                                            <td>V</td>
+                                            <td></td>
+                                            <td></td>
+                                        <?php }else if($tt['periode'] == 3){?>
+                                            <td></td>
+                                            <td>V</td>
+                                            <td></td>
+                                        <?php }else{?>
+                                            <td></td>
+                                            <td></td>
+                                            <td>V</td>
+                                        <?php }?>
+                                        <td><?= $tt['jumlah_tugas']?></td>
+                                        <td>0</td>
                                     </tr>
                                     <?php endforeach?>
                                 </tbody>
