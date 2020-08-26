@@ -101,23 +101,11 @@
                                     <?php } ?>
                                 </div>
                                 <hr>
-                                <?php if($presensi == null || $presensi['waktu_presensi_keluar'] == null){?>
                                 <form action="<?= base_url('/staff/presensi')?>" method="post">
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <input type="hidden" name="user" value="<?= $user['id_riwayat_jabatan']?>" >
                                         <input type="hidden" name="no_induk" value="<?= $user['no_induk']?>" >
-                                            <!-- <fieldset class="radio">
-                                                <label for="radio1">
-                                                    <?php if($presensi['status_tempat_kerja'] == 1) { ?>
-                                                        <input type="radio" id="radio1" name="status_kerja" value="1" checked> Work From Home (WFH)
-                                                    <?php } else if($presensi['status_tempat_kerja'] == 2) { ?>
-                                                        <input type="radio" id="radio2" name="status_kerja" value="2" checked> Work From Office (WFO)
-                                                    <?php } else { ?>
-                                                        <input type="radio" id="radio3" name="status_kerja" value="3" checked> Work From Other (WO)
-                                                    <?php }?>
-                                                </label>
-                                            </fieldset> -->
                                             <fieldset class="radio">
                                                 <label for="radio1">
                                                     <input type="radio" id="radio1" name="status_kerja" value="1" checked> Work From
@@ -144,10 +132,10 @@
                                                 <div class="input-group">
                                                 <?php if($presensi == null) { ?>
                                                     <input class="form-control" type="text" placeholder="Lokasi..." id="lokasi"
-                                                        name="lokasi" onclick="initMap()">
+                                                        name="lokasi" value="" readonly>
                                                 <?php }else{ ?>
                                                     <input class="form-control" type="text" placeholder="Lokasi..." id="lokasi"
-                                                        name="lokasi" value="<?= $presensi['lokasi']?>" onclick="initMap()">
+                                                        name="lokasi" value="<?= $presensi['lokasi']?>" value="" readonly>
                                                 <?php } ?>
                                                     <div class="input-group-append">
                                                         <button class="btn btn-info" type="button" onclick="getLocation()"><i
@@ -166,7 +154,6 @@
                                     </div>
                                 </div>
                                 </form>
-                                <?php } ?>
                             </div>
                         </div>
                     </div>
@@ -268,7 +255,7 @@
                                                 <td><?= $ub['nama']?></td>
                                                 <td><?= $ub['jabat']['nama_status_user'].' '. $ub['jabat']['nama']?></td>
                                                 <td>
-                                                    <button type="button" class="btn btn-info button-detail-presensi-bawahan" data-toggle="modal" data-target="#detail_presensi_bawahan" data-id="<?= $ub['id_riwayat_jabatan']?>">Detail</button>
+                                                    <button type="button" class="btn btn-info button-detail-presensi-bawahan" data-toggle="modal" data-target="#detail_presensi_bawahan" data-id="<?= $ub['id_riwayat_jabatan']?>" data-nama="<?= $ub['nama'] ?>" data-jabatan="<?= $ub['jabat']['nama_status_user'].' '. $ub['jabat']['nama'] ?>">Detail</button>
                                                     <button class="btn btn-success tambah_presensi_pegawai_bawahan" data-toggle="modal" data-target="#tambah_presensi_bawahan" data-id="<?= $ub['id_riwayat_jabatan']?>">Tambah Presensi Pegawai</button>
                                                 </td>
                                             </tr>

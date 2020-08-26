@@ -63,7 +63,7 @@
                                     <?php foreach ($saran as $s) : ?>
                                         <tr>
                                             <td><?= $i++; ?></td>
-                                            <td> <img src="<?= ($s['foto_profil']) ? base_url($s['foto_profil']) : base_url('assets/images/users/default.jpg') ?>" alt="users" class="rounded-circle img-fluid" width="50" /></td>
+                                            <td> <img src="<?= ($s['foto_profil']) ? base_url('public/'.$s['foto_profil']) : base_url('public/assets/images/users/default.jpg') ?>" alt="users" class="rounded-circle img-fluid" width="50" /></td>
                                             <td><?= $s['nama'] ?></td>
                                             <td><?= $s['no_induk'] ?></td>
                                             <td><?= $s['nama_kategori'] ?></td>

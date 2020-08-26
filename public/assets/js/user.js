@@ -61,10 +61,10 @@ $('#validasi-tugas-detail').on('click', '.validasi-revisi',function(){
     $('#id_presensi_validasi').val(presensi);
 })
 
-$('#validasi-tugas-detail').on('click', '.bukti-validasi-detail',function(){
-    let id = $(this).data('id');
-    window.open(window.location.origin+':8080/assets/images/bukti_klarifikasi/'+id);
-})
+// $('#validasi-tugas-detail').on('click', '.bukti-validasi-detail',function(){
+//     let id = $(this).data('id');
+//     window.open(window.location.origin+':8080/assets/images/bukti_klarifikasi/'+id);
+// })
 
 $(function() {
     $.getJSON(segments[0] + '/kinerjaApi', {
@@ -157,14 +157,12 @@ $('#logbook-utama').on('click', '.submit-logbook', function(){
         },
         dataType: 'json',
         success: function(data){
-            // console.log("SUKSESDONG");
             $.ajax({
                 url: segments[0] + '/logbookApi/'+no_ind,
                 type: 'get',
                 dataType: 'json',
                 success: function(dataA){
                     var j = 1;
-                    console.log(dataA)
                     $('#table-tugas-utama').html('');
                     dataA['tugas_hari_ini'].forEach(function(pp) {
                         $('#table-tugas-utama').append(`
@@ -172,6 +170,7 @@ $('#logbook-utama').on('click', '.submit-logbook', function(){
                             <td>`+(j++)+`</td>
                             <td>`+pp['nama_tugas']+`</td>
                             <td>`+pp['jumlah_tugas']+`</td>
+                            <td>`+pp['waktu']+`</td>
                         </tr>
                         `);
                         addRow(pp['id_tugas'], pp['status_tugas'], pp['catatan'], pp['bukti'], no_ind);
@@ -203,14 +202,12 @@ $('#logbook-tambahan').on('click', '.submit-logbook', function(){
         },
         dataType: 'json',
         success: function(data){
-            console.log("SUKSESDONG");
             $.ajax({
                 url: segments[0] + '/logbookApi/'+no_ind,
                 type: 'get',
                 dataType: 'json',
                 success: function(dataA){
                     var j = 1;
-                    console.log(dataA)
                     $('#table-tugas-tambahan').html('');
                     dataA['tugas_tambahan_hari_ini'].forEach(function(pp) {
                         $('#table-tugas-tambahan').append(`
@@ -218,6 +215,7 @@ $('#logbook-tambahan').on('click', '.submit-logbook', function(){
                             <td>`+(j++)+`</td>
                             <td>`+pp['nama_tugas']+`</td>
                             <td>`+pp['jumlah_tugas']+`</td>
+                            <td>`+pp['waktu']+`</td>
                         </tr>
                         `);
                         addRow(pp['id_tugas'], pp['status_tugas'], pp['catatan'], pp['bukti'], no_ind);
@@ -371,7 +369,7 @@ $('#kirim-chat').on('click', function(){
                     $('#list-chat-box').append(`
                     <li class="chat-item">
                         <div class="chat-img">
-                            <img src="`+window.location.origin+pp['foto_profil']+`" alt="user">
+                            <img src="`+window.location.origin+'/public/'+pp['foto_profil']+`" alt="user">
                         </div>
                         <div class="chat-content">
                             <h6 class="font-medium">`+pp['nama']+`</h6>
@@ -398,7 +396,9 @@ listChat.scrollTop = listChat.scrollHeight - listChat.clientHeight;
 
 $('.tabel-presensi-riwayat').on('click', '.button-detail-presensi-bawahan', function(){
     var id_riwayat_jabatan = $(this).data('id');
-    console.log(id_riwayat_jabatan);
+    var nama = $(this).data('nama');
+    var jabatan = $(this).data('jabatan');
+    console.log(jabatan);
     $.ajax({
         url: segments[0] + '/getPresensiBawahan',
         type: 'post',
@@ -407,9 +407,9 @@ $('.tabel-presensi-riwayat').on('click', '.button-detail-presensi-bawahan', func
         },
         dataType: 'json',
         success: function(data){
-            console.log(data);
-            $('#nama-pegawai').html(data['user']['nama']);
-            $('#jabatan-pegawai').html(data['user']['jabat']['nama_status_user']+' '+data['user']['jabat']['nama']);
+            // console.log(data);
+            $('#nama-pegawai').html(nama);
+            $('#jabatan-pegawai').html(jabatan);
             if(data['presensi'].length == 0){
                 $('.tabel-detail-presensi-bawahan').html('');
                 $('.tabel-detail-presensi-bawahan').html('<div class="alert alert-warning text-center">Belum ada presensi</div>');
@@ -593,4 +593,66 @@ $('#tabel-daftar-bawahan').on('click', '.button-detail-bawahan', function(){
     $('#email').val(email);
     $('#no_telepon').val(no);
     $('#alamat').val(alamat);
+})
+
+$('#tabel-daftar-bawahan').on('click', '.button-capaian-bawahan', function(){
+    var nama = $(this).data('nama');
+    var nip = $(this).data('induk');
+    var jabatan = $(this).data('jabatan');
+    var jbtn = $(this).data('jbtn');
+    var status = $(this).data('status');
+    var id_riwayat_jabatan = $(this).data('riwayatjabatan');
+    var tahun = $(this).data('tahun');
+    $('#capaian-atasan-nama').html();
+    $('#capaian-atasan-induk').html();
+    $('#capaian-atasan-jabatan').html();
+    $('#capaian-atasan-nama').html(nama);
+    $('#capaian-atasan-induk').html(nip);
+    $('#capaian-atasan-jabatan').html(status+' '+jabatan);
+    $.ajax({
+        url: segments[0] + '/getCapaianBawahan',
+        type: 'post',
+        data: {
+            thn: tahun,
+            id_rj: id_riwayat_jabatan,
+            id_jabatan: jbtn
+        },
+        dataType: 'json',
+        success: function(data){
+            // console.log(data);
+            $('#capaian-atasan-tabel').html(``);
+            var temp = "aa";
+            var i = 1;
+            data['rancangan_tugas'].forEach(function(t){
+                if(t['id_rancangan_tugas'] != 0){
+                    temp = "Utama";
+                }else{
+                    temp = "Tambahan";
+                }
+                $('#capaian-atasan-tabel').append(`
+                    <tr>
+                        <td>`+(i++)+`</td>
+                        <td>`+t['nama_tugas']+`</td>
+                        <td>`+temp+`</td>
+                        <td>`+t['jumlah_tugas']+`</td>
+                        <td>`+t['jumlah_total_tugas']+`</td>
+                    </tr>
+                `);
+            })
+        }
+    });
+
+})
+
+
+$('#tabel-daftar-jabatan').on('click', '.editJabatan', function(){
+    var id = $(this).data('id');
+    var jabatan = $(this).data('jabatan');
+    var status = $(this).data('status');
+    var statusid = $(this).data('statusid');
+    var atasan = $(this).data('atasan');
+    $('#id_jabatan').val(id);
+    $('#nama_jabatan_edit').val(jabatan);
+    $('#status_jabatan_edit').val(status);
+    $('#atasan_langsung_edit').val(atasan);
 })

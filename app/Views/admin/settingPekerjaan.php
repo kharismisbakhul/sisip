@@ -28,7 +28,7 @@
         <div class="col-lg-4 col-xlg-3 col-md-5">
             <div class="card">
                 <div class="card-body">
-                    <center class="m-t-30"> <img src="<?= base_url($u['foto_profil']) ?>" class="rounded-circle" width="150" />
+                    <center class="m-t-30"> <img src="<?= base_url('public/'.$u['foto_profil']) ?>" class="rounded-circle" width="150" />
                         <h4 class="card-title m-t-10"><?= $u['nama'] ?></h4>
                         <h5 class="card-title m-t-10"><?= $u['nama_status_user'] ?></h5>
                         <h6 class="card-subtitle"><?= ($pekerjaan != null) ? $pekerjaan['nama'] : 'Belum memiliki pekerjaan' ?></h6>

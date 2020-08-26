@@ -68,26 +68,42 @@ class GMController extends BaseController
         $manager = model('manager');
         $jabatan = model('jabatan');
         $riwayat_jabatan = model('riwayat_jabatan');
-        $data['jumlah_validasi'] = count($tugas->where('status_tugas', 1)->where('id_riwayat_jabatan', $data['user']['id_riwayat_jabatan'])->findAll());
-        $data['jumlah_belum_validasi'] = count($tugas->where('status_tugas', 0)->where('id_riwayat_jabatan', $data['user']['id_riwayat_jabatan'])->findAll());
-        $data['jumlah_revisi'] = count($tugas->where('status_tugas', 2)->where('id_riwayat_jabatan', $data['user']['id_riwayat_jabatan'])->findAll());
         $data['user'] = $user->join('riwayat_jabatan', 'riwayat_jabatan.no_induk = user.no_induk')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan')->where('user.no_induk', session('no_induk'))->first();
+        $data['jumlah_validasi'] = count($tugas->where('status_tugas', 1)->where('id_riwayat_jabatan', $data['user']['id_riwayat_jabatan'])->findAll());
+        $data['jumlah_belum_validasi'] = count($tugas->where('status_tugas', 3)->where('id_riwayat_jabatan', $data['user']['id_riwayat_jabatan'])->findAll());
+        $data['jumlah_revisi'] = count($tugas->where('status_tugas', 2)->where('id_riwayat_jabatan', $data['user']['id_riwayat_jabatan'])->findAll());
         $data['presensi'] = $presensi->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'presensi.tanggal_presensi' => date("Y-m-d")])->first();
         
         $kode_bawahan = $manager->where('id_gm', $data['user']['detail_jabatan'])->findAll();
         $jumlah_bawahan = 0;
+        $id_jabatan_bawahan = [];
         for ($i=0; $i < count($kode_bawahan); $i++) { 
             $temp_jabatan = $jabatan->where('kode_jabatan', 4)->where('detail_jabatan', $kode_bawahan[$i]['id_manager'])->first();
             $temp = count($riwayat_jabatan->where('id_jabatan', $temp_jabatan['id_jabatan'])->findAll());
             $jumlah_bawahan += $temp;
+            array_push($id_jabatan_bawahan, $temp_jabatan['id_jabatan']);
         }
-        $data['staff_bawahan'] = $riwayat_jabatan->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan', 'left')->where('jabatan.id_jabatan', 5)->join('staff as s', 's.id_staff=jabatan.detail_jabatan', 'left')->where('id_supervisor', $data['user']['detail_jabatan'])->join('user as u', 'u.no_induk=riwayat_jabatan.no_induk', 'left')->findAll();
+        // $data['staff_bawahan'] = $riwayat_jabatan->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan', 'left')->where('jabatan.id_jabatan', 5)->join('staff as s', 's.id_staff=jabatan.detail_jabatan', 'left')->where('id_supervisor', $data['user']['detail_jabatan'])->join('user as u', 'u.no_induk=riwayat_jabatan.no_induk', 'left')->findAll();
+
+        $data['staff_bawahan'] = $riwayat_jabatan->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan', 'left')->whereIn('jabatan.id_jabatan', $id_jabatan_bawahan)->join('manager as m', 'm.id_manager=jabatan.detail_jabatan', 'left')->join('user as u', 'u.no_induk=riwayat_jabatan.no_induk', 'left')->findAll();
+
         $jumlah_bawahan = count($data['staff_bawahan']);
         $data['jumlah_bawahan'] = $jumlah_bawahan;
 
+        $jumlah_bawahan_validasi = 0;
+        $jumlah_bawahan_belum_validasi = 0;
+        $jumlah_bawahan_revisi = 0;
+
         for ($i=0; $i < count($data['staff_bawahan']); $i++) { 
             $data['staff_bawahan'][$i]['presensi'] = $presensi->where(['id_riwayat_jabatan' => $data['staff_bawahan'][$i]['id_riwayat_jabatan'], 'presensi.tanggal_presensi' => date("Y-m-d")])->first();
+            $jumlah_bawahan_validasi += count($tugas->where('status_tugas', 1)->where('id_riwayat_jabatan', $data['staff_bawahan'][$i]['id_riwayat_jabatan'])->findAll());
+            $jumlah_bawahan_belum_validasi += count($tugas->where('status_tugas', 3)->where('id_riwayat_jabatan', $data['staff_bawahan'][$i]['id_riwayat_jabatan'])->findAll());
+            $jumlah_bawahan_revisi += count($tugas->where('status_tugas', 2)->where('id_riwayat_jabatan', $data['staff_bawahan'][$i]['id_riwayat_jabatan'])->findAll());
         }
+
+        $data['jumlah_bawahan_validasi'] = $jumlah_bawahan_validasi;
+        $data['jumlah_bawahan_belum_validasi'] = $jumlah_bawahan_belum_validasi;
+        $data['jumlah_bawahan_revisi'] = $jumlah_bawahan_revisi;
 
         $data['menu'] = $menu->where('status_user', session('id_status_user'))->findAll();
         $data['kategori_menu'] = $kategori->findAll();
@@ -115,7 +131,7 @@ class GMController extends BaseController
             $tugas = model('tugas');
             $rancangan_tugas = model('rancangan_tugas');
             $data['rancangan_tugas'] = $rancangan_tugas->where('id_jabatan', $data['user']['id_jabatan'])->findAll();
-            $data['tugas'] =  $tugas->asArray()->select('id_tugas, id_riwayat_jabatan, tugas.nama_tugas, tanggal_tugas, tugas.periode, tugas.jumlah_tugas, tugas.nomor_pekerjaan, tugas.status_tugas, tugas.id_rancangan_tugas, rancangan_tugas.jumlah_total_tugas, tugas.kode_tugas')->selectSum('tugas.jumlah_tugas')->join('rancangan_tugas', 'rancangan_tugas.id_rancangan_tugas = tugas.id_rancangan_tugas')->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.tanggal_tugas >=' => date(date("Y").'-01-01'), 'tugas.tanggal_tugas <=' => date(date("Y").'-12-31'), 'tugas.id_rancangan_tugas !=' => 0])->groupBy("tugas.kode_tugas")->orderBy('tugas.id_rancangan_tugas', 'DESC')->findAll();
+            $data['tugas'] =  $tugas->asArray()->select('id_tugas, id_riwayat_jabatan, tugas.nama_tugas, tanggal_tugas, tugas.periode, tugas.jumlah_tugas, tugas.nomor_pekerjaan, tugas.status_tugas, tugas.id_rancangan_tugas, rancangan_tugas.jumlah_total_tugas, tugas.kode_tugas')->selectSum('tugas.jumlah_tugas')->join('rancangan_tugas', 'rancangan_tugas.id_rancangan_tugas = tugas.id_rancangan_tugas')->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.tanggal_tugas >=' => date(date("Y").'-01-01'), 'tugas.tanggal_tugas <=' => date(date("Y").'-12-31'), 'tugas.id_rancangan_tugas !=' => 0, 'tugas.status_tugas' => 1])->groupBy("tugas.kode_tugas")->orderBy('tugas.id_rancangan_tugas', 'DESC')->findAll();
             $jumlah_tugas_berlangsung = 0;
             $jumlah_total_tugas = 0;
             for ($i=0; $i < count($data['rancangan_tugas']); $i++) { 
@@ -187,6 +203,30 @@ class GMController extends BaseController
             $pesan = model('pesan');
             $data['chat']  = $pesan->asArray()->join('user', 'user.no_induk = pesan.user')->orderBy('waktu', 'asc')->orderBy('tanggal', 'asc')->findAll();
 
+            $presensi = model('presensi');
+            $jabatan = model('jabatan');
+            $manager = model('manager');
+            $data_id_manager = $manager->where('id_gm', $data['user']['detail_jabatan'])->findAll();
+            $id_manager = [];
+            for ($i=0; $i < count($data_id_manager); $i++) { 
+                array_push($id_manager, $data_id_manager[$i]['id_manager']);
+            }
+            $data_jabatan = $jabatan->where('kode_jabatan', 5)->whereIn('detail_jabatan', $id_manager)->findAll();
+            $id_jabatan_bawahan = [];
+            for ($i=0; $i < count($data_jabatan); $i++) { 
+                array_push($id_jabatan_bawahan, $data_jabatan[$i]['id_jabatan']);
+            }
+            $user_bawahan = $user->join('riwayat_jabatan', 'riwayat_jabatan.no_induk = user.no_induk')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan')->whereIn('riwayat_jabatan.id_jabatan', $id_jabatan_bawahan)->findAll();
+            $data['user_bawahan'] = $user_bawahan;
+            $id_riwayat_jabatan_bawahan = [];
+            for ($i=0; $i < count($user_bawahan); $i++) { 
+                $data['user_bawahan'][$i]['unit_kerja'] = $jabatan->getUnitKerja($data['user_bawahan'][$i]['id_status_user'], $data['user_bawahan'][$i]['detail_jabatan']);
+                $data['user_bawahan'][$i]['jabat'] = $jabatan->getJabtan($data['user_bawahan'][$i]['id_status_user'], $data['user_bawahan'][$i]['detail_jabatan']);
+                array_push($id_riwayat_jabatan_bawahan, $user_bawahan[$i]['id_riwayat_jabatan']);
+            }
+            $data['presensi_bawahan'] = $presensi->asArray()->join('riwayat_jabatan', 'riwayat_jabatan.id_riwayat_jabatan = presensi.id_riwayat_jabatan')->join('user', 'riwayat_jabatan.no_induk = user.no_induk')->whereIn('presensi.id_riwayat_jabatan', $id_riwayat_jabatan_bawahan)->findAll();
+
+
             return view('presensi', $data);
         }else{
             if($data['presensi'] == null){
@@ -253,8 +293,13 @@ class GMController extends BaseController
         // $data['tugas'] =  $tugas->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.tanggal_tugas >=' => date(date("Y").'-01-01'), 'tugas.tanggal_tugas <=' => date(date("Y").'-12-31')])->findAll();
         $tugas = model('tugas');
         $rancangan_tugas = model('rancangan_tugas');
+        $thn = date('Y');
+        if($this->request->getVar('tahun') != ""){
+            $thn = $this->request->getVar('tahun');
+        }
+        $data['tahun'] = $thn;
         $data['rancangan_tugas'] = $rancangan_tugas->where('id_jabatan', $data['user']['id_jabatan'])->findAll();
-        $data['tugas'] =  $tugas->asArray()->select('id_tugas, id_riwayat_jabatan, tugas.nama_tugas, tanggal_tugas, tugas.periode, tugas.jumlah_tugas, tugas.nomor_pekerjaan, tugas.status_tugas, tugas.id_rancangan_tugas, rancangan_tugas.jumlah_total_tugas, tugas.kode_tugas')->selectSum('tugas.jumlah_tugas')->join('rancangan_tugas', 'rancangan_tugas.id_rancangan_tugas = tugas.id_rancangan_tugas')->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.tanggal_tugas >=' => date(date("Y").'-01-01'), 'tugas.tanggal_tugas <=' => date(date("Y").'-12-31'), 'tugas.id_rancangan_tugas !=' => 0])->groupBy("tugas.kode_tugas")->orderBy('tugas.id_rancangan_tugas', 'DESC')->findAll();
+        $data['tugas'] =  $tugas->asArray()->select('id_tugas, id_riwayat_jabatan, tugas.nama_tugas, tanggal_tugas, tugas.periode, tugas.jumlah_tugas, tugas.nomor_pekerjaan, tugas.status_tugas, tugas.id_rancangan_tugas, rancangan_tugas.jumlah_total_tugas, tugas.kode_tugas')->selectSum('tugas.jumlah_tugas')->join('rancangan_tugas', 'rancangan_tugas.id_rancangan_tugas = tugas.id_rancangan_tugas')->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.tanggal_tugas >=' => date($thn.'-01-01'), 'tugas.tanggal_tugas <=' => date($thn.'-12-31'), 'tugas.id_rancangan_tugas !=' => 0, 'tugas.status_tugas' => 1])->groupBy("tugas.kode_tugas")->orderBy('tugas.id_rancangan_tugas', 'DESC')->findAll();
         $jumlah_tugas_berlangsung = 0;
         $jumlah_total_tugas = 0;
         for ($i=0; $i < count($data['rancangan_tugas']); $i++) { 
@@ -269,13 +314,48 @@ class GMController extends BaseController
         for ($i=0; $i < count($data['tugas']); $i++) { 
             $jumlah_tugas_berlangsung += intval($data['tugas'][$i]['jumlah_tugas']);
         }
+        $data['tugas_tambahan'] = $tugas->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.tanggal_tugas >=' => date($thn.'-01-01'), 'tugas.tanggal_tugas <=' => date($thn.'-12-31'), 'tugas.id_rancangan_tugas' => 0, 'tugas.status_tugas' => 1])->groupBy("tugas.kode_tugas")->orderBy('tugas.tanggal_tugas', 'DESC')->findAll();
+        
+        for ($i=0; $i < count($data['rancangan_tugas']); $i++) { 
+            $data['rancangan_tugas'][$i]['jumlah_tugas'] = 0;
+            for ($j=0; $j < count($data['tugas']); $j++) { 
+                if($data['rancangan_tugas'][$i]['kode_tugas'] == $data['tugas'][$j]['kode_tugas']){
+                    $data['rancangan_tugas'][$i]['jumlah_tugas'] += intval($data['tugas'][$j]['jumlah_tugas']);
+                } 
+            }
+        }
+        $jumlah_tugas_tambahan = 0;
+        for ($i=0; $i < count($data['tugas_tambahan']); $i++) { 
+            $data['tugas_tambahan'][$i]['tanggal_tugas'] = $this->getTanggal($data['tugas_tambahan'][$i]['tanggal_tugas']);
+            $jumlah_tugas_tambahan += intval($data['tugas_tambahan'][$i]['jumlah_tugas']);
+        }
+        $data['jumlah_tugas_tambahan'] = $jumlah_tugas_tambahan;
+
         $data['menu'] = $menu->where('status_user', session('id_status_user'))->findAll();
         $data['kategori_menu'] = $kategori->findAll();
         $pesan = model('pesan');
         $data['chat']  = $pesan->asArray()->join('user', 'user.no_induk = pesan.user')->orderBy('waktu', 'asc')->orderBy('tanggal', 'asc')->findAll();
-        $data['staff_bawahan'] = $riwayat_jabatan->select('u.*,s.nama as nama_jabatan')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan', 'left')->where('jabatan.id_jabatan', 5)->join('staff as s', 's.id_staff=jabatan.detail_jabatan', 'left')->where('id_supervisor', $data['user']['detail_jabatan'])->join('user as u', 'u.no_induk=riwayat_jabatan.no_induk', 'left')->findAll();
+
+        // Tambahan
+        $manager = model('manager');
+        $jabatan = model('jabatan');
+        $kode_bawahan = $manager->where('id_gm', $data['user']['detail_jabatan'])->findAll();
+        $jumlah_bawahan = 0;
+        $id_jabatan_bawahan = [];
+        for ($i=0; $i < count($kode_bawahan); $i++) { 
+            $temp_jabatan = $jabatan->where('kode_jabatan', 5)->where('detail_jabatan', $kode_bawahan[$i]['id_manager'])->first();
+            $temp = count($riwayat_jabatan->where('id_jabatan', $temp_jabatan['id_jabatan'])->findAll());
+            // dd($temp_jabatan);
+            // $jumlah_bawahan += $temp;
+            array_push($id_jabatan_bawahan, $temp_jabatan['id_jabatan']);
+        }
+        $data['staff_bawahan'] = $riwayat_jabatan->select('u.*,su.*,m.nama as nama_jabatan, riwayat_jabatan.*')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan', 'left')->whereIn('jabatan.id_jabatan', $id_jabatan_bawahan)->join('manager as m', 'm.id_manager=jabatan.detail_jabatan', 'left')->join('user as u', 'u.no_induk=riwayat_jabatan.no_induk', 'left')->join('status_user as su', 'su.id_status_user=u.id_status_user', 'left')->findAll();
+
+        // $data['staff_bawahan'] = $riwayat_jabatan->select('u.*,s.nama as nama_jabatan')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan', 'left')->where('jabatan.id_jabatan', 5)->join('staff as s', 's.id_staff=jabatan.detail_jabatan', 'left')->where('id_supervisor', $data['user']['detail_jabatan'])->join('user as u', 'u.no_induk=riwayat_jabatan.no_induk', 'left')->findAll();
         
         $data['penilaian_kinerja'] = $pk->where('status_pk', 1)->first();
+        $bulan = model('bulan');
+        $data['bulan'] = $bulan->findAll();
         // dd($data['tugas']);
         return view('capaian_kerja_atasan', $data);
     }
@@ -309,7 +389,7 @@ class GMController extends BaseController
             ];
             $upload_image = $this->request->getFile('file_pendukung');
             if ($upload_image->getClientName() != "") {
-                $tujuan_upload = 'assets/images/file_pendukung/';
+                $tujuan_upload = 'public/assets/images/file_pendukung/';
                 $upload_image->move($tujuan_upload, $upload_image->getClientName());
                 $nama_file = $upload_image->getClientName();
     
@@ -567,43 +647,296 @@ class GMController extends BaseController
     public function laporanEvaluasi(){
         $presensi = model('presensi');
         $tugas = model('tugas');
+        $user = model('user');
+        $riwayat_jabatan = model('riwayat_jabatan');
+        $jabatan_a = model('jabatan');
         $data = $this->initData();
-        $data['title'] = "Laporan Evaluasi dan Monitoring";
-        $data['presensi'] = $presensi->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'presensi.tanggal_presensi' => date("Y-m-d")])->first();
-        $data['tugas'] =  $tugas->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan']])->groupBy('tugas.kode_tugas')->orderBy('tugas.id_rancangan_tugas', 'desc')->orderBy('tanggal_tugas', 'asc')->findAll();
+        $data['title'] = "Laporan Evaluasi";
         $bulan = model('bulan');
         $data['bulan'] = $bulan->findAll();
-        if($data['user']['id_jabatan'] == 4){
-            $data['user']['nama_jabatan'] = "General Manager";
-            $jabatan = model('general_manager');
-            $data['user']['jabatan'] = $jabatan->where('id_gm', $data['user']['detail_jabatan'])->first();
+        
+        // Tambahan
+        $manager = model('manager');
+        $jabatan = model('jabatan');
+        $kode_bawahan = $manager->where('id_gm', $data['user']['detail_jabatan'])->findAll();
+        $jumlah_bawahan = 0;
+        $id_jabatan_bawahan = [];
+        for ($i=0; $i < count($kode_bawahan); $i++) { 
+            $temp_jabatan = $jabatan->where('kode_jabatan', 5)->where('detail_jabatan', $kode_bawahan[$i]['id_manager'])->first();
+            $temp = count($riwayat_jabatan->where('id_jabatan', $temp_jabatan['id_jabatan'])->findAll());
+            // dd($temp_jabatan);
+            // $jumlah_bawahan += $temp;
+            array_push($id_jabatan_bawahan, $temp_jabatan['id_jabatan']);
+        }
+        $data['staff_bawahan'] = $riwayat_jabatan->select('u.*,su.*,m.nama as nama_jabatan, riwayat_jabatan.*')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan', 'left')->whereIn('jabatan.id_jabatan', $id_jabatan_bawahan)->join('manager as m', 'm.id_manager=jabatan.detail_jabatan', 'left')->join('user as u', 'u.no_induk=riwayat_jabatan.no_induk', 'left')->join('status_user as su', 'su.id_status_user=u.id_status_user', 'left')->findAll();
+
+        // $data['staff_bawahan'] = $riwayat_jabatan->select('u.*,su.*,s.nama as nama_jabatan, riwayat_jabatan.*')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan', 'left')->where('jabatan.kode_jabatan', 6)->join('supervisor as s', 's.id_supervisor=jabatan.detail_jabatan', 'left')->where('id_manager', $data['user']['detail_jabatan'])->join('user as u', 'u.no_induk=riwayat_jabatan.no_induk', 'left')->join('status_user as su', 'su.id_status_user=u.id_status_user', 'left')->findAll();
+        
+        $pegawai = [];
+        array_push($pegawai, $data['user']['no_induk']);
+        for ($i=0; $i < count($data['staff_bawahan']); $i++) { 
+            array_push($pegawai, $data['staff_bawahan'][$i]['no_induk']);
+        }
+
+        $data['pegawai'] = $user->join('riwayat_jabatan', 'riwayat_jabatan.no_induk = user.no_induk')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan')->whereNotIn('user.id_status_user', [1, 2])->whereIn('user.no_induk', $pegawai)->orderBy('jabatan.id_jabatan')->findAll();
+        
+        if($this->request->getVar('waktu_mulai') != "" && $this->request->getVar('waktu_selesai') != ""){
+            $waktu_mulai = $this->request->getVar('waktu_mulai');
+            $waktu_selesai = $this->request->getVar('waktu_selesai');
+            $this->data['tanggal_mulai'] = date('d-m-Y', strtotime($waktu_mulai));
+            $this->data['tgl_mulai'] = $waktu_mulai;
+            $this->data['tgl_selesai'] = $waktu_selesai;
+            $this->data['tanggal_selesai'] = date('d-m-Y', strtotime($waktu_selesai));
+        }else{
+            $this->data['tanggal_mulai'] = null;
+        }
+        // $data['pegawai'] = $user->join('riwayat_jabatan', 'riwayat_jabatan.no_induk = user.no_induk')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan')->whereNotIn('user.id_status_user', [1, 2])->orderBy('jabatan.id_jabatan')->findAll();
+        for ($i=0; $i < count($data['pegawai']); $i++) { 
+            $data['pegawai'][$i]['presensi'] = $presensi->asArray()->where(['id_riwayat_jabatan' => $data['pegawai'][$i]['id_riwayat_jabatan']])->findAll();
+            // $data['pegawai'][$i]['tugas'] =  $tugas->asArray()->where(['id_riwayat_jabatan' => $data['pegawai'][$i]['id_riwayat_jabatan']])->groupBy('tugas.kode_tugas')->orderBy('tugas.id_rancangan_tugas', 'desc')->orderBy('tanggal_tugas', 'asc')->findAll();
+            
+            // Tambahan
+            $rancangan_tugas = model('rancangan_tugas');
+            $data['pegawai'][$i]['rancangan_tugas'] = $rancangan_tugas->where('id_jabatan', $data['pegawai'][$i]['id_jabatan'])->findAll();
+            if($this->request->getVar('waktu_mulai') != "" && $this->request->getVar('waktu_selesai') != ""){
+                $waktu_mulai = $this->request->getVar('waktu_mulai');
+                $waktu_selesai = $this->request->getVar('waktu_selesai');
+                $data['pegawai'][$i]['tugas'] =  $tugas->asArray()->select('id_tugas, id_riwayat_jabatan, tugas.nama_tugas, tanggal_tugas, tugas.periode, tugas.jumlah_tugas, tugas.nomor_pekerjaan, tugas.status_tugas, tugas.id_rancangan_tugas, rancangan_tugas.jumlah_total_tugas, tugas.kode_tugas')->selectSum('tugas.jumlah_tugas')->join('rancangan_tugas', 'rancangan_tugas.id_rancangan_tugas = tugas.id_rancangan_tugas')->where(['id_riwayat_jabatan' => $data['pegawai'][$i]['id_riwayat_jabatan'], 'tugas.tanggal_tugas >=' => $waktu_mulai, 'tugas.tanggal_tugas <=' => $waktu_selesai])->groupBy("tugas.kode_tugas")->orderBy('tugas.id_rancangan_tugas', 'DESC')->findAll();
+                $data['pegawai'][$i]['tugas_tambahan'] = $tugas->asArray()->where(['id_riwayat_jabatan' => $data['pegawai'][$i]['id_riwayat_jabatan'], 'tugas.id_rancangan_tugas' => 0, 'tugas.tanggal_tugas >=' => $waktu_mulai, 'tugas.tanggal_tugas <=' => $waktu_selesai])->groupBy("tugas.kode_tugas")->orderBy('tugas.tanggal_tugas', 'DESC')->findAll();
+
+                $data['tanggal_mulai'] = date('d-m-Y', strtotime($waktu_mulai));
+                $data['tgl_mulai'] = $waktu_mulai;
+                $data['tgl_selesai'] = $waktu_selesai;
+                $data['tanggal_selesai'] = date('d-m-Y', strtotime($waktu_selesai));
+            }
+            else{
+                $data['pegawai'][$i]['tugas'] =  $tugas->asArray()->select('id_tugas, id_riwayat_jabatan, tugas.nama_tugas, tanggal_tugas, tugas.periode, tugas.jumlah_tugas, tugas.nomor_pekerjaan, tugas.status_tugas, tugas.id_rancangan_tugas, rancangan_tugas.jumlah_total_tugas, tugas.kode_tugas')->selectSum('tugas.jumlah_tugas')->join('rancangan_tugas', 'rancangan_tugas.id_rancangan_tugas = tugas.id_rancangan_tugas')->where(['id_riwayat_jabatan' => $data['pegawai'][$i]['id_riwayat_jabatan']])->groupBy("tugas.kode_tugas")->orderBy('tugas.id_rancangan_tugas', 'DESC')->findAll();
+                $data['pegawai'][$i]['tugas_tambahan'] = $tugas->asArray()->where(['id_riwayat_jabatan' => $data['pegawai'][$i]['id_riwayat_jabatan'], 'tugas.id_rancangan_tugas' => 0])->groupBy("tugas.kode_tugas")->orderBy('tugas.tanggal_tugas', 'DESC')->findAll();
+
+                $data['tanggal_mulai'] = null;
+            }
+            
+            // $data['pegawai'][$i]['tugas'] =  $tugas->asArray()->select('id_tugas, id_riwayat_jabatan, tugas.nama_tugas, tanggal_tugas, tugas.periode, tugas.jumlah_tugas, tugas.nomor_pekerjaan, tugas.status_tugas, tugas.id_rancangan_tugas, rancangan_tugas.jumlah_total_tugas, tugas.kode_tugas')->selectSum('tugas.jumlah_tugas')->join('rancangan_tugas', 'rancangan_tugas.id_rancangan_tugas = tugas.id_rancangan_tugas')->where(['id_riwayat_jabatan' => $data['pegawai'][$i]['id_riwayat_jabatan'], 'tugas.status_tugas' => 1])->groupBy("tugas.kode_tugas")->orderBy('tugas.id_rancangan_tugas', 'DESC')->findAll();
+            // $data['pegawai'][$i]['tugas_tambahan'] = $tugas->asArray()->where(['id_riwayat_jabatan' => $data['pegawai'][$i]['id_riwayat_jabatan'], 'tugas.id_rancangan_tugas' => 0, 'tugas.status_tugas' => 1])->groupBy("tugas.kode_tugas")->orderBy('tugas.tanggal_tugas', 'DESC')->findAll();
+    
+            for ($k=0; $k < count($data['pegawai'][$i]['rancangan_tugas']); $k++) { 
+                $data['pegawai'][$i]['rancangan_tugas'][$k]['jumlah_tugas'] = 0;
+                for ($j=0; $j < count($data['pegawai'][$i]['tugas']); $j++) { 
+                    if($data['pegawai'][$i]['rancangan_tugas'][$k]['kode_tugas'] == $data['pegawai'][$i]['tugas'][$j]['kode_tugas']){
+                        $data['pegawai'][$i]['rancangan_tugas'][$k]['jumlah_tugas'] += intval($data['pegawai'][$i]['tugas'][$j]['jumlah_tugas']);
+                    } 
+                }
+            }
+
+            for ($k=0; $k < count($data['pegawai'][$i]['tugas_tambahan']); $k++) { 
+                $dataA = [
+                    'id_rancangan_tugas' => 0,
+                    'id_jabatan' => $data['pegawai'][$i]['id_jabatan'],
+                    'nama_tugas' => $data['pegawai'][$i]['tugas_tambahan'][$k]['nama_tugas'],
+                    'periode' => $data['pegawai'][$i]['tugas_tambahan'][$k]['periode'],
+                    'jumlah_total_tugas' => 0,
+                    'nomor_pekerjaan' => 0,
+                    'status_tugas' => $data['pegawai'][$i]['tugas_tambahan'][$k]['status_tugas'],
+                    'kode_tugas' => $data['pegawai'][$i]['tugas_tambahan'][$k]['kode_tugas'],
+                    'jumlah_tugas' => $data['pegawai'][$i]['tugas_tambahan'][$k]['jumlah_tugas']
+                ];
+                array_push($data['pegawai'][$i]['rancangan_tugas'], $dataA);
+            }
+            // Selesai
+            
+            
+            if($data['pegawai'][$i]['id_status_user'] == 3){
+                $data['pegawai'][$i]['nama_jabatan'] = "Direktur";
+                $jabatan = model('direktur');
+                $data['pegawai'][$i]['jabatan'] = $jabatan->where('id_direktur', $data['pegawai'][$i]['detail_jabatan'])->first();
+            }else if($data['pegawai'][$i]['id_status_user'] == 4){
+                $data['pegawai'][$i]['nama_jabatan'] = "General Manager";
+                $jabatan = model('general_manager');
+                $data['pegawai'][$i]['jabatan'] = $jabatan->where('id_gm', $data['pegawai'][$i]['detail_jabatan'])->first();
+            }else if($data['pegawai'][$i]['id_status_user'] == 5){
+                $data['pegawai'][$i]['nama_jabatan'] = "Manager";
+                $jabatan = model('manager');
+                $data['pegawai'][$i]['jabatan'] = $jabatan->where('id_manager', $data['pegawai'][$i]['detail_jabatan'])->first();
+            }else if($data['pegawai'][$i]['id_status_user'] == 6){
+                $data['pegawai'][$i]['nama_jabatan'] = "Supervisor";
+                $jabatan = model('supervisor');
+                $data['pegawai'][$i]['jabatan'] = $jabatan->where('id_supervisor', $data['pegawai'][$i]['detail_jabatan'])->first();
+            }else if($data['pegawai'][$i]['id_status_user'] == 7){
+                $data['pegawai'][$i]['nama_jabatan'] = "Staff";
+                $jabatan = model('staff');
+                $data['pegawai'][$i]['jabatan'] = $jabatan->where('id_staff', $data['pegawai'][$i]['detail_jabatan'])->first();
+            }else{
+                $data['pegawai'][$i]['nama_jabatan'] = "Tidak Ada Jabatan";
+                $data['pegawai'][$i]['jabatan']['nama'] = "";
+            }
+            $data['pegawai'][$i]['unit_kerja'] = $jabatan_a->getUnitKerja($data['pegawai'][$i]['id_status_user'], $data['pegawai'][$i]['detail_jabatan']);
         }
         // dd($data);
-        return view('laporan/laporan_evaluasi', $data);
+        return view('laporan/laporan_evaluasi_admin', $data);
     }
     public function laporanKeaktifan(){
         $presensi = model('presensi');
         $tugas = model('tugas');
         $bulan = model('bulan');
+        $user = model('user');
+        $jabatan_a = model('jabatan');
+        $riwayat_jabatan = model('riwayat_jabatan');
         $batas_penanggalan = model('batas_penanggalan');
-        $data = $this->initData();
         $thn = date('Y');
         $bln = date('m');
         if($this->request->getVar('tahun') != "" && $this->request->getVar('bulan') != ""){
             $thn = $this->request->getVar('tahun');
-            $bln = $this->request->getVar('bulan');
+            $bln = intval($this->request->getVar('bulan'));
             if(intval($bln) < 10){
                 $bln = '0'.$bln;
             }
         }
+        $data = $this->initData();
         $data['title'] = "Laporan Keaktifan Pegawai";
-        $data['presensi'] = $presensi->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tanggal_presensi >=' => $thn.'-'.$bln.'-01', 'tanggal_presensi <=' => $thn.'-'.$bln.'-31'])->findAll();
+
+        // Tambahan
+        $manager = model('manager');
+        $jabatan = model('jabatan');
+        $kode_bawahan = $manager->where('id_manager', $data['user']['detail_jabatan'])->findAll();
+        $jumlah_bawahan = 0;
+        $id_jabatan_bawahan = [];
+        for ($i=0; $i < count($kode_bawahan); $i++) { 
+            $temp_jabatan = $jabatan->where('kode_jabatan', 5)->where('detail_jabatan', $kode_bawahan[$i]['id_manager'])->first();
+            $temp = count($riwayat_jabatan->where('id_jabatan', $temp_jabatan['id_jabatan'])->findAll());
+            // dd($temp_jabatan);
+            // $jumlah_bawahan += $temp;
+            array_push($id_jabatan_bawahan, $temp_jabatan['id_jabatan']);
+        }
+        $data['staff_bawahan'] = $riwayat_jabatan->select('u.*,su.*,m.nama as nama_jabatan, riwayat_jabatan.*')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan', 'left')->whereIn('jabatan.id_jabatan', $id_jabatan_bawahan)->join('manager as m', 'm.id_manager=jabatan.detail_jabatan', 'left')->join('user as u', 'u.no_induk=riwayat_jabatan.no_induk', 'left')->join('status_user as su', 'su.id_status_user=u.id_status_user', 'left')->findAll();
+
+        // $data['staff_bawahan'] = $riwayat_jabatan->select('u.*,su.*,s.nama as nama_jabatan, riwayat_jabatan.*')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan', 'left')->where('jabatan.kode_jabatan', 6)->join('supervisor as s', 's.id_supervisor=jabatan.detail_jabatan', 'left')->where('id_manager', $data['user']['detail_jabatan'])->join('user as u', 'u.no_induk=riwayat_jabatan.no_induk', 'left')->join('status_user as su', 'su.id_status_user=u.id_status_user', 'left')->findAll();
+        
+        $pegawai = [];
+        array_push($pegawai, $data['user']['no_induk']);
+        for ($i=0; $i < count($data['staff_bawahan']); $i++) { 
+            array_push($pegawai, $data['staff_bawahan'][$i]['no_induk']);
+        }
+
+        $data['pegawai'] = $user->join('riwayat_jabatan', 'riwayat_jabatan.no_induk = user.no_induk')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan')->whereNotIn('user.id_status_user', [1, 2])->whereIn('user.no_induk', $pegawai)->orderBy('jabatan.id_jabatan')->findAll();
+        for ($i=0; $i < count($data['pegawai']); $i++) { 
+            $data['pegawai'][$i]['presensi'] = $presensi->asArray()->where(['id_riwayat_jabatan' => $data['pegawai'][$i]['id_riwayat_jabatan'], 'tanggal_presensi >=' => $thn.'-'.$bln.'-01', 'tanggal_presensi <=' => $thn.'-'.$bln.'-31'])->findAll();
+            if($data['pegawai'][$i]['id_status_user'] == 3){
+                $data['pegawai'][$i]['nama_jabatan'] = "Direktur";
+                $jabatan = model('direktur');
+                $data['pegawai'][$i]['jabatan'] = $jabatan->where('id_direktur', $data['pegawai'][$i]['detail_jabatan'])->first();
+            }else if($data['pegawai'][$i]['id_status_user'] == 4){
+                $data['pegawai'][$i]['nama_jabatan'] = "General Manager";
+                $jabatan = model('general_manager');
+                $data['pegawai'][$i]['jabatan'] = $jabatan->where('id_gm', $data['pegawai'][$i]['detail_jabatan'])->first();
+            }else if($data['pegawai'][$i]['id_status_user'] == 5){
+                $data['pegawai'][$i]['nama_jabatan'] = "Manager";
+                $jabatan = model('manager');
+                $data['pegawai'][$i]['jabatan'] = $jabatan->where('id_manager', $data['pegawai'][$i]['detail_jabatan'])->first();
+            }else if($data['pegawai'][$i]['id_status_user'] == 6){
+                $data['pegawai'][$i]['nama_jabatan'] = "Supervisor";
+                $jabatan = model('supervisor');
+                $data['pegawai'][$i]['jabatan'] = $jabatan->where('id_supervisor', $data['pegawai'][$i]['detail_jabatan'])->first();
+            }else if($data['pegawai'][$i]['id_status_user'] == 7){
+                $data['pegawai'][$i]['nama_jabatan'] = "Staff";
+                $jabatan = model('staff');
+                $data['pegawai'][$i]['jabatan'] = $jabatan->where('id_staff', $data['pegawai'][$i]['detail_jabatan'])->first();
+            }else{
+                $data['pegawai'][$i]['nama_jabatan'] = "Tidak Ada Jabatan";
+                $data['pegawai'][$i]['jabatan']['nama'] = "";
+            }
+            $data['pegawai'][$i]['unit_kerja'] = $jabatan_a->getUnitKerja($data['pegawai'][$i]['id_status_user'], $data['pegawai'][$i]['detail_jabatan']);
+        }
+
+        $data['t'] = $thn;
+        $data['bb'] = $bln;
+        // DB
+        // $data['batas_tanggal'] = $batas_penanggalan->where(['tahun' => $thn, 'bulan' => intval($bln)])->first();
+        // Manual
+        $tanggal_mulai = $thn.'-'.$bln.'-01';
+        $batas = date('t', strtotime($thn.'-'.$bln.'-01'));
+        $data['jumlah_tanggal'] = intval($batas);
+
+        // Weekend
+        $weekend = [];
+        $sabtu_pertama = date('Y-m-d', strtotime('first saturday '.$thn.'-'.$bln.'-00'));
+        $minggu_pertama = date('Y-m-d', strtotime('first sunday '.$thn.'-'.$bln.'-00'));
+        $sabtu = $sabtu_pertama;
+        $minggu = $minggu_pertama;
+        array_push($weekend, $sabtu);
+        array_push($weekend, $minggu);
+        for ($i=0; $i < 4; $i++) { 
+            $sabtu_selanjutnya = date('Y-m-d', strtotime('next saturday '.$sabtu));
+            $minggu_selanjutnya = date('Y-m-d', strtotime('next sunday '.$minggu));
+            array_push($weekend, $sabtu_selanjutnya);
+            array_push($weekend, $minggu_selanjutnya);
+            $sabtu = $sabtu_selanjutnya;
+            $minggu = $minggu_selanjutnya;
+        }
+        
+        // dd($weekend);
+        $data['weekend'] = $weekend;
+
         $data['bulan'] = $bulan->findAll();
         $data['batas_tanggal'] = $batas_penanggalan->where(['tahun' => $thn, 'bulan' => intval($bln)])->first();
         $data['tahun'] = $thn;
         $temp_bulan = $bulan->where('id_bulan', intval($bln))->first();
         $data['bln'] = $temp_bulan['nama_bulan'];
         // dd($data);
-        return view('laporan/laporan_keaktifan', $data);
+        return view('laporan/laporan_keaktifan_admin', $data);
     }
+
+    public function rekapitulasiPresensi(){
+        $user = model('user');
+        $jabatan_a = model('jabatan');
+        $riwayat_jabatan = model('riwayat_jabatan');
+        $data = $this->initData();
+        $data['title'] = "Laporan Rekapitulasi Presensi";
+        // Tambahan
+        $manager = model('manager');
+        $jabatan = model('jabatan');
+        $kode_bawahan = $manager->where('id_manager', $data['user']['detail_jabatan'])->findAll();
+        $jumlah_bawahan = 0;
+        $id_jabatan_bawahan = [];
+        for ($i=0; $i < count($kode_bawahan); $i++) { 
+            $temp_jabatan = $jabatan->where('kode_jabatan', 5)->where('detail_jabatan', $kode_bawahan[$i]['id_manager'])->first();
+            $temp = count($riwayat_jabatan->where('id_jabatan', $temp_jabatan['id_jabatan'])->findAll());
+            array_push($id_jabatan_bawahan, $temp_jabatan['id_jabatan']);
+        }
+        $data['staff_bawahan'] = $riwayat_jabatan->select('u.*,su.*,m.nama as nama_jabatan, riwayat_jabatan.*')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan', 'left')->whereIn('jabatan.id_jabatan', $id_jabatan_bawahan)->join('manager as m', 'm.id_manager=jabatan.detail_jabatan', 'left')->join('user as u', 'u.no_induk=riwayat_jabatan.no_induk', 'left')->join('status_user as su', 'su.id_status_user=u.id_status_user', 'left')->findAll();
+
+        $pegawai = [];
+        for ($i=0; $i < count($data['staff_bawahan']); $i++) { 
+            array_push($pegawai, $data['staff_bawahan'][$i]['no_induk']);
+        }
+        $data['pegawai'] = $user->join('riwayat_jabatan', 'riwayat_jabatan.no_induk = user.no_induk')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan')->whereNotIn('user.id_status_user', [1, 2])->whereIn('user.no_induk', $pegawai)->orderBy('jabatan.id_jabatan')->findAll();
+        for ($i=0; $i < count($data['pegawai']); $i++) { 
+            if($data['pegawai'][$i]['id_status_user'] == 3){
+                $data['pegawai'][$i]['nama_jabatan'] = "Direktur";
+                $jabatan = model('direktur');
+                $data['pegawai'][$i]['jabatan'] = $jabatan->where('id_direktur', $data['pegawai'][$i]['detail_jabatan'])->first();
+            }else if($data['pegawai'][$i]['id_status_user'] == 4){
+                $data['pegawai'][$i]['nama_jabatan'] = "General Manager";
+                $jabatan = model('general_manager');
+                $data['pegawai'][$i]['jabatan'] = $jabatan->where('id_gm', $data['pegawai'][$i]['detail_jabatan'])->first();
+            }else if($data['pegawai'][$i]['id_status_user'] == 5){
+                $data['pegawai'][$i]['nama_jabatan'] = "Manager";
+                $jabatan = model('manager');
+                $data['pegawai'][$i]['jabatan'] = $jabatan->where('id_manager', $data['pegawai'][$i]['detail_jabatan'])->first();
+            }else if($data['pegawai'][$i]['id_status_user'] == 6){
+                $data['pegawai'][$i]['nama_jabatan'] = "Supervisor";
+                $jabatan = model('supervisor');
+                $data['pegawai'][$i]['jabatan'] = $jabatan->where('id_supervisor', $data['pegawai'][$i]['detail_jabatan'])->first();
+            }else if($data['pegawai'][$i]['id_status_user'] == 7){
+                $data['pegawai'][$i]['nama_jabatan'] = "Staff";
+                $jabatan = model('staff');
+                $data['pegawai'][$i]['jabatan'] = $jabatan->where('id_staff', $data['pegawai'][$i]['detail_jabatan'])->first();
+            }else{
+                $data['pegawai'][$i]['nama_jabatan'] = "Tidak Ada Jabatan";
+                $data['pegawai'][$i]['jabatan']['nama'] = "";
+            }
+            $data['pegawai'][$i]['unit_kerja'] = $jabatan_a->getUnitKerja($data['pegawai'][$i]['id_status_user'], $data['pegawai'][$i]['detail_jabatan']);
+        }
+        return view('laporan/rekapitulasi_presensi', $data);
+    }
+
 }

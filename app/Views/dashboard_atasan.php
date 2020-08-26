@@ -298,7 +298,7 @@
                                                     <tr>
                                                         <td>
                                                             <div class="d-flex align-items-center">
-                                                                <img src="<?= ($p['foto_profil']) ? base_url($p['foto_profil']) : base_url('/assets/images/users/default.jpg') ?>" alt="user" width="100" alt="user" width="60" class="rounded-circle">
+                                                                <img src="<?= ($p['foto_profil']) ? base_url('public/'.$p['foto_profil']) : base_url('public/assets/images/users/default.jpg') ?>" alt="user" width="100" alt="user" width="60" class="rounded-circle">
                                                                 <div class="comment-text w-100">
                                                                     <span class="mr-3"><i class="fas fa-user mr-2"></i><?= $p['nama']?></span>
                                                                     <span class="mr-3"><i class="fas fa-calendar-plus mr-2"></i><?= date('d-m-Y')?></span>
@@ -320,7 +320,7 @@
                                                     <tr>
                                                         <td>
                                                             <div class="d-flex align-items-center">
-                                                                <img src="<?= ($p['foto_profil']) ? base_url($p['foto_profil']) : base_url('/assets/images/users/default.jpg') ?>" alt="user" width="100" alt="user" width="60" class="rounded-circle">
+                                                                <img src="<?= ($p['foto_profil']) ? base_url('public/'.$p['foto_profil']) : base_url('public/assets/images/users/default.jpg') ?>" alt="user" width="100" alt="user" width="60" class="rounded-circle">
                                                                 <div class="comment-text w-100">
                                                                     <span class="mr-3"><i class="fas fa-user mr-2"></i><?= $p['nama']?></span>
                                                                     <span class="mr-3"><i class="fas fa-calendar-plus mr-2"></i><?= date('d-m-Y')?></span>
@@ -340,7 +340,7 @@
                                                     <tr>
                                                         <td>
                                                             <div class="d-flex align-items-center">
-                                                                <img src="<?= ($p['foto_profil']) ? base_url($p['foto_profil']) : base_url('/assets/images/users/default.jpg') ?>" alt="user" width="100" alt="user" width="60" class="rounded-circle">
+                                                                <img src="<?= ($p['foto_profil']) ? base_url('public/'.$p['foto_profil']) : base_url('public/assets/images/users/default.jpg') ?>" alt="user" width="100" alt="user" width="60" class="rounded-circle">
                                                                 <div class="comment-text w-100">
                                                                     <span class="mr-3"><i class="fas fa-user mr-2"></i><?= $p['nama']?></span>
                                                                     <span class="mr-3"><i class="fas fa-calendar-plus mr-2"></i><?= date('d-m-Y')?></span>

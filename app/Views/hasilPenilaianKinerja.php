@@ -25,10 +25,7 @@
         <div class="col-sm-12 col-md-12 col-lg-12">
             <div class="alert alert-info">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button>
-                <h3 class="text-info"><i class="fa fa-exclamation-circle"></i> Information</h3> This is an
-                example top alert. You can edit what u wish. Aww yeah, you successfully read this important
-                alert message. This example text is going to run a bit longer so that you can see how
-                spacing within an alert works with this kind of content.
+                <h3 class="text-info"><i class="fa fa-exclamation-circle"></i> Informasi</h3> Berikut adalah informasi dari hasil penilaian kinerja
             </div>
             <div class="card">
 

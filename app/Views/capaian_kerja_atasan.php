@@ -38,7 +38,15 @@
                     <div class="table-responsive">
                     <div class="row">
                                     <div class="d-flex col-lg-8 mb-2">
+                                    <?php if(session('id_status_user') == 3) {?>
+                                        <form action="<?= base_url('/direktur/capaianKerja')?>" method="get">
+                                    <?php }else if(session('id_status_user') == 4) {?>
+                                        <form action="<?= base_url('/gm/capaianKerja')?>" method="get">
+                                    <?php }else if(session('id_status_user') == 5) {?>
+                                        <form action="<?= base_url('/manager/capaianKerja')?>" method="get">
+                                    <?php }else if(session('id_status_user') == 6) {?>
                                         <form action="<?= base_url('/supervisor/capaianKerja')?>" method="get">
+                                    <?php }?>
                                             <div class="input-group">
                                                 <select class="custom-select " id="inlineFormCustomSelect" name="tahun">
                                                     <option selected value="" hidden>Pilih Tahun...</option>
@@ -118,7 +126,7 @@
                         <tbody>
                             <?php foreach ($staff_bawahan as $sb) :  ?>
                                 <tr>
-                                    <td style="width:40px"><img src="<?= base_url($sb['foto_profil']) ?>" width="60" class="rounded-circle" alt="logo"></td>
+                                    <td style="width:40px"><img src="<?= base_url('public/'.$sb['foto_profil']) ?>" width="60" class="rounded-circle" alt="logo"></td>
                                     <td>
                                         <div class="comment-text w-100">
                                             <h5 class="d-block"><?= $sb['nama'] ?></h5>
@@ -130,7 +138,7 @@
                                         <div class="button-group">
                                             <button type="button" class="btn btn-sm waves-effect waves-light btn-info button-detail-bawahan" data-toggle="modal" data-target="#detail-bawahan" data-foto="<?= $sb['foto_profil'] ?>" data-nama="<?= $sb['nama']?>" data-nip="<?= $sb['no_induk']?>" data-jabatan="<?= $sb['nama_jabatan']?>" data-status="<?= $sb['nama_status_user']?>" data-email="<?= $sb['email']?>" data-no="<?= $sb['no_telepon']?>" data-alamat="<?= $sb['alamat']?>">Detail</button>
 
-                                            <button type="button" class="btn btn-sm waves-effect waves-light btn-secondary button-capaian-bawahan" data-toggle="modal" data-target="#capaian-bawahan" data-tahun="<?= $tahun ?>" data-induk="<?= $sb['no_induk']?>" >Capaian Kerja</button>
+                                            <button type="button" class="btn btn-sm waves-effect waves-light btn-secondary button-capaian-bawahan" data-toggle="modal" data-target="#capaian-bawahan" data-tahun="<?= $tahun ?>" data-induk="<?= $sb['no_induk']?>" data-nama="<?= $sb['nama']?>" data-jabatan="<?= $sb['nama_jabatan']?>" data-status="<?= $sb['nama_status_user']?>" data-riwayatjabatan="<?= $sb['id_riwayat_jabatan']?>" data-jbtn="<?= $sb['id_jabatan']?>">Capaian Kerja</button>
 
                                             <a class="btn btn-sm  waves-effect waves-light btn-success" href="<?= base_url('/supervisor/daftarPenilaian') . '/' . $sb['no_induk'] ?>">Penilaian Kinerja</a>
 
@@ -148,7 +156,7 @@
         <div class="col-lg-6">
             <div class="card">
                 <div class="card-body ml-5">
-                    <img src="../../assets/images/undraw_dashboard.svg" width="63%" class="mx-auto d-block" alt="">
+                    <!-- <img src="../../assets/images/undraw_dashboard.svg" width="63%" class="mx-auto d-block" alt=""> -->
                 </div>
                 <div class="card-body ml-5">
                     <h3>Penilaian Kinerja</h3>
@@ -296,9 +304,23 @@
                 </button>
             </div>
             <div class="modal-body">
-                <h5>Nama:</h5>
-                <h5>No Induk:</h5>
-                <h5>Jabatan:</h5>
+                <h5>Nama: <span id="capaian-atasan-nama"></span></h5>
+                <h5>No Induk: <span id="capaian-atasan-induk"></span></h5>
+                <h5>Jabatan: <span id="capaian-atasan-jabatan"></span></h5>
+                <table id="zero_config" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tugas</th>
+                                    <th>Jenis Tugas</th>
+                                    <th>Total Dicapai</th>
+                                    <th>Total Target</th>
+                                </tr>
+                            </thead>
+                            <tbody id="capaian-atasan-tabel">
+                            
+                            </tbody>
+                        </table>
             </div>
         </div>
     </div>

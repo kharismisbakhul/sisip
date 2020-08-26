@@ -28,7 +28,7 @@
 				<div id="logo-ub"><img src="https://kadowisudaku.com/wp-content/uploads/2016/11/Logo-Universitas-Brawijaya-UB.jpg" alt="logo ub" style="width: 150px;"></div>
 			</div>
 			<div class="col-10 text-center" style="padding-right: 10rem">
-				<span class="h4 font-weight-normal">KEMENTRIAN RISET, TEKNOLOGI DAN PENDIDIKAN TINGGI</span> <br>
+				<span class="h4 font-weight-normal">KEMENTRIAN PENDIDIKAN DAN KEBUDAYAAN</span> <br>
 				<span class="h4 font-weight-normal">UNIVERSITAS BRAWIJAYA</span> <br>
 				<span class="h4 font-weight-bold">BADAN USAHA NON AKADEMIK</span> <br>
 				<!-- yang ini nanti disesuaikan dengan fakultas ekonomi nya -->

@@ -38,7 +38,7 @@
                             <div class="card-body">
                                 <div class="table-responsive">
                                 <?php if($presensi_bawahan == null) { ?>
-                                    <div class="alert alert-warning text-center">Tidak ada saran</div>
+                                    <div class="alert alert-warning text-center">Tidak ada validasi</div>
                                 <?php }else{ ?>
                                     <table id="tabel_validasi_logbook" class="table table-hover table-bordered">
                                         <thead>

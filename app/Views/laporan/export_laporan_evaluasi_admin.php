@@ -35,15 +35,29 @@
 
 <body>
     <?php
-    header("Content-type: application/vnd-ms-excel");
-    header("Content-Disposition: attachment; filename=Laporan_keaktifan_admin.xls");
+    if (session('id_status_user') == 1) {
+        header("Content-type: application/vnd-ms-excel");
+        header("Content-Disposition: attachment; filename=Laporan_evaluasi_admin.xls");
+    }
+    else {
+        header("Content-type: application/vnd-ms-excel");
+        header("Content-Disposition: attachment; filename=Laporan_evaluasi_atasan.xls");
+    }
     ?>
     <div id="app">
         <div class="main-wrapper">
             <!-- Main Content -->
             <div class="main-content">
                 <section class="section">
-                <h1>Laporan Evaluasi Pegawai</h1>
+                <?php
+                if ($tanggal_mulai != null) {
+                    echo '<h1>Laporan Evaluasi Pegawai ' . $tanggal_mulai . ' s/d ' . $tanggal_selesai . '</h1>';
+                }
+                else {
+                    echo '<h1>Laporan Evaluasi Pegawai</h1>';
+                }
+                ?>
+                
                 <table id="zero_config" class="table table-hover table-bordered">
                 <thead>
                 <tr>
@@ -66,15 +80,16 @@
 
             </thead>
             <tbody>
-                <?php $index = 1; foreach($pegawai as $p) :?>
+                <?php $index = 1;
+                foreach ($pegawai as $p) : ?>
                     <?php $count = 1;
-                    if($p['rancangan_tugas'] == null){
+                    if ($p['rancangan_tugas'] == null) {
                         echo '
                         <tr>
-                            <td>'.($index++).'</td>
-                            <td>'.$p['unit_kerja']['nama'].'</td>
-                            <td>'.$p['nama_jabatan'].' '.$p['jabatan']['nama'].'</td>
-                            <td>'.$p['nama'].'</td>
+                            <td>' . ($index++) . '</td>
+                            <td>' . $p['unit_kerja']['nama'] . '</td>
+                            <td>' . $p['nama_jabatan'] . ' ' . $p['jabatan']['nama'] . '</td>
+                            <td>' . $p['nama'] . '</td>
                             <td>-</td>
                             <td>-</td>
                             <td>-</td>
@@ -83,45 +98,58 @@
                             <td>-</td>
                             <td>-</td>
                         </tr>';
-                    }else{
-                    foreach($p['rancangan_tugas'] as $t) :?>  
+                    }
+                    else {
+                        foreach ($p['rancangan_tugas'] as $t) : ?>  
                     <tr>
-                    <?php if($count == 1) {?>
-                        <td><?php ($count++) ?><?= ($index++)?></td>
+                    <?php if ($count == 1) { ?>
+                        <td><?php  ($count++) ?><?= ($index++) ?></td>
                         <td><?= $p['unit_kerja']['nama'] ?></td>
-                        <td><?= $p['nama_jabatan'].' '.$p['jabatan']['nama']?></td>
-                        <td><?= $p['nama']?></td>
-                    <?php }else{?>
-                            <td><?php ($count++) ?><?= ($index++)?></td>
+                        <td><?= $p['nama_jabatan'] . ' ' . $p['jabatan']['nama'] ?></td>
+                        <td><?= $p['nama'] ?></td>
+                    <?php 
+                }
+                else { ?>
+                            <td><?php  ($count++) ?><?= ($index++) ?></td>
                             <td></td>
                             <td></td>
                             <td></td>
-                    <?php }?>
-                    <?php if($t['id_rancangan_tugas'] != 0) {?>
-                        <td><?= $t['nama_tugas']?></td>
+                    <?php 
+                } ?>
+                    <?php if ($t['id_rancangan_tugas'] != 0) { ?>
+                        <td><?= $t['nama_tugas'] ?></td>
                         <td></td>
-                    <?php }else{?>
+                    <?php 
+                }
+                else { ?>
                         <td></td>
-                        <td><?= $t['nama_tugas']?></td>
-                    <?php }?>
-                    <?php if($t['periode'] == 1) {?>
+                        <td><?= $t['nama_tugas'] ?></td>
+                    <?php 
+                } ?>
+                    <?php if ($t['periode'] == 1) { ?>
                         <td>V</td>
                         <td></td>
                         <td></td>
-                    <?php }else if($t['periode'] == 3) {?>
+                    <?php 
+                }
+                else if ($t['periode'] == 3) { ?>
                         <td></td>
                         <td>V</td>
                         <td></td>
-                    <?php }else{?>
+                    <?php 
+                }
+                else { ?>
                         <td></td>
                         <td></td>
                         <td>V</td>
-                    <?php }?>
-                    <td><?= $t['jumlah_tugas']?></td>
-                    <td><?= $t['jumlah_total_tugas']?></td>
+                    <?php 
+                } ?>
+                    <td><?= $t['jumlah_tugas'] ?></td>
+                    <td><?= $t['jumlah_total_tugas'] ?></td>
                 </tr>
-                    <?php endforeach; }?>
-                <?php endforeach?>
+                    <?php endforeach;
+                } ?>
+                <?php endforeach ?>
             </tbody>
                 </table>
                 <br><br><br>
@@ -134,23 +162,24 @@
 		        </div>
                 <div class="col-4">
                     Malang, <?php 
-                        $bulan = array (1 =>   'Januari',
-                        'Februari',
-                        'Maret',
-                        'April',
-                        'Mei',
-                        'Juni',
-                        'Juli',
-                        'Agustus',
-                        'September',
-                        'Oktober',
-                        'November',
-                        'Desember'
-                        );
-                    $split = explode('-', date('Y-m-d'));
-                    echo $split[2] . ' ' . $bulan[ (int)$split[1] ] . ' ' . $split[0];
-                    ?><br><br><br>
-                    <p style="margin-top:100px;"><u><?= session('nama')?></u><br>NIK. <?= session('no_induk')?></p>
+                            $bulan = array(
+                                1 => 'Januari',
+                                'Februari',
+                                'Maret',
+                                'April',
+                                'Mei',
+                                'Juni',
+                                'Juli',
+                                'Agustus',
+                                'September',
+                                'Oktober',
+                                'November',
+                                'Desember'
+                            );
+                            $split = explode('-', date('Y-m-d'));
+                            echo $split[2] . ' ' . $bulan[(int)$split[1]] . ' ' . $split[0];
+                            ?><br><br><br>
+                    <p style="margin-top:100px;"><u><?= session('nama') ?></u><br>NIK. <?= session('no_induk') ?></p>
                 </div>
 	            </div>
                 </section>

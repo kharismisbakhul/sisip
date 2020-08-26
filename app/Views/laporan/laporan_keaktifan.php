@@ -48,11 +48,12 @@
                                                 </select>
                                                 <select class="custom-select " id="inlineFormCustomSelect" name="tahun">
                                                     <option selected hidden value="">Pilih Tahun...</option>
-                                                    <option value="2018">2018</option>
-                                                    <option value="2019">2019</option>
-                                                    <option value="2020">2020</option>
-                                                    <option value="2021">2021</option>
-                                                    <option value="2022">2022</option>
+                                                    <?php 
+                                                    for ($i=2018; $i <= 2050; $i++) { 
+                                                        echo '<option value="'.$i.'">'.$i.'</option>';
+                                                        # code...
+                                                    }
+                                                ?>
                                                 </select>
                                                 <div class="input-group-append">
                                                     <button class="btn btn-info" type="submit"><i

@@ -50,6 +50,8 @@ $routes->get('/exportLaporanEvaluasiAdmin', 'AdminController::exportLaporanEvalu
 $routes->post('/staff/inputLogbookApi', 'StaffController::inputLogbookApi');
 $routes->post('/getPresensiBawahan', 'SupervisorController::getPresensiBawahan');
 $routes->post('/getLogbookBawahan', 'SupervisorController::getLogbookBawahan');
+$routes->post('/getCapaianBawahan', 'SupervisorController::getCapaianBawahan');
+$routes->get('/getCapaianBawahan', 'SupervisorController::getCapaianBawahan');
 
 // Admin
 $routes->get('/admin', 'AdminController::index');
@@ -95,9 +97,18 @@ $routes->get('/admin/daftarJabatan', 'AdminController::daftarJabatan');
 $routes->get('/admin/laporanKeaktifan', 'AdminController::laporanKeaktifan');
 $routes->get('/admin/laporanKinerja', 'AdminController::laporanKinerja');
 $routes->get('/admin/LaporanEvaluasi', 'AdminController::laporanEvaluasi');
+$routes->get('/admin/rekapitulasiPresensi', 'AdminController::rekapitulasiPresensi');
+$routes->post('/admin/rekapitulasiPresensiDetail', 'AdminController::rekapitulasiPresensiDetail');
 
-// Operator
-$routes->get('/operator', 'OperatorController::index');
+// Rekap Presensi
+$routes->get('/direktur/rekapitulasiPresensi', 'DirekturController::rekapitulasiPresensi');
+// $routes->post('/direktur/rekapitulasiPresensiDetail', 'DirekturController::rekapitulasiPresensiDetail');
+$routes->get('/gm/rekapitulasiPresensi', 'GMController::rekapitulasiPresensi');
+// $routes->post('/gm/rekapitulasiPresensiDetail', 'GMController::rekapitulasiPresensiDetail');
+$routes->get('/manager/rekapitulasiPresensi', 'ManagerController::rekapitulasiPresensi');
+// $routes->post('/manager/rekapitulasiPresensiDetail', 'ManagerController::rekapitulasiPresensiDetail');
+$routes->get('/supervisor/rekapitulasiPresensi', 'SupervisorController::rekapitulasiPresensi');
+// $routes->post('/supervisor/rekapitulasiPresensiDetail', 'SupervisorController::rekapitulasiPresensiDetail');
 
 // Direktur
 $routes->get('/direktur', 'DirekturController::index');

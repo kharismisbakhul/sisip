@@ -9,10 +9,10 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/ub_icon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="public/assets/images/ub_icon.png">
     <title>Siboksi - Login Page</title>
     <!-- Custom CSS -->
-    <link href="dist/css/style.min.css" rel="stylesheet">
+    <link href="public/dist/css/style.min.css" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -39,11 +39,11 @@
         <!-- Login box.scss -->
         <!-- ============================================================== -->
         <div class="auth-wrapper d-flex no-block justify-content-center align-items-center"
-            style="background:url(assets/images/background/city.jpg) no-repeat center center;background-size: cover;">
+            style="background:url(public/assets/images/background/city.jpg) no-repeat center center;background-size: cover;">
             <div class="auth-box on-sidebar">
                 <div id="loginform">
                     <div class="logo mt-5">
-                        <span class="db"><img src="assets/images/icon_ub.png" alt="logo" /></span>
+                        <span class="db"><img src="public/assets/images/icon_ub.png" alt="logo" /></span>
                         <!-- <h5 class="font-medium m-b-20">Masuk ke SISIP</h5> -->
                     </div>
                     <!-- Form -->
@@ -99,7 +99,7 @@
                 </div>
                 <div id="recoverform">
                     <div class="logo">
-                        <span class="db"><img src="assets/images/logo-icon.png" alt="logo" /></span>
+                        <span class="db"><img src="public/assets/images/logo-icon.png" alt="logo" /></span>
                         <h5 class="font-medium m-b-20">Recover Password</h5>
                         <span>Enter your Email and instructions will be sent to you!</span>
                     </div>
@@ -144,10 +144,10 @@
     <!-- ============================================================== -->
     <!-- All Required js -->
     <!-- ============================================================== -->
-    <script src="assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="public/assets/libs/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap tether Core JavaScript -->
-    <script src="assets/libs/popper.js/dist/umd/popper.min.js"></script>
-    <script src="assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="public/assets/libs/popper.js/dist/umd/popper.min.js"></script>
+    <script src="public/assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- ============================================================== -->
     <!-- This page plugin js -->
     <!-- ============================================================== -->

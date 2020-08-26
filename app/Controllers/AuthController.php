@@ -68,23 +68,23 @@ class AuthController extends BaseController
         // $data['pager'] = $user->pager;
         for ($i=0; $i < count($data['pegawai']); $i++) { 
             $data['pegawai'][$i]['presensi'] = $presensi->where(['id_riwayat_jabatan' => $data['pegawai'][$i]['id_riwayat_jabatan'], 'presensi.tanggal_presensi' => date("Y-m-d")])->first();
-            if($data['pegawai'][$i]['id_jabatan'] == 3){
+            if($data['pegawai'][$i]['id_status_user'] == 3){
                 $data['pegawai'][$i]['nama_jabatan'] = "Direktur";
                 $jabatan = model('direktur');
                 $data['pegawai'][$i]['jabatan'] = $jabatan->where('id_direktur', $data['pegawai'][$i]['detail_jabatan'])->first();
-            }else if($data['pegawai'][$i]['id_jabatan'] == 4){
+            }else if($data['pegawai'][$i]['id_status_user'] == 4){
                 $data['pegawai'][$i]['nama_jabatan'] = "General Manager";
                 $jabatan = model('general_manager');
                 $data['pegawai'][$i]['jabatan'] = $jabatan->where('id_gm', $data['pegawai'][$i]['detail_jabatan'])->first();
-            }else if($data['pegawai'][$i]['id_jabatan'] == 5){
+            }else if($data['pegawai'][$i]['id_status_user'] == 5){
                 $data['pegawai'][$i]['nama_jabatan'] = "Manager";
                 $jabatan = model('manager');
                 $data['pegawai'][$i]['jabatan'] = $jabatan->where('id_manager', $data['pegawai'][$i]['detail_jabatan'])->first();
-            }else if($data['pegawai'][$i]['id_jabatan'] == 6){
+            }else if($data['pegawai'][$i]['id_status_user'] == 6){
                 $data['pegawai'][$i]['nama_jabatan'] = "Supervisor";
                 $jabatan = model('supervisor');
                 $data['pegawai'][$i]['jabatan'] = $jabatan->where('id_supervisor', $data['pegawai'][$i]['detail_jabatan'])->first();
-            }else if($data['pegawai'][$i]['id_jabatan'] == 7){
+            }else if($data['pegawai'][$i]['id_status_user'] == 7){
                 $data['pegawai'][$i]['nama_jabatan'] = "Staff";
                 $jabatan = model('staff');
                 $data['pegawai'][$i]['jabatan'] = $jabatan->where('id_staff', $data['pegawai'][$i]['detail_jabatan'])->first();

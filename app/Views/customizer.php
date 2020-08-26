@@ -40,7 +40,7 @@
                                         <?php }else{?>
                                             <li class="chat-item">
                                             <div class="chat-img">
-                                                <img src="<?= base_url($c['foto_profil'])?>" alt="user">
+                                                <img src="<?= base_url('public/'.$c['foto_profil'])?>" alt="user">
                                             </div>
                                             <div class="chat-content">
                                                 <h6 class="font-medium"><?=$c['nama']?></h6>

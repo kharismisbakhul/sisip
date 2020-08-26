@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 18, 2020 at 01:56 PM
+-- Generation Time: Aug 18, 2020 at 02:02 PM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.1
 
@@ -313,7 +313,32 @@ CREATE TABLE `jam_kerja` (
 
 INSERT INTO `jam_kerja` (`id_jam_kerja`, `jam_kerja_masuk`, `jam_kerja_keluar`, `id_jabatan`, `status_aktif`, `status_jam_kerja`) VALUES
 (1, '08:00:00', '15:00:00', 7, 1, 0),
-(2, '08:00:00', '15:00:00', 6, 1, 0);
+(2, '08:00:00', '15:00:00', 6, 1, 0),
+(3, '07:00:00', '15:00:00', 3, 1, 0),
+(4, '07:00:00', '15:00:00', 4, 1, 0),
+(5, '07:00:00', '15:00:00', 5, 1, 0),
+(6, '08:00:00', '15:00:00', 8, 1, 0),
+(7, '08:00:00', '15:00:00', 9, 1, 0),
+(8, '08:00:00', '15:00:00', 10, 1, 0),
+(9, '08:00:00', '15:00:00', 11, 1, 0),
+(10, '08:00:00', '15:00:00', 12, 1, 0),
+(11, '08:00:00', '15:00:00', 13, 1, 0),
+(12, '08:00:00', '15:00:00', 14, 1, 0),
+(13, '08:00:00', '15:00:00', 15, 1, 0),
+(14, '08:00:00', '15:00:00', 16, 1, 0),
+(15, '08:00:00', '15:00:00', 17, 1, 0),
+(16, '08:00:00', '15:00:00', 18, 1, 0),
+(17, '08:00:00', '15:00:00', 19, 1, 0),
+(18, '08:00:00', '15:00:00', 20, 1, 0),
+(19, '08:00:00', '15:00:00', 21, 1, 0),
+(20, '08:00:00', '15:00:00', 21, 1, 0),
+(21, '08:00:00', '15:00:00', 22, 1, 0),
+(22, '08:00:00', '15:00:00', 23, 1, 0),
+(23, '08:00:00', '15:00:00', 24, 1, 0),
+(24, '08:00:00', '15:00:00', 25, 1, 0),
+(25, '08:00:00', '15:00:00', 26, 1, 0),
+(26, '08:00:00', '15:00:00', 27, 1, 0),
+(27, '08:00:00', '15:00:00', 28, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -579,15 +604,6 @@ CREATE TABLE `perizinan` (
   `status_izin` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `perizinan`
---
-
-INSERT INTO `perizinan` (`id_perizinan`, `tanggal_izin`, `tanggal_mulai`, `tanggal_selesai`, `alasan`, `bukti`, `kategori_izin`, `no_induk`, `status_izin`) VALUES
-(2, '2020-07-01', '2020-07-10', '2020-07-14', 'ADDD', '', 1, '700', 1),
-(3, '2020-07-14', '2020-07-16', '2020-07-17', 'Cuti ya', '21.jpg', 2, '700', 2),
-(6, '2020-08-06', '2020-08-14', '2020-08-17', 'Izin Baru', '31518874_2016740351877482_1283966518790455296_n.jpg', 2, '700', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -606,16 +622,6 @@ CREATE TABLE `perizinan_temp` (
   `status_izin` int(11) NOT NULL,
   `waktu_izin` time NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `perizinan_temp`
---
-
-INSERT INTO `perizinan_temp` (`id_perizinan`, `tanggal_izin`, `tanggal_mulai`, `tanggal_selesai`, `alasan`, `bukti`, `kategori_izin`, `no_induk`, `status_izin`, `waktu_izin`) VALUES
-(8, '2020-08-12', '2020-08-12', '2020-08-14', 'ASDDDD', '', 1, '700', 0, '15:13:41'),
-(9, '2020-08-12', '2020-08-15', '2020-08-17', 'Izin Baruuuuu', '', 2, '700', 0, '15:14:06'),
-(10, '2020-08-12', '2020-08-13', '2020-08-15', 'IZIN LAGIIII', '', 3, '700', 0, '15:24:16'),
-(11, '2020-08-12', '2020-08-13', '2020-08-21', 'ASSSs', '', 1, '700', 0, '15:25:13');
 
 -- --------------------------------------------------------
 
@@ -671,7 +677,6 @@ INSERT INTO `pesan` (`id_pesan`, `pesan`, `waktu`, `tanggal`, `user`) VALUES
 (9, 'Wahahaha', '10:10:06', '2020-07-16', '700'),
 (10, 'Pesan baru', '06:27:45', '2020-07-23', '700'),
 (11, 'baru lagi', '06:31:17', '2020-07-23', '700'),
-(12, 'wkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwkwk', '08:49:24', '2020-07-23', '100'),
 (13, 'Halo gan', '11:45:58', '2020-08-05', '700'),
 (31, 'Jonu', '01:23:56', '2020-08-05', '700'),
 (32, 'haha', '01:24:19', '2020-08-05', '700'),
@@ -708,29 +713,6 @@ CREATE TABLE `presensi` (
   `tanggal_presensi` date NOT NULL,
   `isi_logbook` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `presensi`
---
-
-INSERT INTO `presensi` (`id_presensi`, `waktu_presensi_masuk`, `waktu_presensi_keluar`, `status_presensi`, `lokasi`, `lokasi_keluar`, `status_tempat_kerja`, `id_riwayat_jabatan`, `tanggal_presensi`, `isi_logbook`) VALUES
-(1, '07:00:00', '16:00:00', 0, 'Jl. Bunga No. 21', NULL, 1, 2, '2020-06-29', 0),
-(5, '07:20:22', '07:41:55', 0, 'Jl. Bunga No. 22', NULL, 1, 1, '2020-06-28', 0),
-(6, '07:54:08', '07:54:17', 0, 'Jl. Kucing No. 21', NULL, 1, 1, '2020-07-06', 0),
-(7, '08:09:57', '08:10:04', 0, 'Perumahan Griya', NULL, 3, 1, '2020-07-07', 0),
-(9, '10:15:21', '11:43:00', 0, 'Jl. Koala No. 33', NULL, 1, 1, '2020-07-08', 0),
-(10, '01:53:11', '01:56:33', 0, 'Jl. Veteran No. 21', NULL, 2, 1, '2020-07-09', 0),
-(12, '09:43:48', '09:46:50', 0, 'Jalan Sultan Agung, RW 10, Pasar Manggis, Setiabudi, South Jakarta, Jakarta Special Capital Region, 12850, Indonesia', 'Malang, East Java, 65113, Indonesia', 2, 1, '2020-07-16', 0),
-(14, '06:58:03', '07:03:22', 0, 'Malang, East Java, 65113, Indonesia', 'Karang Besuki, Malang, East Java, 65145, Indonesia', 2, 1, '2020-07-23', 0),
-(15, '07:14:18', NULL, 0, 'Universitas Islam Negeri Maulana Malik Ibrahim Malang, Jalan Kerto Sentono, Kelurahan Ketawanggede, Malang, East Java, 65145, Indonesia', NULL, 2, 1, '2020-07-31', 0),
-(16, '04:39:41', '04:40:37', 0, 'Malang, East Java, 65145, Indonesia', '04, Kel Penanggungan, Kec Klojen, Kota Malang, Malang, East Java, 65113, Indonesia', 2, 1, '2020-08-03', 0),
-(20, '13:15:02', NULL, 0, 'Malang, East Java, 65145, Indonesia', NULL, 1, 1, '2020-08-06', 0),
-(21, '18:20:25', NULL, 0, 'Jl. AA', NULL, 2, 1, '2020-08-12', 0),
-(22, '13:33:03', NULL, 0, 'Bunga', NULL, 1, 4, '2020-08-13', 0),
-(27, '15:58:14', NULL, 3, '-', NULL, 3, 1, '2020-08-14', 0),
-(28, '15:58:14', NULL, 3, '-', NULL, 3, 1, '2020-08-15', 0),
-(29, '15:58:14', NULL, 3, '-', NULL, 3, 1, '2020-08-16', 0),
-(30, '17:42:35', NULL, 0, 'Jl. BB', NULL, 1, 1, '2020-08-18', 0);
 
 -- --------------------------------------------------------
 
@@ -928,35 +910,6 @@ CREATE TABLE `tugas` (
   `bukti` varchar(500) DEFAULT NULL,
   `waktu` time NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `tugas`
---
-
-INSERT INTO `tugas` (`id_tugas`, `id_riwayat_jabatan`, `nama_tugas`, `tanggal_tugas`, `periode`, `jumlah_tugas`, `nomor_pekerjaan`, `status_tugas`, `id_rancangan_tugas`, `kode_tugas`, `catatan`, `bukti`, `waktu`) VALUES
-(2, 1, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', '2020-07-07', 1, 1, 1, 1, 1, 's512dd', '', NULL, '00:00:00'),
-(3, 1, 'Menyiapkan kelengkapan permintaan uang persediaan', '2020-07-07', 1, 3, 2, 1, 2, 'we23rr', '', NULL, '00:00:00'),
-(4, 1, 'Siram Bunga', '2020-07-07', 1, 2, 0, 1, 0, 'ww2211', '', NULL, '00:00:00'),
-(6, 1, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', '2020-07-08', 1, 1, 1, 4, 1, 's512dd', 'Saya masuk', 'computer-icons-user-profile-head-ico-download.jpg', '00:00:00'),
-(7, 1, 'Ganti Baju', '2020-07-07', 1, 1, 0, 1, 0, '33wwee', '', NULL, '00:00:00'),
-(8, 1, 'Cuci Cuci', '2020-07-08', 1, 1, 0, 4, 0, 'rewq11', 'Saya sudah melakukan ini loh mas', 'ERD.png', '00:00:00'),
-(10, 1, 'Menyiapkan kelengkapan permintaan uang persediaan', '2020-07-08', 1, 4, 2, 1, 2, 'we23rr', NULL, NULL, '00:00:00'),
-(12, 1, 'Bersih Bersih', '2020-07-09', 1, 2, 0, 1, 0, 'bds455', NULL, NULL, '00:00:00'),
-(13, 1, 'Menyiapkan kelengkapan permintaan uang persediaan', '2020-07-09', 1, 4, 2, 4, 2, 'we23rr', 'Saya melakukan ini', 'Abstrak Jurnal - Misbakhul Kharis 165150201111021.pdf', '00:00:00'),
-(31, 1, 'Menyiapkan kelengkapan permintaan uang persediaan', '2020-07-16', 1, 6, 2, 2, 2, 'we23rr', 'Revisi Boi', NULL, '00:00:00'),
-(32, 1, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', '2020-07-16', 1, 5, 1, 2, 1, 's512dd', 'Revisi Juga ini', NULL, '00:00:00'),
-(37, 1, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', '2020-07-23', 1, 3, 1, 1, 1, 's512dd', NULL, NULL, '00:00:00'),
-(38, 1, 'Menyiapkan kelengkapan permintaan uang persediaan aja', '2020-07-23', 1, 4, 2, 1, 2, 'we23rr', NULL, NULL, '00:00:00'),
-(40, 1, 'Tugas Tambahan 2', '2020-07-23', 1, 3, 0, 1, 0, '04c642', NULL, NULL, '00:00:00'),
-(42, 1, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', '2020-08-03', 1, 6, 1, 4, 1, 's512dd', 'AAA', 'AksaraFILKOM.png', '00:00:00'),
-(43, 1, 'Menyiapkan kelengkapan permintaan uang persediaan aja', '2020-08-03', 1, 4, 2, 1, 2, 'we23rr', NULL, NULL, '00:00:00'),
-(44, 1, 'Tugas Tambahan 1', '2020-08-03', 1, 3, 0, 2, 0, '89387c', 'Revisi 2', NULL, '00:00:00'),
-(51, 1, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', '2020-08-06', 1, 4, 1, 1, 1, 's512dd', NULL, NULL, '00:00:00'),
-(52, 1, 'Menyiapkan kelengkapan permintaan uang persediaan aja', '2020-08-06', 1, 3, 2, 2, 2, 'we23rr', 'Silahkan dibenahi jumlah tidak sesuai', NULL, '00:00:00'),
-(53, 1, 'Tugas Baru', '2020-08-06', 1, 2, 3, 3, 15, '27b6e3', NULL, NULL, '00:00:00'),
-(54, 1, 'Perwakilan ', '2020-08-06', 1, 1, 0, 5, 0, '39ea3b', NULL, NULL, '00:00:00'),
-(55, 1, 'Membantu membuat laporan harian bendahara seperti buku kas, setoran ke bank dan lain lain', '2020-08-15', 1, 2, 1, 5, 1, 's512dd', NULL, NULL, '14:36:37'),
-(56, 1, 'Tugas Tambahan', '2020-08-15', 1, 3, 0, 3, 0, '466a51', NULL, NULL, '14:49:21');
 
 -- --------------------------------------------------------
 
@@ -1305,7 +1258,7 @@ ALTER TABLE `jabatan`
 -- AUTO_INCREMENT for table `jam_kerja`
 --
 ALTER TABLE `jam_kerja`
-  MODIFY `id_jam_kerja` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_jam_kerja` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `kategori_feedback`

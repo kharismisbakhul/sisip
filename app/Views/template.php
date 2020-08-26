@@ -9,15 +9,15 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('assets/images/ub_icon.png')?>">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('public/assets/images/ub_icon.png')?>">
     <title><?= $title;?></title>
     <!-- Custom CSS -->
-    <link href="<?= base_url('assets/libs/chartist/dist/chartist.min.css')?>" rel="stylesheet">
-    <link href="<?= base_url('assets/extra-libs/c3/c3.min.css')?>" rel="stylesheet">
-    <link href="<?= base_url('assets/libs/morris.js/morris.css')?>" rel="stylesheet">
+    <link href="<?= base_url('public/assets/libs/chartist/dist/chartist.min.css')?>" rel="stylesheet">
+    <link href="<?= base_url('public/assets/extra-libs/c3/c3.min.css')?>" rel="stylesheet">
+    <link href="<?= base_url('public/assets/libs/morris.js/morris.css')?>" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="<?= base_url('dist/css/style.min.css')?>" rel="stylesheet">
-    <link href="<?= base_url('assets/extra-libs/css-chart/css-chart.css')?>" rel="stylesheet">
+    <link href="<?= base_url('public/dist/css/style.min.css')?>" rel="stylesheet">
+    <link href="<?= base_url('public/assets/extra-libs/css-chart/css-chart.css')?>" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -63,9 +63,9 @@
                         <b class="logo-icon">
                             <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
                             <!-- Dark Logo icon -->
-                            <img src="<?= base_url('assets/images/logo-icon.png')?>" alt="homepage" class="dark-logo" />
+                            <img src="<?= base_url('public/assets/images/logo-icon.png')?>" alt="homepage" class="dark-logo" />
                             <!-- Light Logo icon -->
-                            <img src="<?= base_url('assets/images/logo-light-icon.png')?>" alt="homepage" class="light-logo" />
+                            <img src="<?= base_url('public/assets/images/logo-light-icon.png')?>" alt="homepage" class="light-logo" />
                         </b>
                         <!--End Logo icon -->
                         <!-- Logo text -->
@@ -158,47 +158,47 @@
     <!-- ============================================================== -->
     <!-- All Jquery -->
     <!-- ============================================================== -->
-    <script src="<?= base_url('assets/libs/jquery/dist/jquery.min.js')?>"></script>
+    <script src="<?= base_url('public/assets/libs/jquery/dist/jquery.min.js')?>"></script>
     <!-- Bootstrap tether Core JavaScript -->
-    <script src="<?= base_url('assets/libs/popper.js/dist/umd/popper.min.js')?>"></script>
-    <script src="<?= base_url('assets/libs/bootstrap/dist/js/bootstrap.min.js')?>"></script>
+    <script src="<?= base_url('public/assets/libs/popper.js/dist/umd/popper.min.js')?>"></script>
+    <script src="<?= base_url('public/assets/libs/bootstrap/dist/js/bootstrap.min.js')?>"></script>
     <!-- apps -->
-    <script src="<?= base_url('dist/js/app.min.js')?>"></script>
-    <script src="<?= base_url('dist/js/app.init.js')?>"></script>
-    <script src="<?= base_url('dist/js/app-style-switcher.js')?>"></script>
+    <script src="<?= base_url('public/dist/js/app.min.js')?>"></script>
+    <script src="<?= base_url('public/dist/js/app.init.js')?>"></script>
+    <script src="<?= base_url('public/dist/js/app-style-switcher.js')?>"></script>
     <!-- slimscrollbar scrollbar JavaScript -->
-    <script src="<?= base_url('assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js')?>"></script>
-    <script src="<?= base_url('assets/extra-libs/sparkline/sparkline.js')?>"></script>
+    <script src="<?= base_url('public/assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js')?>"></script>
+    <script src="<?= base_url('public/assets/extra-libs/sparkline/sparkline.js')?>"></script>
     <!--Wave Effects -->
-    <script src="<?= base_url('dist/js/waves.js')?>"></script>
+    <script src="<?= base_url('public/dist/js/waves.js')?>"></script>
     <!--Menu sidebar -->
-    <script src="<?= base_url('dist/js/sidebarmenu.js')?>"></script>
+    <script src="<?= base_url('public/dist/js/sidebarmenu.js')?>"></script>
     <!--Custom JavaScript -->
-    <script src="<?= base_url('dist/js/custom.min.js')?>"></script>
+    <script src="<?= base_url('public/dist/js/custom.min.js')?>"></script>
     <!--This page JavaScript -->
     <!--chartis chart-->
-    <script src="<?= base_url('assets/libs/chartist/dist/chartist.min.js')?>"></script>
-    <script src="<?= base_url('assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js')?>"></script>
+    <script src="<?= base_url('public/assets/libs/chartist/dist/chartist.min.js')?>"></script>
+    <script src="<?= base_url('public/assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js')?>"></script>
     <!--c3 charts -->
-    <script src="<?= base_url('assets/extra-libs/c3/d3.min.js')?>"></script>
-    <script src="<?= base_url('assets/extra-libs/c3/c3.min.js')?>"></script>
+    <script src="<?= base_url('public/assets/extra-libs/c3/d3.min.js')?>"></script>
+    <script src="<?= base_url('public/assets/extra-libs/c3/c3.min.js')?>"></script>
     <!-- DataTables -->
-    <script src="<?= base_url('assets/extra-libs/DataTables/datatables.min.js')?>"></script>
-    <script src="<?= base_url('dist/js/pages/datatable/datatable-basic.init.js')?>"></script>
+    <script src="<?= base_url('public/assets/extra-libs/DataTables/datatables.min.js')?>"></script>
+    <script src="<?= base_url('public/dist/js/pages/datatable/datatable-basic.init.js')?>"></script>
 
     <!--chartjs -->
-    <!--<script src="<?= base_url('assets/libs/raphael/raphael.min.js')?>"></script>-->
-    <!--<script src="<?= base_url('assets/libs/morris.js/morris.min.js')?>"></script>-->
-    <!--<script src="<?= base_url('dist/js/pages/dashboards/dashboard1.js')?>"></script>-->
+    <!--<script src="<?= base_url('public/assets/libs/raphael/raphael.min.js')?>"></script>-->
+    <!--<script src="<?= base_url('public/assets/libs/morris.js/morris.min.js')?>"></script>-->
+    <!--<script src="<?= base_url('public/dist/js/pages/dashboards/dashboard1.js')?>"></script>-->
 
-    <!--<script src="<?= base_url('dist/js/pages/dashboards/dashboard2.js')?>"></script>-->
+    <!--<script src="<?= base_url('public/dist/js/pages/dashboards/dashboard2.js')?>"></script>-->
 
     <!-- Custom Js -->
     <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD4NcKjfbIxsPeUU-42gGEiRWz-EI8ASpc"></script>      -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1UN7cFiG_kqvrABPV1kbXBVbU8Awhot8"></script>     
-    <script src="<?= base_url('assets/js/user.js')?>"></script>
-    <script src="<?= base_url('assets/js/script.js') ?>"></script>
-    <script src="<?= base_url('assets/js/geolocation.js') ?>"></script>
+    <script src="<?= base_url('public/assets/js/user.js')?>"></script>
+    <script src="<?= base_url('public/assets/js/script.js') ?>"></script>
+    <script src="<?= base_url('public/assets/js/geolocation.js') ?>"></script>
 </body>
 
 </html>

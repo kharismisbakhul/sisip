@@ -35,8 +35,13 @@
 
 <body>
     <?php
-    header("Content-type: application/vnd-ms-excel");
-    header("Content-Disposition: attachment; filename=Laporan_keaktifan_admin.xls");
+    if(session('id_status_user') == 1){
+        header("Content-type: application/vnd-ms-excel");
+        header("Content-Disposition: attachment; filename=Laporan_keaktifan_admin.xls");
+    }else{
+        header("Content-type: application/vnd-ms-excel");
+        header("Content-Disposition: attachment; filename=Laporan_keaktifan_atasan.xls");
+    }
     ?>
     <div id="app">
         <div class="main-wrapper">
@@ -64,7 +69,6 @@
                 </thead>
                 <tbody>
                 <?php $index = 1; ?>
-                <tr>
                 <?php 
                 for ($p=0; $p < count($pegawai); $p++) { 
                     $counter = 0;

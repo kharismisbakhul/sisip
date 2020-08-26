@@ -12,7 +12,7 @@
                             <!-- User Profile-->
                             <div class="user-profile dropdown m-t-20">
                                 <div class="gambar2 rounded-circle user-pic">
-                                    <img src="<?= ($user['foto_profil']) ?  base_url($user['foto_profil']) : 'assets/images/users/default.jpg'  ?>" alt="users"
+                                    <img src="<?= ($user['foto_profil']) ?  base_url('public/'.$user['foto_profil']) : 'public/assets/images/users/default.jpg'  ?>" alt="users"
                                         class="rounded-circle img-fluid portrait2" />
                                 </div>
                                 <div class="user-content hide-menu m-t-10">

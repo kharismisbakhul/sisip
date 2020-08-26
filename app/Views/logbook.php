@@ -130,9 +130,10 @@
                                                 <table class="table no-border" id="logbook-tugas-utama">
                                                     <thead>
                                                         <th style="width: 5%">No</th>
-                                                        <th style="width: 50%;">Tugas Utama</th>
+                                                        <th style="width: 45%;">Tugas Utama</th>
                                                         <th style="width: 5%">Jumlah</th>
-                                                        <th style="width: 30%">Status</th>
+                                                        <th style="width: 10%;">Waktu Pengisian</th>
+                                                        <th style="width: 25%">Status</th>
                                                         <th style="width: 10%">Aksi</th>
                                                     </thead>
                                                     <tbody id="table-tugas-utama">
@@ -141,6 +142,7 @@
                                                                 <td><?= $i++; ?></td>
                                                                 <td><?= $t['nama_tugas']?></td>
                                                                 <td><?= $t['jumlah_tugas']?></td>
+                                                                <td><?= $t['waktu']?></td>
                                                                 <?php if($t['status_tugas'] == 1) { ?>
                                                                     <td><i class="fas fa-dot-circle mr-2 text-success"></i> Valid</td>
                                                                 <?php }else if($t['status_tugas'] == 2) {?>
@@ -169,9 +171,10 @@
                                                 <table class="table no-border" id="logbook-tugas-tambahan">
                                                     <thead>
                                                         <th style="width: 5%">No</th>
-                                                        <th style="width: 50%;">Tugas Tambahan</th>
+                                                        <th style="width: 45%;">Tugas Tambahan</th>
                                                         <th style="width: 5%">Jumlah</th>
-                                                        <th style="width: 30%">Status</th>
+                                                        <th style="width: 10%">Waktu Pengisian</th>
+                                                        <th style="width: 25%">Status</th>
                                                         <th style="width: 10%">Aksi</th>
                                                     </thead>
                                                     <tbody id="table-tugas-tambahan">
@@ -180,6 +183,7 @@
                                                             <td><?= $i++; ?></td>
                                                             <td><?= $tt['nama_tugas']?></td>
                                                             <td><?= $tt['jumlah_tugas']?></td>
+                                                            <td><?= $tt['waktu']?></td>
                                                             <?php if($tt['status_tugas'] == 1) { ?>
                                                                 <td><i class="fas fa-dot-circle mr-2 text-success"></i> Valid</td>
                                                             <?php }else if($tt['status_tugas'] == 2) {?>

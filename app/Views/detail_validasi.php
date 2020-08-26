@@ -135,7 +135,7 @@
                                                 <?php } else {?>
                                                     <td><i class="fas fa-dot-circle mr-2 text-purple"></i>
                                                     Klarifikasi
-                                                    <a href="#" class="bukti-validasi-detail" data-id="<?= $t['bukti']?>"><i class="fas fa-file-alt"></i></a>
+                                                    <a target="_blank" href="<?= base_url('/assets/images/bukti_klarifikasi/'.$t['bukti'])?>" class="bukti-validasi-detail" data-id="<?= $t['bukti']?>"><i class="fas fa-file-alt"></i></a>
                                                     <p><?= $t['catatan']?></p>
                                                     </td>
                                                     <td>

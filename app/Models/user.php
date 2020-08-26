@@ -15,7 +15,8 @@ class user extends Model
     public function getUser($no_induk = false)
     {
         if ($no_induk == false) {
-            return $this->join('status_user', 'user.id_status_user=status_user.id_status_user', 'left')->join('riwayat_jabatan', 'riwayat_jabatan.no_induk = user.no_induk')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan')->orderBy('user.no_induk', 'asc')->findAll();
+            return $this->join('status_user', 'user.id_status_user=status_user.id_status_user', 'left')->orderBy('user.no_induk', 'asc')->findAll();
+            // return $this->join('status_user', 'user.id_status_user=status_user.id_status_user', 'left')->join('riwayat_jabatan', 'riwayat_jabatan.no_induk = user.no_induk')->join('jabatan', 'riwayat_jabatan.id_jabatan = jabatan.id_jabatan')->orderBy('user.no_induk', 'asc')->findAll();
         }
 
         return $this->join('status_user', 'user.id_status_user=status_user.id_status_user', 'left')->where(['no_induk' => $no_induk])->first();

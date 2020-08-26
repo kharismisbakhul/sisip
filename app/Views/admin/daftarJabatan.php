@@ -65,7 +65,7 @@
                                             <td><?= $jb['atasan']['nama_status_user'] .' '. $jb['atasan']['nama_jabatan'] ?></td>
                                             <td>
                                                 <div class="btn-group">
-                                                    <!-- <a href="" class="btn btn-info editJamKerja" data-toggle="modal" data-target="#editJamKerja" data-whatever="@mdo" data-id="<?= $jb['id_jabatan'] ?>" >Edit</a> -->
+                                                    <button class="btn btn-info editJabatan" data-toggle="modal" data-target="#editJabatan" data-whatever="@mdo" data-id="<?= $jb['id_jabatan'] ?>" data-jabatan="<?= $jb['nama']?>" data-status="<?= $jb['nama_status_user'] ?>" data-statusid="<?= $jb['kode_jabatan']?>" data-atasan="<?= $jb['atasan']['nama_status_user'] .' '. $jb['atasan']['nama_jabatan'] ?>">Edit</button>
                                                     <a onclick="confirm('Apakah anda yakin akan dihapus ?)" href="<?= base_url('AdminController/hapusJabatan/' . $jb['id_jabatan']) ?>" class="btn btn-danger">Hapus</a>
                                                 </div>
                                             </td>
@@ -112,7 +112,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success waves-effect waves-light">Submit</button>
+                            <button type="submit" class="btn btn-success waves-effect waves-light">Tambah</button>
                         </div>
                     </form>
                 </div>
@@ -123,50 +123,36 @@
         <!-- ============================================================== -->
 
 
-        <div class="modal fade" id="editJamKerja" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
+        <div class="modal fade" id="editJabatan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
             <div class="modal-dialog " role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title" id="exampleModalLabel1">Edit Jam Kerja</h4>
+                        <h4 class="modal-title" id="exampleModalLabel1">Edit Jabatan</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     </div>
-                    <form method="post" action="<?= base_url('AdminController/editJamKerja') ?>">
+                    <form method="post" action="<?= base_url('/AdminController/editJabatan') ?>">
                         <input type="hidden" name="id_jam_kerja" id="id_jam_kerja_edit" value="">
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="riwayat_jabatan" class="control-label">Jabatan:</label>
-                                <input required class="form-control" id="riwayat_jabatan_edit" type="text" readonly>
+                                <label for="nama_jabatan" class="control-label">Nama Jabatan:</label>
+                                <input required class="form-control" id="nama_jabatan_edit" name="nama_jabatan_edit" type="text">
+                                <input class="form-control" id="kode_jabatan" name="kode_jabatan" type="hidden">
+                                <input class="form-control" id="detail_jabatan" name="detail_jabatan" type="hidden">
+                                <input class="form-control" id="id_jabatan" name="id_jabatan" type="hidden">
                             </div>
                             <div class="form-group">
-                                <label for="riwayat_bidang_edit" class="control-label">Bidang:</label>
-                                <input required class="form-control" id="riwayat_bidang_edit" type="text" readonly>
+                                <label for="status_jabatan" class="control-label">Status Jabatan:</label>
+                                <input required class="form-control" id="status_jabatan_edit" name="status_jabatan_edit" type="text" readonly>
                             </div>
                             <div class="form-group">
-                                <label for="jam_kerja_masuk_edit" class="control-label">Jam Kerja Masuk:</label>
-                                <input required class="custom-select mr-sm-2" id="jam_kerja_masuk_edit" name="jam_kerja_masuk" type="time">
-                            </div>
-                            <div class="form-group">
-                                <label for="jam_kerja_keluar_edit" class="control-label">Jam Kerja Keluar:</label>
-                                <input required class="custom-select mr-sm-2" id="jam_kerja_keluar_edit" name="jam_kerja_keluar" type="time">
-                            </div>
-                            <div class="form-group">
-                                <label for="status_aktif" class="control-label">Status Aktif:</label>
-                                <select class="form-control" name="status_aktif" id="status_aktif_edit" required>
-
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="status_jam_kerja" class="control-label">Status Jam Kerja:</label>
-                                <select class="form-control" name="status_jam_kerja" id="status_jam_kerja_edit" required>
-                                    <option value="1">Aktif</option>
-                                    <option value="0">Tidak Aktif</option>
-                                </select>
+                                <label for="atasan_langsung" class="control-label">Atasan Langsung:</label>
+                                <input required class="form-control" id="atasan_langsung_edit" name="atasan_langsung_edit" type="text" readonly>
                             </div>
 
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success waves-effect waves-light">Submit</button>
+                            <button type="submit" class="btn btn-success waves-effect waves-light">Edit</button>
                         </div>
                     </form>
                 </div>

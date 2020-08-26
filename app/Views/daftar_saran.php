@@ -40,7 +40,7 @@
                                 <div class="table-responsive">
                                     <div class="d-flex justify-content-end mb-2">
 
-                                        <form action="" method="">
+                                        <!-- <form action="" method="">
                                             <div class="input-group">
                                                 <select class="custom-select form-control" id="inlineFormCustomSelect">
                                                     <option selected="">Jenis...</option>
@@ -58,7 +58,7 @@
                                                 </div>
 
                                             </div>
-                                        </form>
+                                        </form> -->
                                     </div>
                                     <table class="table table-hover" id="zero">
                                         <thead>

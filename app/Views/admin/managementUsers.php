@@ -65,10 +65,10 @@
                                     <?php foreach ($users as $u) : ?>
                                         <tr>
                                             <td><?= $i++; ?></td>
-                                            <td> <img src="<?= ($u['foto_profil']) ? base_url($u['foto_profil']) : base_url('/assets/images/users/default.jpg') ?>" alt="users" class="rounded-circle img-fluid" width="50" /></td>
+                                            <td> <img src="<?= ($u['foto_profil']) ? base_url('public/'.$u['foto_profil']) : base_url('public/assets/images/users/default.jpg') ?>" alt="users" class="rounded-circle img-fluid" width="50" /></td>
                                             <td><?= $u['nama'] ?></td>
                                             <td><?= $u['no_induk'] ?></td>
-                                            <td><?= $u['nama_status_user'].' '.$u['jabatan']['nama'] ?></td>
+                                            <td><?= $u['nama_status_user'] ?></td>
                                             <td>
                                                 <div class="button-group">
                                                     <form action="<?= base_url('/admin/'. $u['no_induk']) ?>" method="post" class="d-inline">

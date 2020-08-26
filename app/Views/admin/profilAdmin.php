@@ -34,7 +34,7 @@
                 <div class="card-body">
                     <center class="m-t-30">
                         <div class="gambar rounded-circle">
-                            <img src="<?= ($user['foto_profil']) ?  base_url($user['foto_profil']) : '/assets/images/users/default.jpg'  ?>" class="rounded-circle" width="150"/>
+                            <img src="<?= ($user['foto_profil']) ?  base_url('public/'.$user['foto_profil']) : 'public/assets/images/users/default.jpg'  ?>" class="rounded-circle" width="150"/>
                         </div>
                         <h4 class="card-title m-t-10"><?= $user['nama'] ?></h4>
                         <h6 class="card-subtitle"><?= $user['nama_status_user']  ?></h6>

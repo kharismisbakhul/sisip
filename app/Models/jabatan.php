@@ -18,17 +18,19 @@ class jabatan extends Model
                 break;
             case '4':
                 $gm = model('general_manager');
-                $data_gm = $gm->where('id_gm', $detail_jabatan)->first();
-                $direktur = model('direktur');
-                return $direktur->select('nama')->where('id_direktur', $data_gm['id_direktur'])->first();
+                $data_gm = $gm->select('nama')->where('id_gm', $detail_jabatan)->first();
+                // $direktur = model('direktur');
+                // return $direktur->select('nama')->where('id_direktur', $data_gm['id_direktur'])->first();
+                return $data_gm;
                 break;
             case '5':
                 $manager = model('manager');
                 $data_m = $manager->where('id_manager', $detail_jabatan)->first();
                 $gm = model('general_manager');
-                $data_gm = $gm->where('id_gm', $data_m['id_gm'])->first();
-                $direktur = model('direktur');
-                return $direktur->select('nama')->where('id_direktur', $data_gm['id_direktur'])->first();
+                $data_gm = $gm->select('nama')->where('id_gm', $data_m['id_gm'])->first();
+                // $direktur = model('direktur');
+                // return $direktur->select('nama')->where('id_direktur', $data_gm['id_direktur'])->first();
+                return $data_gm;
                 break;
             case '6':
                 $supervisor = model('supervisor');
@@ -36,9 +38,10 @@ class jabatan extends Model
                 $manager = model('manager');
                 $data_m = $manager->where('id_manager', $data_sp['id_manager'])->first();
                 $gm = model('general_manager');
-                $data_gm = $gm->where('id_gm', $data_m['id_gm'])->first();
-                $direktur = model('direktur');
-                return $direktur->select('nama')->where('id_direktur', $data_gm['id_direktur'])->first();
+                $data_gm = $gm->select('nama')->where('id_gm', $data_m['id_gm'])->first();
+                // $direktur = model('direktur');
+                // return $direktur->select('nama')->where('id_direktur', $data_gm['id_direktur'])->first();
+                return $data_gm;
                 break;
             case '7':
                 $staff = model('staff');
@@ -48,9 +51,10 @@ class jabatan extends Model
                 $manager = model('manager');
                 $data_m = $manager->where('id_manager', $data_sp['id_manager'])->first();
                 $gm = model('general_manager');
-                $data_gm = $gm->where('id_gm', $data_m['id_gm'])->first();
-                $direktur = model('direktur');
-                return $direktur->select('nama')->where('id_direktur', $data_gm['id_direktur'])->first();
+                $data_gm = $gm->select('nama')->where('id_gm', $data_m['id_gm'])->first();
+                // $direktur = model('direktur');
+                // return $direktur->select('nama')->where('id_direktur', $data_gm['id_direktur'])->first();
+                return $data_gm;
                 break;
             default:
                 return null;

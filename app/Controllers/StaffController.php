@@ -110,7 +110,7 @@ class StaffController extends BaseController
         $data = $this->initData();
         $data['title'] = "Dashboard Pegawai";
         $data['jumlah_validasi'] = count($tugas->where('status_tugas', 1)->where('id_riwayat_jabatan', $data['user']['id_riwayat_jabatan'])->findAll());
-        $data['jumlah_belum_validasi'] = count($tugas->where('status_tugas', 0)->where('id_riwayat_jabatan', $data['user']['id_riwayat_jabatan'])->findAll());
+        $data['jumlah_belum_validasi'] = count($tugas->where('status_tugas', 3)->where('id_riwayat_jabatan', $data['user']['id_riwayat_jabatan'])->findAll());
         $data['jumlah_revisi'] = count($tugas->where('status_tugas', 2)->where('id_riwayat_jabatan', $data['user']['id_riwayat_jabatan'])->findAll());
         $data['presensi'] = $presensi->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'presensi.tanggal_presensi' => date("Y-m-d")])->first();
         $data['pengumuman'] = $pengumuman->join('user', 'pengumuman.publisher = user.no_induk')->where('pengumuman.status_pengumuman', 1)->findAll(); 
@@ -150,7 +150,7 @@ class StaffController extends BaseController
         ];
         $upload_image = $this->request->getFile('bukti');
         if ($upload_image->getClientName() != "") {
-            $tujuan_upload = 'assets/images/izin/';
+            $tujuan_upload = 'public/assets/images/izin/';
             $upload_image->move($tujuan_upload, $upload_image->getClientName());
             $nama_file = $upload_image->getClientName();
             $data['bukti'] = $nama_file;
@@ -180,7 +180,7 @@ class StaffController extends BaseController
             $tugas = model('tugas');
             $rancangan_tugas = model('rancangan_tugas');
             $data['rancangan_tugas'] = $rancangan_tugas->where('id_jabatan', $data['user']['id_jabatan'])->findAll();
-            $data['tugas'] =  $tugas->asArray()->select('id_tugas, id_riwayat_jabatan, tugas.nama_tugas, tanggal_tugas, tugas.periode, tugas.jumlah_tugas, tugas.nomor_pekerjaan, tugas.status_tugas, tugas.id_rancangan_tugas, rancangan_tugas.jumlah_total_tugas, tugas.kode_tugas')->selectSum('tugas.jumlah_tugas')->join('rancangan_tugas', 'rancangan_tugas.id_rancangan_tugas = tugas.id_rancangan_tugas')->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.tanggal_tugas >=' => date(date("Y").'-01-01'), 'tugas.tanggal_tugas <=' => date(date("Y").'-12-31'), 'tugas.id_rancangan_tugas !=' => 0])->groupBy("tugas.kode_tugas")->orderBy('tugas.id_rancangan_tugas', 'DESC')->findAll();
+            $data['tugas'] =  $tugas->asArray()->select('id_tugas, id_riwayat_jabatan, tugas.nama_tugas, tanggal_tugas, tugas.periode, tugas.jumlah_tugas, tugas.nomor_pekerjaan, tugas.status_tugas, tugas.id_rancangan_tugas, rancangan_tugas.jumlah_total_tugas, tugas.kode_tugas')->selectSum('tugas.jumlah_tugas')->join('rancangan_tugas', 'rancangan_tugas.id_rancangan_tugas = tugas.id_rancangan_tugas')->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.tanggal_tugas >=' => date(date("Y").'-01-01'), 'tugas.tanggal_tugas <=' => date(date("Y").'-12-31'), 'tugas.id_rancangan_tugas !=' => 0, 'tugas.status_tugas' => 1] )->groupBy("tugas.kode_tugas")->orderBy('tugas.id_rancangan_tugas', 'DESC')->findAll();
             $jumlah_tugas_berlangsung = 0;
             $jumlah_total_tugas = 0;
             for ($i=0; $i < count($data['rancangan_tugas']); $i++) { 
@@ -266,14 +266,13 @@ class StaffController extends BaseController
         // dd($upload_image);
         // $upload_image = $_FILES['image']['name'];
         if ($upload_image) {
-            $tujuan_upload = 'assets/images/users/';
-            // dd($tujuan_upload);
+            $tujuan_upload = 'public/assets/images/users/';
             $upload_image->move($tujuan_upload, $upload_image->getClientName());
-            $nama_file = '/assets/images/users/'.$upload_image->gCetClientName();
+            $nama_file = '/assets/images/users/'.$upload_image->getClientName();
 
             $old_images = $data['user']['foto_profil'];
-            if ($old_images != 'assets/images/users/1.jpg') {
-                unlink(FCPATH . $old_images);
+            if ($old_images != 'assets/images/users/default.jpg') {
+                unlink(FCPATH . 'public/'.$old_images);
             }
             $user->update(session('no_induk'), ['foto_profil' => $nama_file]);
             if(session('id_status_user') == 6){
@@ -557,8 +556,8 @@ class StaffController extends BaseController
         $data['tahun'] = $thn;
         $rancangan_tugas = model('rancangan_tugas');
         $data['rancangan_tugas'] = $rancangan_tugas->where('id_jabatan', $data['user']['id_jabatan'])->findAll();
-        $data['tugas'] =  $tugas->asArray()->select('id_tugas, id_riwayat_jabatan, tugas.nama_tugas, tanggal_tugas, tugas.periode, tugas.jumlah_tugas, tugas.nomor_pekerjaan, tugas.status_tugas, tugas.id_rancangan_tugas, rancangan_tugas.jumlah_total_tugas, tugas.kode_tugas')->selectSum('tugas.jumlah_tugas')->join('rancangan_tugas', 'rancangan_tugas.id_rancangan_tugas = tugas.id_rancangan_tugas')->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.tanggal_tugas >=' => date($thn.'-01-01'), 'tugas.tanggal_tugas <=' => date($thn.'-12-31')])->groupBy("tugas.id_rancangan_tugas")->orderBy('tugas.id_rancangan_tugas', 'DESC')->findAll();
-        $data['tugas_tambahan'] = $tugas->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.tanggal_tugas >=' => date($thn.'-01-01'), 'tugas.tanggal_tugas <=' => date($thn.'-12-31'), 'tugas.id_rancangan_tugas' => 0])->groupBy("tugas.kode_tugas")->orderBy('tugas.tanggal_tugas', 'DESC')->findAll();
+        $data['tugas'] =  $tugas->asArray()->select('id_tugas, id_riwayat_jabatan, tugas.nama_tugas, tanggal_tugas, tugas.periode, tugas.jumlah_tugas, tugas.nomor_pekerjaan, tugas.status_tugas, tugas.id_rancangan_tugas, rancangan_tugas.jumlah_total_tugas, tugas.kode_tugas')->selectSum('tugas.jumlah_tugas')->join('rancangan_tugas', 'rancangan_tugas.id_rancangan_tugas = tugas.id_rancangan_tugas')->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.tanggal_tugas >=' => date($thn.'-01-01'), 'tugas.tanggal_tugas <=' => date($thn.'-12-31'), 'tugas.status_tugas' => 1])->groupBy("tugas.id_rancangan_tugas")->orderBy('tugas.id_rancangan_tugas', 'DESC')->findAll();
+        $data['tugas_tambahan'] = $tugas->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.tanggal_tugas >=' => date($thn.'-01-01'), 'tugas.tanggal_tugas <=' => date($thn.'-12-31'), 'tugas.id_rancangan_tugas' => 0, 'tugas.status_tugas' => 1])->groupBy("tugas.kode_tugas")->orderBy('tugas.tanggal_tugas', 'DESC')->findAll();
 
         for ($i=0; $i < count($data['rancangan_tugas']); $i++) { 
             $data['rancangan_tugas'][$i]['jumlah_tugas'] = 0;
@@ -642,7 +641,7 @@ class StaffController extends BaseController
             ];
             $upload_image = $this->request->getFile('file_pendukung');
             if ($upload_image->getClientName() != "") {
-                $tujuan_upload = 'assets/images/file_pendukung/';
+                $tujuan_upload = 'public/assets/images/file_pendukung/';
                 $upload_image->move($tujuan_upload, $upload_image->getClientName());
                 $nama_file = $upload_image->getClientName();
     
@@ -684,7 +683,7 @@ class StaffController extends BaseController
         ];
         $upload_image = $this->request->getFile('bukti-klarifikasi');
         if ($upload_image->getClientName() != "") {
-            $tujuan_upload = 'assets/images/bukti_klarifikasi/';
+            $tujuan_upload = 'public/assets/images/bukti_klarifikasi/';
             $upload_image->move($tujuan_upload, $upload_image->getClientName());
             $nama_file = $upload_image->getClientName();
             $data['bukti'] = $nama_file;
@@ -779,8 +778,8 @@ class StaffController extends BaseController
         $data = $this->initData();
         $rancangan_tugas = model('rancangan_tugas');
         $data['rancangan_tugas'] = $rancangan_tugas->where('id_jabatan', $data['user']['id_jabatan'])->findAll();
-        $data['tugas'] =  $tugas->asArray()->select('id_tugas, id_riwayat_jabatan, tugas.nama_tugas, tanggal_tugas, tugas.periode, tugas.jumlah_tugas, tugas.nomor_pekerjaan, tugas.status_tugas, tugas.id_rancangan_tugas, rancangan_tugas.jumlah_total_tugas, tugas.kode_tugas')->selectSum('tugas.jumlah_tugas')->join('rancangan_tugas', 'rancangan_tugas.id_rancangan_tugas = tugas.id_rancangan_tugas')->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.id_rancangan_tugas !=' => 0])->groupBy("tugas.id_rancangan_tugas")->orderBy('tugas.id_rancangan_tugas', 'DESC')->findAll();
-        $data['tugas_tambahan'] = $tugas->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.id_rancangan_tugas' => 0])->groupBy("tugas.kode_tugas")->orderBy('tugas.tanggal_tugas', 'DESC')->findAll();
+        $data['tugas'] =  $tugas->asArray()->select('id_tugas, id_riwayat_jabatan, tugas.nama_tugas, tanggal_tugas, tugas.periode, tugas.jumlah_tugas, tugas.nomor_pekerjaan, tugas.status_tugas, tugas.id_rancangan_tugas, rancangan_tugas.jumlah_total_tugas, tugas.kode_tugas')->selectSum('tugas.jumlah_tugas')->join('rancangan_tugas', 'rancangan_tugas.id_rancangan_tugas = tugas.id_rancangan_tugas')->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.id_rancangan_tugas !=' => 0, 'tugas.status_tugas' => 1])->groupBy("tugas.id_rancangan_tugas")->orderBy('tugas.id_rancangan_tugas', 'DESC')->findAll();
+        $data['tugas_tambahan'] = $tugas->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.id_rancangan_tugas' => 0, 'tugas.status_tugas' => 1])->groupBy("tugas.kode_tugas")->orderBy('tugas.tanggal_tugas', 'DESC')->findAll();
         for ($i=0; $i < count($data['rancangan_tugas']); $i++) { 
             $data['rancangan_tugas'][$i]['jumlah_tugas'] = 0;
             for ($j=0; $j < count($data['tugas']); $j++) { 
@@ -815,8 +814,8 @@ class StaffController extends BaseController
         // $data['tugas'] =  $tugas->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan']])->groupBy('tugas.kode_tugas')->orderBy('tugas.id_rancangan_tugas', 'desc')->orderBy('tanggal_tugas', 'asc')->findAll();
         $rancangan_tugas = model('rancangan_tugas');
         $data['rancangan_tugas'] = $rancangan_tugas->where('id_jabatan', $data['user']['id_jabatan'])->findAll();
-        $data['tugas'] =  $tugas->asArray()->select('id_tugas, id_riwayat_jabatan, tugas.nama_tugas, tanggal_tugas, tugas.periode, tugas.jumlah_tugas, tugas.nomor_pekerjaan, tugas.status_tugas, tugas.id_rancangan_tugas, rancangan_tugas.jumlah_total_tugas, tugas.kode_tugas')->selectSum('tugas.jumlah_tugas')->join('rancangan_tugas', 'rancangan_tugas.id_rancangan_tugas = tugas.id_rancangan_tugas')->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.id_rancangan_tugas !=' => 0])->groupBy("tugas.id_rancangan_tugas")->orderBy('tugas.id_rancangan_tugas', 'DESC')->findAll();
-        $data['tugas_tambahan'] = $tugas->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.id_rancangan_tugas' => 0])->groupBy("tugas.kode_tugas")->orderBy('tugas.tanggal_tugas', 'DESC')->findAll();
+        $data['tugas'] =  $tugas->asArray()->select('id_tugas, id_riwayat_jabatan, tugas.nama_tugas, tanggal_tugas, tugas.periode, tugas.jumlah_tugas, tugas.nomor_pekerjaan, tugas.status_tugas, tugas.id_rancangan_tugas, rancangan_tugas.jumlah_total_tugas, tugas.kode_tugas')->selectSum('tugas.jumlah_tugas')->join('rancangan_tugas', 'rancangan_tugas.id_rancangan_tugas = tugas.id_rancangan_tugas')->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.id_rancangan_tugas !=' => 0, 'tugas.status_tugas' => 1])->groupBy("tugas.id_rancangan_tugas")->orderBy('tugas.id_rancangan_tugas', 'DESC')->findAll();
+        $data['tugas_tambahan'] = $tugas->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.id_rancangan_tugas' => 0, 'tugas.status_tugas' => 1])->groupBy("tugas.kode_tugas")->orderBy('tugas.tanggal_tugas', 'DESC')->findAll();
         for ($i=0; $i < count($data['rancangan_tugas']); $i++) { 
             $data['rancangan_tugas'][$i]['jumlah_tugas'] = 0;
             for ($j=0; $j < count($data['tugas']); $j++) { 

@@ -32,13 +32,23 @@
                     <div class="col-lg-12 col-xlg-12 col-md-12">
                         <div class="card">
                             <div class="card-header bg-info text-white">
-                                <h4>Keaktifan Pegawai - <?= $bln .' '.$tahun ?></h4>
+                                <h4>Keaktifan Pegawai - <?= $bln .' '.$tahun; ?></h4>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <div class="row">
                                     <div class="d-flex col-lg-5 mb-2">
+                                    <?php if(session('id_status_user') == 1) {?>
                                         <form action="<?= base_url('/admin/laporanKeaktifan')?>" method="get">
+                                    <?php }else if(session('id_status_user') == 3) {?>
+                                        <form action="<?= base_url('/direktur/laporanKeaktifan')?>" method="get">
+                                    <?php }else if(session('id_status_user') == 4) {?>
+                                        <form action="<?= base_url('/gm/laporanKeaktifan')?>" method="get">
+                                    <?php }else if(session('id_status_user') == 5) {?>
+                                        <form action="<?= base_url('/manager/laporanKeaktifan')?>" method="get">
+                                    <?php }else if(session('id_status_user') == 6) {?>
+                                        <form action="<?= base_url('/supervisor/laporanKeaktifan')?>" method="get">
+                                    <?php }?>
                                             <div class="input-group">
                                                 <select class="custom-select " id="inlineFormCustomSelect" name="bulan">
                                                     <option selected hidden value="">Pilih Bulan...</option>
@@ -48,11 +58,12 @@
                                                 </select>
                                                 <select class="custom-select " id="inlineFormCustomSelect" name="tahun">
                                                     <option selected hidden value="">Pilih Tahun...</option>
-                                                    <option value="2018">2018</option>
-                                                    <option value="2019">2019</option>
-                                                    <option value="2020">2020</option>
-                                                    <option value="2021">2021</option>
-                                                    <option value="2022">2022</option>
+                                                    <?php 
+                                                        for ($i=2018; $i <= 2050; $i++) { 
+                                                            echo '<option value="'.$i.'">'.$i.'</option>';
+                                                            # code...
+                                                        }
+                                                    ?>
                                                 </select>
                                                 <div class="input-group-append">
                                                     <button class="btn btn-info" type="submit"><i
