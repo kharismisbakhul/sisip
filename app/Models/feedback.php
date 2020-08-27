@@ -12,8 +12,12 @@ class feedback extends Model
         'id_feedback', 'feedback', 'no_induk', 'kategori_feedback', 'file_pendukung', 'tanggal', 'waktu'
     ];
 
-    public function getFeedback()
+    public function getFeedback($mulai = null, $selesai = null)
     {
-        return $this->join('user', 'user.no_induk=feedback.no_induk', 'left')->join('kategori_feedback as kf', 'kf.id_kategori=feedback.kategori_feedback', 'left')->findAll();
+        if($mulai != null && $selesai != null){
+            return $this->join('user', 'user.no_induk=feedback.no_induk', 'left')->join('kategori_feedback as kf', 'kf.id_kategori=feedback.kategori_feedback', 'left')->orderBy('feedback.tanggal', 'asc')->where(['feedback.tanggal >=' => $mulai, 'feedback.tanggal <=' => $selesai])->findAll();
+        } else{
+            return $this->join('user', 'user.no_induk=feedback.no_induk', 'left')->join('kategori_feedback as kf', 'kf.id_kategori=feedback.kategori_feedback', 'left')->orderBy('feedback.tanggal', 'asc')->findAll();
+        }
     }
 }

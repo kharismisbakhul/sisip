@@ -364,11 +364,21 @@ class AdminController extends BaseController
     public function daftarSaran()
     {
         $this->data['title'] = 'Daftar Saran';
-        $this->data['saran'] = $this->feedbackUserModel->getFeedback();
+        if($this->request->getVar('waktu_mulai') != "" && $this->request->getVar('waktu_selesai') != ""){
+            $waktu_mulai = $this->request->getVar('waktu_mulai');
+            $waktu_selesai = $this->request->getVar('waktu_selesai');
+            $this->data['saran'] = $this->feedbackUserModel->getFeedback($waktu_mulai, $waktu_selesai);
+            $this->data['waktu_mulai'] = $waktu_mulai;
+            $this->data['waktu_selesai'] = $waktu_selesai;
+        }else{
+            $this->data['saran'] = $this->feedbackUserModel->getFeedback();
+            $this->data['waktu_mulai'] = null;
+            $this->data['waktu_selesai'] = null;
+        }
 
         return view('admin/daftarSaran', $this->data);
 
-        dd($this->data['saran']);
+        // dd($this->data['saran']);
     }
 
     public function profil()
@@ -1826,5 +1836,22 @@ class AdminController extends BaseController
         // dd($this->data);
 
         return view('laporan/export_rekapitulasi_presensi', $this->data);
+    }
+
+    public function exportDaftarSaran(){
+        $this->data['title'] = 'Daftar Saran';
+        if($this->request->getVar('waktu_mulai') != "" && $this->request->getVar('waktu_selesai') != ""){
+            $waktu_mulai = $this->request->getVar('waktu_mulai');
+            $waktu_selesai = $this->request->getVar('waktu_selesai');
+            $this->data['saran'] = $this->feedbackUserModel->getFeedback($waktu_mulai, $waktu_selesai);
+            $this->data['waktu_mulai'] = $waktu_mulai;
+            $this->data['waktu_selesai'] = $waktu_selesai;
+        }else{
+            $this->data['saran'] = $this->feedbackUserModel->getFeedback();
+            $this->data['waktu_mulai'] = null;
+            $this->data['waktu_selesai'] = null;
+        }
+
+        return view('laporan/export_daftar_saran', $this->data);
     }
 }
