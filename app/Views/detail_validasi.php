@@ -34,7 +34,7 @@
                             <div class="card-body">
                                 <div class="d-flex align-items-center">
                                     <div class="m-r-40">
-                                        <img src="<?=base_url($user_bawahan['foto_profil'])?>" alt="user" width="100"
+                                        <img src="<?=base_url('public/'.$user_bawahan['foto_profil'])?>" alt="user" width="100"
                                             class="rounded-circle">
                                     </div>
                                     <div class="row">
