@@ -13,7 +13,7 @@ class jam_kerja extends Model
     public function getJamKerja()
     {
 
-        $data = $this->join('jabatan', 'jam_kerja.id_jabatan = jabatan.id_jabatan')->findAll();
+        $data = $this->join('jabatan', 'jam_kerja.id_jabatan = jabatan.id_jabatan')->orderBy('jabatan.kode_jabatan', 'asc')->orderBy('jabatan.detail_jabatan', 'asc')->findAll();
         $i = 0;
         // dd($data);
         $temp = [];

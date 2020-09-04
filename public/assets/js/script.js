@@ -241,19 +241,22 @@ $('#tambah-rancangan').click(function (e) {
     let periode = $('.periode').val()
     let jumlah_tugas = $('.jumlah_tugas').val()
     let nomor_pekerjaan = $('.nomor_pekerjaan').val()
+    let tahun = $(this).data('tahun')
 
     $.ajax({
-        url: segments[0] + '/admin/tambahRancanganTugas',
+        url: segments[0] + '/AdminController/tambahRancanganTugas',
         data: {
             'id_jabatan': id_jabatan,
             'nama_tugas': nama_tugas,
             'periode': periode,
             'jumlah_tugas': jumlah_tugas,
-            'nomor_pekerjaan': nomor_pekerjaan
+            'nomor_pekerjaan': nomor_pekerjaan,
+            'tahun' : tahun
         },
         method: "post",
         dataType: 'json',
         success: function (result) {
+            // console.log(result)
             let r = result['rancangan'];
             let periode = "";
 
@@ -306,25 +309,26 @@ $('#tambah-rancangan').click(function (e) {
     });
 })
 
-function editRancanganTugas(id) {
+function editRancanganTugas(id, tahun) {
     let nama_tugas = $('#nama_tugas' + id).val()
     let periode = $('#periode' + id).val()
     let jumlah_tugas = $('#jumlah_tugas' + id).val()
     let nomor_pekerjaan = $('#nomor_pekerjaan' + id).val()
 
-
     $.ajax({
-        url: segments[0] + '/admin/ubahRancanganTugas',
+        url: segments[0] + '/AdminController/ubahRancanganTugas',
         data: {
             'nama_tugas': nama_tugas,
             'periode': periode,
             'jumlah_tugas': jumlah_tugas,
             'nomor_pekerjaan': nomor_pekerjaan,
-            'id_rancangan_tugas': id
+            'id_rancangan_tugas': id,
+            'tahun': tahun
         },
         method: "post",
         dataType: 'json',
         success: function (result) {
+            // console.log(result)
             alert('Data berhasil diubah')
         },
         error: function (data) {
@@ -378,19 +382,20 @@ $('#riwayat_jabatan').on('change', function () {
 
 $('#status_jabatan_modal').on('change', function () {
     let id_status_user = $('#status_jabatan_modal').val()
-    console.log(id_status_user);
+    // console.log(id_status_user);
     $.ajax({
         url: segments[0] + '/admin/apiAtasanJabatan/' + id_status_user,
         method: "get",
         dataType: 'json',
         success: function (result) {
-            console.log(result)
+            // console.log(result)
             let pilihan = '';
             if(result != null){
                 $('#atasan').html(`
                 <div class="form-group">
                     <label for="atasan_langsung_modal" class="control-label">Atasan Langsung</label>
                     <select class="custom-select mr-sm-2" id="atasan_langsung_modal" name="atasan_langsung">
+                        <option hidden selected>Pilih Atasan</option>
                     </select>
                 </div>
                 `)
@@ -398,9 +403,39 @@ $('#status_jabatan_modal').on('change', function () {
                     pilihan += '<option value="' + result[i]['id_jabatan'] + '">' + result[i]['nama_status_user']+' '+result[i]['nama'] + '</option>'
                 }
                 $('#atasan_langsung_modal').append(pilihan);
+                $('#unit_kerja').html(`
+                <div class="form-group">
+                    <label for="unit_kerja_modal" class="control-label">Unit Kerja</label>
+                    <input class="form-control mr-sm-2" id="unit_kerja_modal" name="unit_kerja" value="" readonly>
+                </div>
+                `)
             }else{
                 $('#atasan').html(``)
+                $('#unit_kerja').html(``)
             }
         }
     });
+})
+
+$('#atasan').on('change','#atasan_langsung_modal', function () {
+    let id_status_user = $('#status_jabatan_modal').val()
+    let id_jabatan = $('#atasan_langsung_modal').val()
+    // console.log("HAHAHA"+id_jabatan);
+    if(id_status_user == 5 || id_status_user == 6 || id_status_user == 7){
+        $.ajax({
+            url: segments[0] + '/AdminController/apiUnitKerja/' + id_jabatan,
+            method: "get",
+            dataType: 'json',
+            success: function (result) {
+                console.log(result)
+                if(result != null){
+                    $('#unit_kerja_modal').val(result['nama'])
+                }else{
+                    $('#unit_kerja_modal').val(``)
+                }
+            }
+        });
+    }
+
+
 })

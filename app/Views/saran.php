@@ -127,7 +127,9 @@
                                                     <?= $f['nama_kategori']?>
                                                 </td>
                                                 <td>
-                                                    <a target="_blank" href="<?= base_url('assets/images/file_pendukung/'.$f['file_pendukung'])?>"><i class="fas fa-file-alt"></i></a>
+                                                    <?php if($f['file_pendukung'] != null) { ?>
+                                                        <a target="_blank" href="<?= base_url('assets/images/file_pendukung/'.$f['file_pendukung'])?>"><i class="fas fa-file-alt"></i></a>
+                                                    <?php } ?>
                                                 </td>
                                             </tr>
                                             <?php endforeach ?>

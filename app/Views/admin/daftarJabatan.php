@@ -53,6 +53,7 @@
                                         <th>No</th>
                                         <th>Nama Jabatan</th>
                                         <th>Atasan Langsung</th>
+                                        <th>Unit Kerja</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -63,6 +64,7 @@
                                             <td><?= $i++ ?></td>
                                             <td><?= $jb['nama_status_user'] .' '. $jb['nama'] ?></td>
                                             <td><?= $jb['atasan']['nama_status_user'] .' '. $jb['atasan']['nama_jabatan'] ?></td>
+                                            <td><?= $jb['unit_kerja']['nama']?></td>
                                             <td>
                                                 <div class="btn-group">
                                                     <button class="btn btn-info editJabatan" data-toggle="modal" data-target="#editJabatan" data-whatever="@mdo" data-id="<?= $jb['id_jabatan'] ?>" data-jabatan="<?= $jb['nama']?>" data-status="<?= $jb['nama_status_user'] ?>" data-statusid="<?= $jb['kode_jabatan']?>" data-atasan="<?= $jb['atasan']['nama_status_user'] .' '. $jb['atasan']['nama_jabatan'] ?>">Edit</button>
@@ -106,6 +108,9 @@
                                 </select>
                             </div>
                             <div id="atasan">
+                                
+                            </div>
+                            <div id="unit_kerja">
                                 
                             </div>
 

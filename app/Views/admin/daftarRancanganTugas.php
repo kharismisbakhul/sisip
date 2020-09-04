@@ -45,6 +45,29 @@
 
                                 <!-- <button type="button" class="btn btn-success" data-toggle="modal" data-target="#editUser" data-whatever="@mdo">Tambah
                                     Rancangan Tugas</button> -->
+                                            <div class="row">
+                                            <div class="form-group">
+                                                <label for="rancangan_tahun">List Tahun Rancangan Yang Tersedia</label>
+                                                <select type="date" class="form-control" name="rancangan_tahun">
+                                                    <?php if ($tahun != null) {
+                                                        for ($i = intval($tahun['tahun_min']); $i <= intval($tahun['tahun_max']); $i++) {
+                                                            echo '<option value="' . $i . '">' . $i . '</option>';
+                                                        }
+                                                    } ?>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                            <label for="waktu_selesai"></label><br>
+                                                    <button class="btn btn-info mt-2 mr-3 ml-2" data-toggle="modal" data-target="#tambah_tahun"><i
+                                                            class="fas fa-plus"></i></button>
+                                            </div>
+                                            </div>
+                                            <div class="form-group">
+                                            <label for="waktu_selesai"></label><br>
+                                                    <button class="btn btn-danger mt-2" data-toggle="modal" data-target="#hapus_tahun"><i
+                                                            class="fas fa-trash"></i></button>
+                                            </div>
+                                            </div>
 
                             </div>
                             <table class="table table-hover" id="zero_config">
@@ -67,7 +90,7 @@
                                             <td><?= $in['unit_kerja']['nama'] ?></td>
                                             <td>
                                                 <div class="button-group">
-                                                    <a href="<?= base_url('/admin/lihatRancanganTugas/'.$in['id_jabatan']) ?>" class="btn btn-primary">Lihat Rancangan Tugas</a>
+                                                    <a href="<?= base_url('/admin/lihatRancanganTugas/' . $in['id_jabatan']) ?>" class="btn btn-primary">Lihat Rancangan Tugas</a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -87,61 +110,61 @@
         <!-- ============================================================== -->
         <!-- Start Modeal -->
         <!-- ============================================================== -->
-        <div class="modal fade" id="editUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
+        <div class="modal fade" id="tambah_tahun" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
             <div class="modal-dialog " role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title" id="exampleModalLabel1">Tambah Jabatan</h4>
+                        <h4 class="modal-title" id="exampleModalLabel1">Tambah Tahun</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     </div>
-                    <form action="/AdminController/tambahPengumuman" method="post">
+                    <form action="<?= base_url('/AdminController/tambahTahun') ?>" method="post">
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="message-text" class="control-label">Pengumuman:</label>
-                                <textarea type="text" name="pengumuman" class="form-control" id="message-text1" required></textarea>
+                                <label for="message-text" class="control-label">Tahun:</label>
+                                <input type="number" name="tahun" class="form-control" id="message-text1"></input>
                             </div>
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-                            <button type="submit" class="btn btn-primary">Kirim</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                            <button type="submit" class="btn btn-primary">Tambah</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
 
-
-        <div class="modal fade editPengumuman" id="editPengumuman" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
+        <div class="modal fade" id="hapus_tahun" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
             <div class="modal-dialog " role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title" id="exampleModalLabel1">Edit Pengumuman</h4>
+                        <h4 class="modal-title" id="exampleModalLabel1">Hapus Tahun</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     </div>
-                    <form action="/AdminController/editPengumuman" method="post">
+                    <form action="<?= base_url('/AdminController/hapusTahun') ?>" method="post">
                         <div class="modal-body">
                             <div class="form-group">
-                                <input type="hidden" name="id_pengumuman" class="edit-id-pengumuman">
-                                <label for="message-text" class="control-label">Pengumuman:</label>
-                                <textarea type="text" name="pengumuman" class="form-control edit-pengumuman" id="message-text1" required></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="message-text" class="control-label">Status Pengumuman:</label>
-                                <select class="custom-select col-12 edit-status-pengumuman" id="status_pengumuman" name="status_pengumuman">
-
+                                <label for="message-text" class="control-label">Tahun:</label>
+                                <select name="tahun" class="form-control" id="message-text1">
+                                <option hidden selected>Pilih Tahun...</option>
+                                <?php
+                                    foreach ($semua_tahun as $s) {
+                                        echo '<option value="' . $s['tahun'] . '">' . $s['tahun'] . '</option>';
+                                    } 
+                                ?>
                                 </select>
                             </div>
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-                            <button type="submit" class="btn btn-primary">Kirim</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                            <button type="submit" class="btn btn-danger">Hapus</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
+
         <!-- ============================================================== -->
         <!-- End Modal -->
         <!-- ============================================================== -->

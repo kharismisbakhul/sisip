@@ -179,7 +179,7 @@ class StaffController extends BaseController
         ])){
             $tugas = model('tugas');
             $rancangan_tugas = model('rancangan_tugas');
-            $data['rancangan_tugas'] = $rancangan_tugas->where('id_jabatan', $data['user']['id_jabatan'])->findAll();
+            $data['rancangan_tugas'] = $rancangan_tugas->where('id_jabatan', $data['user']['id_jabatan'])->join('rancangan_per_tahun as r', 'rancangan_tugas.id_rancangan_tugas = r.id_rancangan_tugas')->where('r.tahun', date('Y'))->findAll();
             $data['tugas'] =  $tugas->asArray()->select('id_tugas, id_riwayat_jabatan, tugas.nama_tugas, tanggal_tugas, tugas.periode, tugas.jumlah_tugas, tugas.nomor_pekerjaan, tugas.status_tugas, tugas.id_rancangan_tugas, rancangan_tugas.jumlah_total_tugas, tugas.kode_tugas')->selectSum('tugas.jumlah_tugas')->join('rancangan_tugas', 'rancangan_tugas.id_rancangan_tugas = tugas.id_rancangan_tugas')->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.tanggal_tugas >=' => date(date("Y").'-01-01'), 'tugas.tanggal_tugas <=' => date(date("Y").'-12-31'), 'tugas.id_rancangan_tugas !=' => 0, 'tugas.status_tugas' => 1] )->groupBy("tugas.kode_tugas")->orderBy('tugas.id_rancangan_tugas', 'DESC')->findAll();
             $jumlah_tugas_berlangsung = 0;
             $jumlah_total_tugas = 0;
@@ -221,7 +221,7 @@ class StaffController extends BaseController
             }else if(session('id_status_user') == 4){
                 return redirect()->to(base_url().'/gm/profil');
             }else if(session('id_status_user') == 3){
-                return redirect()->to(base_url().'/direksi/profil');
+                return redirect()->to(base_url().'/direktur/profil');
             }else{
                 return redirect()->to(base_url().'/staff/profil');
             }
@@ -248,7 +248,7 @@ class StaffController extends BaseController
                 }else if(session('id_status_user') == 4){
                     return redirect()->to(base_url().'/gm/profil');
                 }else if(session('id_status_user') == 3){
-                    return redirect()->to(base_url().'/direksi/profil');
+                    return redirect()->to(base_url().'/direktur/profil');
                 }else{
                     return redirect()->to(base_url().'/staff/profil');
                 }
@@ -282,7 +282,7 @@ class StaffController extends BaseController
             }else if(session('id_status_user') == 4){
                 return redirect()->to(base_url().'/gm/profil');
             }else if(session('id_status_user') == 3){
-                return redirect()->to(base_url().'/direksi/profil');
+                return redirect()->to(base_url().'/direktur/profil');
             }else{
                 return redirect()->to(base_url().'/staff/profil');
             }
@@ -344,7 +344,7 @@ class StaffController extends BaseController
             }else if(session('id_status_user') == 4){
                 return redirect()->to(base_url().'/gm/presensi');
             }else if(session('id_status_user') == 3){
-                return redirect()->to(base_url().'/direksi/presensi');
+                return redirect()->to(base_url().'/direktur/presensi');
             }else{
                 return redirect()->to(base_url().'/staff/presensi');
             }
@@ -555,7 +555,7 @@ class StaffController extends BaseController
         // }
         $data['tahun'] = $thn;
         $rancangan_tugas = model('rancangan_tugas');
-        $data['rancangan_tugas'] = $rancangan_tugas->where('id_jabatan', $data['user']['id_jabatan'])->findAll();
+        $data['rancangan_tugas'] = $rancangan_tugas->where('id_jabatan', $data['user']['id_jabatan'])->join('rancangan_per_tahun as r', 'rancangan_tugas.id_rancangan_tugas = r.id_rancangan_tugas')->where('r.tahun', $thn)->findAll();
         $data['tugas'] =  $tugas->asArray()->select('id_tugas, id_riwayat_jabatan, tugas.nama_tugas, tanggal_tugas, tugas.periode, tugas.jumlah_tugas, tugas.nomor_pekerjaan, tugas.status_tugas, tugas.id_rancangan_tugas, rancangan_tugas.jumlah_total_tugas, tugas.kode_tugas')->selectSum('tugas.jumlah_tugas')->join('rancangan_tugas', 'rancangan_tugas.id_rancangan_tugas = tugas.id_rancangan_tugas')->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.tanggal_tugas >=' => date($thn.'-01-01'), 'tugas.tanggal_tugas <=' => date($thn.'-12-31'), 'tugas.status_tugas' => 1])->groupBy("tugas.id_rancangan_tugas")->orderBy('tugas.id_rancangan_tugas', 'DESC')->findAll();
         $data['tugas_tambahan'] = $tugas->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.tanggal_tugas >=' => date($thn.'-01-01'), 'tugas.tanggal_tugas <=' => date($thn.'-12-31'), 'tugas.id_rancangan_tugas' => 0, 'tugas.status_tugas' => 1])->groupBy("tugas.kode_tugas")->orderBy('tugas.tanggal_tugas', 'DESC')->findAll();
 
@@ -575,6 +575,8 @@ class StaffController extends BaseController
         $data['jumlah_tugas_tambahan'] = $jumlah_tugas_tambahan;
         $bulan = model('bulan');
         $data['bulan'] = $bulan->findAll();
+        $rpt = model('rancangan_per_tahun');
+        $data['temp_tahun'] = $rpt->select('max(tahun) as tahun_max, min(tahun) as tahun_min')->first();
         return view('capaian_kerja', $data);
     }
 
@@ -655,7 +657,7 @@ class StaffController extends BaseController
             }else if(session('id_status_user') == 4){
                 return redirect()->to(base_url().'/gm/saran');
             }else if(session('id_status_user') == 3){
-                return redirect()->to(base_url().'/direksi/saran');
+                return redirect()->to(base_url().'/direktur/saran');
             }else{
                 return redirect()->to(base_url().'/staff/saran');
             }
@@ -697,7 +699,7 @@ class StaffController extends BaseController
         }else if(session('id_status_user') == 4){
             return redirect()->to(base_url().'/gm/klarifikasi');
         }else if(session('id_status_user') == 3){
-            return redirect()->to(base_url().'/direksi/klarifikasi');
+            return redirect()->to(base_url().'/direktur/klarifikasi');
         }else{
             return redirect()->to(base_url().'/staff/klarifikasi');
         }
@@ -777,7 +779,7 @@ class StaffController extends BaseController
         $jabatan = model('jabatan');
         $data = $this->initData();
         $rancangan_tugas = model('rancangan_tugas');
-        $data['rancangan_tugas'] = $rancangan_tugas->where('id_jabatan', $data['user']['id_jabatan'])->findAll();
+        $data['rancangan_tugas'] = $rancangan_tugas->where('id_jabatan', $data['user']['id_jabatan'])->join('rancangan_per_tahun as r', 'rancangan_tugas.id_rancangan_tugas = r.id_rancangan_tugas')->where('r.tahun', date('Y'))->findAll();
         $data['tugas'] =  $tugas->asArray()->select('id_tugas, id_riwayat_jabatan, tugas.nama_tugas, tanggal_tugas, tugas.periode, tugas.jumlah_tugas, tugas.nomor_pekerjaan, tugas.status_tugas, tugas.id_rancangan_tugas, rancangan_tugas.jumlah_total_tugas, tugas.kode_tugas')->selectSum('tugas.jumlah_tugas')->join('rancangan_tugas', 'rancangan_tugas.id_rancangan_tugas = tugas.id_rancangan_tugas')->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.id_rancangan_tugas !=' => 0, 'tugas.status_tugas' => 1])->groupBy("tugas.id_rancangan_tugas")->orderBy('tugas.id_rancangan_tugas', 'DESC')->findAll();
         $data['tugas_tambahan'] = $tugas->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.id_rancangan_tugas' => 0, 'tugas.status_tugas' => 1])->groupBy("tugas.kode_tugas")->orderBy('tugas.tanggal_tugas', 'DESC')->findAll();
         for ($i=0; $i < count($data['rancangan_tugas']); $i++) { 
@@ -813,7 +815,7 @@ class StaffController extends BaseController
         $data['presensi'] = $presensi->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'presensi.tanggal_presensi' => date("Y-m-d")])->first();
         // $data['tugas'] =  $tugas->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan']])->groupBy('tugas.kode_tugas')->orderBy('tugas.id_rancangan_tugas', 'desc')->orderBy('tanggal_tugas', 'asc')->findAll();
         $rancangan_tugas = model('rancangan_tugas');
-        $data['rancangan_tugas'] = $rancangan_tugas->where('id_jabatan', $data['user']['id_jabatan'])->findAll();
+        $data['rancangan_tugas'] = $rancangan_tugas->where('id_jabatan', $data['user']['id_jabatan'])->join('rancangan_per_tahun as r', 'rancangan_tugas.id_rancangan_tugas = r.id_rancangan_tugas')->where('r.tahun', date('Y'))->findAll();
         $data['tugas'] =  $tugas->asArray()->select('id_tugas, id_riwayat_jabatan, tugas.nama_tugas, tanggal_tugas, tugas.periode, tugas.jumlah_tugas, tugas.nomor_pekerjaan, tugas.status_tugas, tugas.id_rancangan_tugas, rancangan_tugas.jumlah_total_tugas, tugas.kode_tugas')->selectSum('tugas.jumlah_tugas')->join('rancangan_tugas', 'rancangan_tugas.id_rancangan_tugas = tugas.id_rancangan_tugas')->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.id_rancangan_tugas !=' => 0, 'tugas.status_tugas' => 1])->groupBy("tugas.id_rancangan_tugas")->orderBy('tugas.id_rancangan_tugas', 'DESC')->findAll();
         $data['tugas_tambahan'] = $tugas->asArray()->where(['id_riwayat_jabatan' => $data['user']['id_riwayat_jabatan'], 'tugas.id_rancangan_tugas' => 0, 'tugas.status_tugas' => 1])->groupBy("tugas.kode_tugas")->orderBy('tugas.tanggal_tugas', 'DESC')->findAll();
         for ($i=0; $i < count($data['rancangan_tugas']); $i++) { 

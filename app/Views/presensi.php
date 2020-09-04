@@ -166,6 +166,9 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
+                                    <?php if($semua_presensi == null) {?>
+                                        <h4 class="alert alert-warning text-center p-3">Belum ada presensi</h4>
+                                    <?php } else {?>
                                     <table class="table" id="riwayat-presensi">
                                         <thead>
                                             <tr>
@@ -173,11 +176,6 @@
                                             </tr>
                                         </thead>
                                     <tbody>
-                                    <?php if($semua_presensi == null) {?>
-                                    <tr>
-                                        <h4 class="alert alert-warning text-center p-3">Belum ada presensi</h4>
-                                    </tr>
-                                    <?php } else {?>
                                     <?php foreach($semua_presensi as $p) :?>
                                         <tr>
                                             <td>
@@ -215,9 +213,9 @@
                                             </td>
                                         </tr>
                                         <?php endforeach ?>
-                                    <?php } ?>
                                     </tbody>
                                     </table>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </div>
@@ -239,7 +237,7 @@
                                 <?php if($user_bawahan == null) { ?>
                                     <div class="alert alert-warning text-center">Tidak memiliki bawahan</div>
                                 <?php }else{ ?>
-                                    <table id="zero_config" class="table table-hover table-bordered tabel-presensi-riwayat">
+                                    <table id="" class="table table-hover table-bordered tabel-presensi-riwayat">
                                         <thead>
                                             <tr>
                                                 <th>No</th>
@@ -307,6 +305,7 @@
                                     <th>Tempat Presensi Masuk</th>
                                     <th>Tempat Presensi Keluar</th>
                                     <th>Jenis Pekerjaan</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody >

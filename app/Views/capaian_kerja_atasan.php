@@ -50,11 +50,11 @@
                                             <div class="input-group">
                                                 <select class="custom-select " id="inlineFormCustomSelect" name="tahun">
                                                     <option selected value="" hidden>Pilih Tahun...</option>
-                                                    <?php 
-                                                    for ($i=2020; $i < 2030; $i++) { 
-                                                        echo '<option value="'.$i.'">'.$i.'</option>';
-                                                    };
-                                                    ?>
+                                                    <?php if ($temp_tahun != null) {
+                                                        for ($i = intval($temp_tahun['tahun_min']); $i <= intval($temp_tahun['tahun_max']); $i++) {
+                                                            echo '<option value="' . $i . '">' . $i . '</option>';
+                                                        }
+                                                    } ?>
                                                     
                                                 </select>
                                                 <div class="input-group-append">

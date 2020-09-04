@@ -349,7 +349,7 @@ class AdminController extends BaseController
         }
 
         if ($pekerjaan_aktif) {
-            $this->data['pekerjaan_sekarang'] = $this->rancanganTugasModel->where('id_jabatan', $pekerjaan_aktif['id_jabatan'])->findAll();
+            $this->data['pekerjaan_sekarang'] = $this->rancanganTugasModel->where('id_jabatan', $pekerjaan_aktif['id_jabatan'])->join('rancangan_per_tahun as r', 'rancangan_tugas.id_rancangan_tugas = r.id_rancangan_tugas')->where('r.tahun', date('Y'))->findAll();
             $this->data['pekerjaan'] = $pekerjaan_aktif;
         } else {
             $this->data['pekerjaan_sekarang'] = null;
@@ -457,10 +457,36 @@ class AdminController extends BaseController
                 'sangat_baik' => count($this->indeksNilaiModel->getJumlahUser($pertanyaan[$i]['id_pertanyaan'], 4)),
             ];
         }
+        $ikp = model('indeksKepuasan');
+
+        $this->data['ikp'] = $ikp->where('id', $in_indeks)->first();
+        $this->data['tgl_ikp'] = $this->getTanggal($this->data['ikp']['tanggal']);
         $this->data['jumlah'] = count($this->userModel->getUserKepuasan());
         $this->data['pertanyaan'] = $pertanyaan;
         $this->data['nilai'] = $data;
         return view('hasilIndeksKepuasan', $this->data);
+    }
+    public function exportKepuasanPegawai($id_ikp)
+    {
+        $this->data['title'] = 'Hasil Indeks Kepuasan Pegawai';
+        $pertanyaan = $this->indeksPertanyaanModel->getPertanyaan($id_ikp);
+        $data = [];
+        for ($i = 0; $i < count($pertanyaan); $i++) {
+            $data[$pertanyaan[$i]['id_pertanyaan']] = [
+                'kurang' => count($this->indeksNilaiModel->getJumlahUser($pertanyaan[$i]['id_pertanyaan'], 1)),
+                'cukup' => count($this->indeksNilaiModel->getJumlahUser($pertanyaan[$i]['id_pertanyaan'], 2)),
+                'baik' => count($this->indeksNilaiModel->getJumlahUser($pertanyaan[$i]['id_pertanyaan'], 3)),
+                'sangat_baik' => count($this->indeksNilaiModel->getJumlahUser($pertanyaan[$i]['id_pertanyaan'], 4)),
+            ];
+        }
+        $ikp = model('indeksKepuasan');
+
+        $this->data['ikp'] = $ikp->where('id', $id_ikp)->first();
+        $this->data['tgl_ikp'] = $this->getTanggal($this->data['ikp']['tanggal']);
+        $this->data['jumlah'] = count($this->userModel->getUserKepuasan());
+        $this->data['pertanyaan'] = $pertanyaan;
+        $this->data['nilai'] = $data;
+        return view('layout/hasil_kepuasan_pegawai_export', $this->data);
     }
 
     public function tambahIndeksKepuasan()
@@ -684,6 +710,7 @@ class AdminController extends BaseController
         $this->pertanyaanpkModel->update($id_pertanyaan_pk, $data);
         echo json_encode($id_pertanyaan_pk);
     }
+    
     public function exportPenilaianKinerja($id_pk)
     {
         $user = $this->userModel->getUserKepuasan();
@@ -826,8 +853,44 @@ class AdminController extends BaseController
             $data[$j['id_jabatan']] = $this->jabatanModel->getJabtan($j['kode_jabatan'], $j['detail_jabatan']);
             $data[$j['id_jabatan']]['unit_kerja'] = $this->jabatanModel->getUnitKerja($j['kode_jabatan'], $j['detail_jabatan']);
         }
+        $tahun = model('rancangan_per_tahun');
+        // $this->data['tahun'] = $tahun->select('max(tahun) as tahun_max, min(tahun) as tahun_min')->first();
+        $temp = $tahun->countAll();
+        if($temp != 0){
+            $this->data['tahun'] = $tahun->select('max(tahun) as tahun_max, min(tahun) as tahun_min')->first();
+        }else{
+            $this->data['tahun'] = null;
+        }
+        $this->data['semua_tahun'] = $tahun->groupBy('tahun')->findAll();
         $this->data['jabatan'] = $data;
+        // dd($this->data['tahun']);
         return view('admin/daftarRancanganTugas', $this->data);
+    }
+
+    public function tambahTahun(){
+        $tahun = $this->request->getVar('tahun');
+        $per_tahun = model('rancangan_per_tahun');
+        $rancangan_tugas = model('rancangan_tugas');
+        $data = $rancangan_tugas->findAll();
+        $new_data = [];
+        for ($i=0; $i < count($data); $i++) { 
+            $a = [
+                'id_rancangan_tugas' => $data[$i]['id_rancangan_tugas'],
+                'tahun' => $tahun,
+                'jumlah_total_tugas' => 20
+            ];
+            array_push($new_data, $a);
+        }
+        $per_tahun->insertBatch($new_data);
+        session()->setFlashdata('pesan', 'Tahun rancangan tugas berhasil ditambahkan');
+        return redirect()->to(base_url().'/admin/daftarRancanganTugas/');
+    }
+    public function hapusTahun(){
+        $tahun = $this->request->getVar('tahun');
+        $per_tahun = model('rancangan_per_tahun');
+        $per_tahun->where('tahun', $tahun)->delete();
+        session()->setFlashdata('pesan', 'Tahun rancangan tugas berhasil dihapus');
+        return redirect()->to(base_url().'/admin/daftarRancanganTugas/');
     }
 
     public function lihatRancanganTugas($id_jabatan)
@@ -835,7 +898,22 @@ class AdminController extends BaseController
         $this->data['title'] = 'Daftar Rancangan Tugas';
         $id = $this->jabatanModel->where('id_jabatan', $id_jabatan)->first();
         $this->data['jabatan'] = $this->jabatanModel->getJabtan($id['kode_jabatan'], $id['detail_jabatan']);
-        $this->data['rancangan'] = $this->rancanganTugasModel->where('id_jabatan', $id_jabatan)->orderBy('nomor_pekerjaan', 'ASC')->findAll();
+        $tahun = model('rancangan_per_tahun');
+        // $this->data['tahun'] = $tahun->select('max(tahun) as tahun_max, min(tahun) as tahun_min')->first();
+        $temp = $tahun->countAll();
+        if($temp != 0){
+            $this->data['tahun'] = $tahun->select('max(tahun) as tahun_max, min(tahun) as tahun_min')->first();
+        }else{
+            $this->data['tahun'] = null;
+        }
+        $this->data['id_jabatan'] = $id_jabatan;
+        $thn = date('Y');
+        if($this->request->getVar('rancangan_tahun')){
+            $thn = $this->request->getVar('rancangan_tahun');
+        }
+        $this->data['thn'] = $thn;
+        $this->data['rancangan'] = $this->rancanganTugasModel->where(['id_jabatan' => $id_jabatan, 'r.tahun' => $thn])->join('rancangan_per_tahun as r', 'rancangan_tugas.id_rancangan_tugas = r.id_rancangan_tugas')->orderBy('nomor_pekerjaan', 'ASC')->findAll();
+        // dd($this->data['rancangan']);
         return view('admin/editRancanganTugas', $this->data);
     }
 
@@ -845,7 +923,7 @@ class AdminController extends BaseController
             'id_jabatan' => $this->request->getVar('id_jabatan'),
             'nama_tugas' => $this->request->getVar('nama_tugas'),
             'periode' => $this->request->getVar('periode'),
-            'jumlah_total_tugas' => $this->request->getVar('jumlah_tugas'),
+            'jumlah_total_tugas' => 0,
             'nomor_pekerjaan' => $this->request->getVar('nomor_pekerjaan'),
             'kode_tugas' => bin2hex(random_bytes(3)),
             'status_tugas' => 1,
@@ -854,7 +932,29 @@ class AdminController extends BaseController
         $this->rancanganTugasModel->insert($data);
         $id_rancangan_tugas = $this->rancanganTugasModel->getLastID();
 
+        $jumlah = intval($this->request->getVar('jumlah_tugas'));
+        $tahun = intval($this->request->getVar('tahun'));
+
+        $thn = model('rancangan_per_tahun');
+        $temp = $thn->select('max(tahun) as tahun_max, min(tahun) as tahun_min')->first();
+
+        $new_data = [];
+        for ($i = intval($temp['tahun_min']); $i <= intval($temp['tahun_max']); $i++) {
+            $a = [
+                'id_rancangan_tugas' => $id_rancangan_tugas['id_rancangan_tugas'],
+                'tahun' => $i,
+                'jumlah_total_tugas' => 0
+            ];
+            if($i == intval($tahun)){
+                $a['jumlah_total_tugas'] = $jumlah;
+            }
+            array_push($new_data, $a);
+        }
+
+        $thn->insertBatch($new_data);
+
         $this->data['rancangan'] = $this->rancanganTugasModel->where(['id_rancangan_tugas' => $id_rancangan_tugas['id_rancangan_tugas']])->first();
+        $this->data['rancangan']['jumlah_total_tugas'] = $jumlah;
         echo json_encode($this->data);
     }
 
@@ -865,16 +965,37 @@ class AdminController extends BaseController
         $data = [
             'nama_tugas' => $this->request->getVar('nama_tugas'),
             'periode' => $this->request->getVar('periode'),
-            'jumlah_total_tugas' => $this->request->getVar('jumlah_tugas'),
+            'jumlah_total_tugas' => 0,
+            'nomor_pekerjaan' => intval($this->request->getVar('nomor_pekerjaan')),
+        ];
+
+        $jumlah = intval($this->request->getVar('jumlah_tugas'));
+        $tahun = intval($this->request->getVar('tahun'));
+
+        $thn = model('rancangan_per_tahun');
+
+        $update_data = $thn->where(['id_rancangan_tugas' => $id_rancangan_tugas,'tahun' => $tahun])->first();
+       
+        $dataU = [
+            'jumlah_total_tugas' => $jumlah
+        ];
+
+        $dataE = [
+            'nama_tugas' => $this->request->getVar('nama_tugas'),
+            'periode' => $this->request->getVar('periode'),
+            'jumlah_total_tugas' => $jumlah,
             'nomor_pekerjaan' => $this->request->getVar('nomor_pekerjaan'),
         ];
 
+        $thn->update(intval($update_data['id_rancangan_per_tahun']), $dataU);
         $this->rancanganTugasModel->update($id_rancangan_tugas, $data);
-        echo json_encode($data);
+        echo json_encode($id_rancangan_tugas);
     }
 
     public function hapusRancanganTugas($id_rancangan_tugas, $id_jabatan)
     {
+        $per_tahun = model('rancangan_per_tahun');
+        $per_tahun->where('id_rancangan_tugas', $id_rancangan_tugas)->delete();
         $this->rancanganTugasModel->where('id_rancangan_tugas', $id_rancangan_tugas)->delete();
         session()->setFlashdata('pesan', 'Data rancangan tugas berhasil dihapus');
         return redirect()->to(base_url().'/admin/lihatRancanganTugas/' . $id_jabatan);
@@ -889,6 +1010,12 @@ class AdminController extends BaseController
     {
         $data = $this->jabatanModel->getListAtasan($id_status_user);
         echo json_encode($data);
+    }
+    public function apiUnitKerja($id_jabatan)
+    {
+        $data = $this->jabatanModel->where('id_jabatan', $id_jabatan)->first();
+        $unit_kerja = $this->jabatanModel->getUnitKerja($data['kode_jabatan'], $data['detail_jabatan']);
+        echo json_encode($unit_kerja);
     }
 
     public function tambahRiwayatPekerjaan($no_induk)
@@ -977,9 +1104,13 @@ class AdminController extends BaseController
     }
     public function daftarJamKerja()
     {
+        $jabatan = model('jabatan');
         $this->data['title'] = 'Management Jam Kerja';
         $this->data['jam_kerja']  = $this->jamKerjaModel->getJamKerja();
         $this->data['status_user'] = $this->statusUserModel->whereNotIn('id_status_user', [1, 2])->findAll();
+        for($i = 0; $i < count($this->data['jam_kerja']); $i++){
+            $this->data['jam_kerja'][$i]['unit_kerja'] = $jabatan->getUnitKerja($this->data['jam_kerja'][$i]['id_status_user'], $this->data['jam_kerja'][$i]['detail_jabatan']);
+        }
         // dd($this->data['jam_kerja']);
         return view('admin/daftarJamKerja', $this->data);
     }
@@ -996,6 +1127,7 @@ class AdminController extends BaseController
         foreach ($jabatan as $j) {
             $data[$j['id_jabatan']] = $this->jabatanModel->getJabtan($j['kode_jabatan'], $j['detail_jabatan']);
             $data[$j['id_jabatan']]['atasan'] = $this->jabatanModel->getAtasanJabatan($j['kode_jabatan'], $j['detail_jabatan']);
+            $data[$j['id_jabatan']]['unit_kerja'] = $this->jabatanModel->getUnitKerja($j['kode_jabatan'], $j['detail_jabatan']);
         }
         $this->data['jabatan'] = $data;
         $this->data['status_user'] = $this->statusUserModel->whereNotIn('id_status_user', [1, 2])->findAll();
@@ -1035,7 +1167,7 @@ class AdminController extends BaseController
         if($status != '3'){
             $atasan = $this->request->getVar('atasan_langsung');
             $temp_jabatan = $jabatan->where('id_jabatan', $atasan)->first();
-            if ($status = '7') {
+            if ($status == '7') {
                 $data = [
                     'nama' => $nama,
                     'id_supervisor' => $temp_jabatan['detail_jabatan']
@@ -1047,7 +1179,7 @@ class AdminController extends BaseController
                     'kode_jabatan' => 7,
                     'detail_jabatan' => $temp_p['id_staff']
                 ];
-            } else if ($status = '6') {
+            } else if ($status == '6') {
                 $data = [
                     'nama' => $nama,
                     'id_manager' => $temp_jabatan['detail_jabatan']
@@ -1059,7 +1191,7 @@ class AdminController extends BaseController
                     'kode_jabatan' => 6,
                     'detail_jabatan' => $temp_p['id_supervisor']
                 ];
-            } else if ($status = '5') {
+            } else if ($status == '5') {
                 $data = [
                     'nama' => $nama,
                     'id_gm' => $temp_jabatan['detail_jabatan']
@@ -1071,7 +1203,7 @@ class AdminController extends BaseController
                     'kode_jabatan' => 5,
                     'detail_jabatan' => $temp_p['id_manager']
                 ];
-            } else if ($status = '4') {
+            } else if ($status == '4') {
                 $data = [
                     'nama' => $nama,
                     'id_direktur' => $temp_jabatan['detail_jabatan']
@@ -1145,6 +1277,7 @@ class AdminController extends BaseController
     public function hapusJabatan($id_jabatan)
     {
         $jabatan = model('jabatan');
+        $jam_kerja = model('jam_kerja');
         $temp_jabatan = $jabatan->where('id_jabatan', $id_jabatan)->first();
         $riwayat_jabatan = model('riwayat_jabatan');
         $temp_riwayat_jabatan = $riwayat_jabatan->where('id_jabatan', $id_jabatan)->findAll();
@@ -1171,6 +1304,7 @@ class AdminController extends BaseController
                 $staff->where('id_staff', $temp_jabatan['detail_jabatan'])->delete();
                 $jabatan->where('id_jabatan', $id_jabatan)->delete();
             }
+            $jam_kerja->where('id_jabatan', $id_jabatan)->delete();
             session()->setFlashdata('pesan', 'Jabatan berhasil dihapus');
             return redirect()->to(base_url('/admin/daftarJabatan/'));
         }else{
@@ -1228,7 +1362,7 @@ class AdminController extends BaseController
             
             // Tambahan
             $rancangan_tugas = model('rancangan_tugas');
-            $this->data['pegawai'][$i]['rancangan_tugas'] = $rancangan_tugas->where('id_jabatan', $this->data['pegawai'][$i]['id_jabatan'])->findAll();
+            $this->data['pegawai'][$i]['rancangan_tugas'] = $rancangan_tugas->where('id_jabatan', $this->data['pegawai'][$i]['id_jabatan'])->join('rancangan_per_tahun as r', 'rancangan_tugas.id_rancangan_tugas = r.id_rancangan_tugas')->where('r.tahun', date('Y'))->findAll();
             if($this->request->getVar('waktu_mulai') != "" && $this->request->getVar('waktu_selesai') != ""){
                 $waktu_mulai = $this->request->getVar('waktu_mulai');
                 $waktu_selesai = $this->request->getVar('waktu_selesai');

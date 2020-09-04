@@ -15,10 +15,10 @@ $('#tabel-daftar-jabatan').DataTable({
     "pageLength": 5,
     'order' : []
 });
-$('#tabel-riwayat-presensi').DataTable({
-    "pageLength": 5,
-    'order' : []
-});
+// $('#tabel-riwayat-presensi').DataTable({
+//     "pageLength": 5,
+//     'order' : []
+// });
 $('#tabel-riwayat-saran').DataTable({
     "pageLength": 5
 });
@@ -398,7 +398,7 @@ $('.tabel-presensi-riwayat').on('click', '.button-detail-presensi-bawahan', func
     var id_riwayat_jabatan = $(this).data('id');
     var nama = $(this).data('nama');
     var jabatan = $(this).data('jabatan');
-    console.log(jabatan);
+    // console.log(jabatan);
     $.ajax({
         url: segments[0] + '/getPresensiBawahan',
         type: 'post',
@@ -585,7 +585,7 @@ $('#tabel-daftar-bawahan').on('click', '.button-detail-bawahan', function(){
     $('#email').val();
     $('#no_telepon').val();
     $('#alamat').val();
-    $('#foto').attr('src', window.location.origin+foto);
+    $('#foto').attr('src', window.location.origin+'/public'+foto);
     $('#foto').attr('alt', 'Foto');
     $('#nama').val(nama);
     $('#no_induk').val(nip);

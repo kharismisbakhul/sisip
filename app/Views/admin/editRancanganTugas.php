@@ -36,11 +36,34 @@
             <?php endif; ?>
             <div class="card">
                 <div class="card-header bg-info text-white">
-                    <h4>Daftar Rancangan Tugas </h4>
+                    <h4>Daftar Rancangan Tugas Tahun <?= $thn ?></h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-
+                        <div class="row">
+                            <div class="col-12">
+                                <a href="<?= base_url('/admin/daftarRancanganTugas') ?>" class="float-left btn btn-secondary">Kembali</a>
+                            </div>
+                        </div>
+                        <form action="<?= base_url('/admin/lihatRancanganTugas/' . $id_jabatan) ?>" method="get">
+                           <div class="row justify-content-end">
+                                <div class="form-group">
+                                    <label for="rancangan_tahun">List Tahun Rancangan Yang Tersedia</label>
+                                    <select type="date" class="form-control" name="rancangan_tahun">
+                                        <?php if ($tahun != null) {
+                                            for ($i = intval($tahun['tahun_min']); $i <= intval($tahun['tahun_max']); $i++) {
+                                                echo '<option value="' . $i . '">' . $i . '</option>';
+                                            }
+                                        } ?>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                <label for="waktu_selesai"></label><br>
+                                    <button class="btn btn-info mt-2 mr-3 ml-2" type="submit"><i class="fas fa-search"></i></button>
+                                </div>
+                            </div>
+                                                
+                        </form>
                         <table class="table table-hover ">
                             <thead>
                                 <tr>
@@ -78,7 +101,7 @@
                                         </td>
                                         <td>
                                             <div class="button-group">
-                                                <button type="button" id="tambah-rancangan" class="btn waves-effect waves-light btn-success"><i class="fas fa-plus mr-2"></i></button>
+                                                <button type="button" id="tambah-rancangan" class="btn waves-effect waves-light btn-success" data-tahun="<?= $thn ?>"><i class="fas fa-plus mr-2"></i></button>
                                             </div>
                                         </td>
                                     </form>
@@ -117,15 +140,20 @@
                                                             <option value="1" selected>Harian</option>
                                                             <option value="3">Mingguan</option>
                                                             <option value="2">Bulanan</option>
-                                                        <?php }else if ($r['periode'] == 3) { ?>
+                                                        <?php 
+                                                    }
+                                                    else if ($r['periode'] == 3) { ?>
                                                             <option value="1">Harian</option>
                                                             <option value="3" selected>Mingguan</option>
                                                             <option value="2">Bulanan</option>
-                                                        <?php }else { ?>
+                                                        <?php 
+                                                    }
+                                                    else { ?>
                                                             <option value="1">Harian</option>
                                                             <option value="3">Mingguan</option>
                                                             <option value="2" selected>Bulanan</option>
-                                                        <?php } ?>
+                                                        <?php 
+                                                    } ?>
                                                     </select>
                                                 </div>
                                             </td>
@@ -136,8 +164,8 @@
                                             </td>
                                             <td>
                                                 <div class="button-group">
-                                                    <button type="button" class="btn waves-effect waves-light btn-info edit-pertanyaan" data-id="<?= $r['id_rancangan_tugas'] ?>" onclick="editRancanganTugas(<?= $r['id_rancangan_tugas'] ?>)"><i class=" fas fa-edit mr-2"></i>Simpan</button>
-                                                    <a href="/admin/hapusRancanganTugas/<?= $r['id_rancangan_tugas'] ?>/<?= $r['id_jabatan'] ?>" class="btn waves-effect waves-light btn-danger"><i class="fas fa-trash mr-2"></i>Hapus</a>
+                                                    <button type="button" class="btn waves-effect waves-light btn-info edit-pertanyaan" data-id="<?= $r['id_rancangan_tugas'] ?>" onclick="editRancanganTugas(<?= $r['id_rancangan_tugas'] ?>, <?= $thn?>)"><i class=" fas fa-edit mr-2"></i>Simpan</button>
+                                                    <a href="/sisip/admin/hapusRancanganTugas/<?= $r['id_rancangan_tugas'] ?>/<?= $r['id_jabatan'] ?>" class="btn waves-effect waves-light btn-danger"><i class="fas fa-trash mr-2"></i>Hapus</a>
                                                 </div>
                                             </td>
                                         </form>
@@ -146,7 +174,7 @@
 
                             </tbody>
                         </table>
-
+                        
                     </div>
                 </div>
             </div>

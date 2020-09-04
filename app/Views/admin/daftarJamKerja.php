@@ -53,10 +53,10 @@
                                         <th>No</th>
                                         <th>Status Jabatan</th>
                                         <th>Detail Jabatan</th>
+                                        <th>Unit Kerja</th>
                                         <th>Jam Kerja Masuk</th>
                                         <th>Jam Kerja Keluar</th>
                                         <th>Status Aktif</th>
-                                        <th>Status Jam Kerja</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -67,14 +67,10 @@
                                             <td><?= $i++ ?></td>
                                             <td><?= $jm['nama_status_user'] ?></td>
                                             <td><?= $jm['nama'] ?></td>
+                                            <td><?= $jm['unit_kerja']['nama'] ?></td>
                                             <td><?= $jm['jam_kerja_masuk'] ?></td>
                                             <td><?= $jm['jam_kerja_keluar'] ?></td>
                                             <?php if ($jm['status_aktif'] == 0) : ?>
-                                                <td class="text"><span class="badge badge-danger">Tidak Aktif</span></td>
-                                            <?php else : ?>
-                                                <td class="text"><span class="badge badge-success">Aktif</span></td>
-                                            <?php endif; ?>
-                                            <?php if ($jm['status_jam_kerja'] == 0) : ?>
                                                 <td class="text"><span class="badge badge-danger">Tidak Aktif</span></td>
                                             <?php else : ?>
                                                 <td class="text"><span class="badge badge-success">Aktif</span></td>

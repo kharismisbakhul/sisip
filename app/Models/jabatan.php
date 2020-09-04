@@ -14,7 +14,11 @@ class jabatan extends Model
         switch ($kode_jabatan) {
             case '3':
                 $direktur = model('direktur');
-                return $direktur->select('nama')->where('id_direktur', $detail_jabatan)->first();
+                // return $direktur->select('nama')->where('id_direktur', $detail_jabatan)->first();
+                $data = [
+                    "nama" => "BUNA"
+                ];
+                return $data;
                 break;
             case '4':
                 $gm = model('general_manager');
